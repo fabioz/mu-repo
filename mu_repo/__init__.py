@@ -34,18 +34,31 @@ class ExecuteCommandThread(threading.Thread):
         self.stdout = ''
         self.stderr = ''
 
-    def run(self):
+    def run(self, serial=False):
         args = self.args
         repo = self.repo
         cmd = ['git'] + args
-        self.stdout += ' '.join(['\n', repo, ':'] + cmd + ['\n'])
-        p = subprocess.Popen(cmd, cwd=repo, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
-        stdout, stderr = p.communicate()
-        if stdout:
-            self.stdout += Indent(stdout)
-        if stderr:
-            self.stderr += Indent(stderr)
+        msg = ' '.join(['\n', repo, ':'] + cmd + ['\n'])
 
+        if serial:
+            Print(msg)
+            p = subprocess.Popen(cmd, cwd=repo)
+            p.wait()
+
+        else:
+            self.stdout += msg
+            p = subprocess.Popen(cmd, cwd=repo, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+            stdout, stderr = p.communicate()
+            if stdout:
+                if serial:
+                    Print(Indent(stdout))
+                else:
+                    self.stdout += Indent(stdout)
+            if stderr:
+                if serial:
+                    Print(Indent(stderr))
+                else:
+                    self.stderr += Indent(stderr)
 
 #===================================================================================================
 # Print
@@ -130,6 +143,12 @@ mu checkout release
             return Status(repo_str, True, config)
 
     else:
+
+        serial = False
+        if args[0] in ('-s', '--serial'): #-s == --serial
+            serial = True
+            args = args[1:]
+
         if args[0] == 'st':
             args[0] = 'status'
 
@@ -147,17 +166,23 @@ mu checkout release
                 Print('%s does not exist' % (repo,), file=stream)
             else:
                 t = ExecuteCommandThread(repo, args)
-                t.start()
                 threads.append(t)
 
-        for t in threads:
-            t.join()
+        if serial:
+            for t in threads:
+                t.run(serial=True) #When serial will print as is executing.
+        else:
+            for t in threads:
+                t.start()
 
-        for t in threads:
-            if t.stdout:
-                Print(t.stdout, file=stream)
-            if t.stderr:
-                Print(t.stderr, file=stream)
+            for t in threads:
+                t.join()
+
+            for t in threads:
+                if t.stdout:
+                    Print(t.stdout, file=stream)
+                if t.stderr:
+                    Print(t.stderr, file=stream)
 
 
     return Status('Finished', True)
