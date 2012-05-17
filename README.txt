@@ -1,8 +1,10 @@
-mu-repo (license: GPL 3)
+mu-repo 
 ========================
 
 Tool to help in dealing with multiple repositories
 (currently only supporting git repositories -- in the same dir)
+
+License: GPL 3, Copyright (c) 2012 by Fabio Zadrozny
 
 
 INSTALLING
