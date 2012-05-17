@@ -15,6 +15,9 @@ class Status(object):
         self.succeeded = succeeded
         self.config = config
 
+#===================================================================================================
+# Indent
+#===================================================================================================
 def Indent(txt):
     return '\n'.join('  ' + line for line in  txt.splitlines()) + '\n'
 
@@ -35,7 +38,7 @@ class ExecuteCommandThread(threading.Thread):
         args = self.args
         repo = self.repo
         cmd = ['git'] + args
-        self.stdout += ' '.join([repo, ':'] + cmd + ['\n'])
+        self.stdout += ' '.join(['\n', repo, ':'] + cmd + ['\n'])
         p = subprocess.Popen(cmd, cwd=repo, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
         stdout, stderr = p.communicate()
         if stdout:
@@ -43,6 +46,13 @@ class ExecuteCommandThread(threading.Thread):
         if stderr:
             self.stderr += Indent(stderr)
 
+
+#===================================================================================================
+# Print
+#===================================================================================================
+def Print(*args, **kwargs):
+    f = kwargs.get('file', sys.stdout)
+    f.write(' '.join(args))
 
 #===================================================================================================
 # main
@@ -74,7 +84,7 @@ mu push
 mu checkout release
 
 '''
-        print >> stream, msg
+        Print(msg, file=stream)
         return Status(msg, False)
 
     exists = os.path.exists(config_file)
@@ -88,19 +98,19 @@ mu checkout release
     if args[0] == 'register':
         if len(args) < 2:
             msg = 'Repository (dir name) to track not passed'
-            print >> stream, msg
+            Print(msg, file=stream)
             return Status(msg, False)
         repos = config.repos
         msgs = []
         for repo in args[1:]:
             if repo in repos:
                 msg = 'Repository: %s not added (already there)' % (repo,)
-                print >> stream, msg
+                Print(msg, file=stream)
                 msgs.append(msg)
             else:
                 repos.append(repo)
                 msg = 'Repository: %s added' % (repo,)
-                print >> stream, msg
+                Print(msg, file=stream)
                 msgs.append(msg)
 
         with open(config_file, 'w') as f:
@@ -109,21 +119,32 @@ mu checkout release
         return Status('\n'.join(msgs), True, config)
 
     elif args[0] == 'list':
-        repo_str = '\n'.join(sorted(config.repos))
-        print >> stream, 'Repositories:'
-        print >> stream, repo_str
-        return Status(repo_str, True, config)
-
-    else:
         if not config.repos:
             msg = 'No repository registered. Use mu register repo_name to register repository.'
-            print >> stream, msg
-            return Status(msg, False, config)
+            Print(msg, file=stream)
+            return Status(msg, True, config)
+        else:
+            repo_str = '\n'.join(sorted(config.repos))
+            Print('Repositories:', file=stream)
+            Print(repo_str, file=stream)
+            return Status(repo_str, True, config)
+
+    else:
+        if args[0] == 'st':
+            args[0] = 'status'
+
+        elif args[0] == 'co':
+            args[0] = 'checkout'
+
+        if not config.repos:
+            msg = 'No repository registered. Use mu register repo_name to register repository.'
+            Print(msg, file=stream)
+            return Status(msg, True, config)
 
         threads = []
         for repo in config.repos:
             if not os.path.exists(repo):
-                print >> stream, '%s does not exist'
+                Print('%s does not exist' % (repo,), file=stream)
             else:
                 t = ExecuteCommandThread(repo, args)
                 t.start()
@@ -134,9 +155,9 @@ mu checkout release
 
         for t in threads:
             if t.stdout:
-                print >> stream, t.stdout
+                Print(t.stdout, file=stream)
             if t.stderr:
-                print >> stream, t.stderr
+                Print(t.stderr, file=stream)
 
 
     return Status('Finished', True)
@@ -147,7 +168,7 @@ mu checkout release
 #===================================================================================================
 def ConfigToString(config):
     lst = []
-    for key, val in config.iteritems():
+    for key, val in config.items():
         if isinstance(val, list):
             assert key.endswith('s')
             key = key[:-1]
@@ -168,13 +189,13 @@ class Config(object):
 
     def __init__(self, **kwargs):
         self.repos = []
-        for k, v in kwargs.iteritems():
+        for k, v in kwargs.items():
             setattr(self, k, v)
 
     def __getitem__(self, key):
         return getattr(self, key)
 
-    def iteritems(self):
+    def items(self):
         yield ('repos', self.repos)
 
     def __eq__(self, o):
