@@ -1,5 +1,5 @@
 mu-repo 
-========================
+=========
 
 Tool to help in dealing with multiple repositories
 (currently only supporting git repositories -- in the same dir)
@@ -9,6 +9,7 @@ License: GPL 3, Copyright (c) 2012 by Fabio Zadrozny
 
 INSTALLING
 ===========
+
 Requisite: the python and git executables must be in your path.
 
 Then, grab mu-repo from git:
@@ -43,4 +44,27 @@ mu list <-- will print a list of the repositories registered.
 mu status <-- will go into each subdir and do 'git status'.
 
 mu checkout release <-- will go into each subdir and do 'git checkout release'.      
-        
+
+
+PARALLELISM
+============
+
+mu-repo by default will execute commands in parallel, but in this mode,
+actions that require input will not work (and depending on the action,
+may even block), so, it's possible to force it to run in serial mode, where
+no buffering is done by setting the 'serial' flag to 1.
+
+i.e.: mu set_var serial=1
+
+(and to go back to having commands run in parallel, do mu set_var serial=0)
+
+
+GIT
+====
+
+If for some reason you don't have git in the path, it's possible to force 
+its location by doing:
+
+mu set_var git=d:\bin\git\bin\git.exe
+
+ 
