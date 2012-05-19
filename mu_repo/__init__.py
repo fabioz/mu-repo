@@ -69,6 +69,10 @@ mu register repo1 repo2
 
 mu list: lists the currently tracked repositories.
 
+mu set_var git=d:/bin/git/bin/git.exe
+
+mu get_vars
+
 Any other command (such as the ones below) is passed directly to git through the multiple repositories:
  
 mu pull

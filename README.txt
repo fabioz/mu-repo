@@ -25,7 +25,7 @@ USING
 The idea is that you have a structure such as:
 
 /workspace
-    .mu_repo <- configuration file
+    .mu_repo <- configuration file (created by mu commands)
     /repo1   <- git repository name (i.e.: directory name with .git file)
         /.git
     /repo2

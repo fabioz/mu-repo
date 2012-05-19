@@ -12,16 +12,27 @@ from mu_repo.print_ import Print
 # Run
 #===================================================================================================
 def Run(params):
-    var, value = params.args[1].split('=')
+    args = params.args
+    if len(args) != 2 or args[1].count('=') != 1:
+        msg = 'Syntax for set_var is "mu set_var key=value"'
+        Print(msg, file=params.stream)
+        return Status(msg, True, params.config)
+
+    var, value = args[1].split('=')
     var = var.strip().lower()
-    value = value.strip().lower()
     if var == 'serial':
         if IsFalse(value):
             params.config.serial = False
         else:
             params.config.serial = True
+
+    elif var == 'git':
+        params.config.git = value
+
     else:
-        return Status('Variable to set: %s not recognized.' % (var,), False, params.config)
+        msg = 'Variable to set: "%s" not recognized.' % (var,)
+        Print(msg, file=params.stream)
+        return Status(msg, False, params.config)
 
     with open(params.config_file, 'w') as f:
         f.write(str(params.config))
