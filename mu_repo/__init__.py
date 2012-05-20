@@ -101,6 +101,9 @@ mu checkout release
     elif args[0] == 'register':
         from .action_register import Run #@Reimport
 
+    elif args[0] == 'dd':
+        from .action_diff import Run #@Reimport
+
     elif args[0] == 'list':
         from .action_list import Run #@Reimport
 
