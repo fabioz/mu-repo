@@ -118,7 +118,7 @@ class _KeepInSyncThread(threading.Thread):
 
 
     _instance = None
-    _TIMEOUT = 0.2 #Each 300 millis, do a full sync.
+    _TIMEOUT = 0.2 #Each 200 millis, do a full sync.
 
 
     def __init__(self):

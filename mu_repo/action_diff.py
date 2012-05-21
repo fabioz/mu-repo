@@ -100,19 +100,29 @@ def Run(params):
 
     try:
         #Note: we could use diff status --porcelain instead if we wanted to check untracked files.
-        cmd = [git] + 'diff HEAD --name-only -z'.split()
+        #cmd = [git] + 'diff --name-only -z'.split()
+        cmd = [git] + 'status --porcelain -z'.split()
         for repo in config.repos:
             stdout = ExecuteGettingStdOutput(cmd, repo)
+
             for changed_file_fullpath in stdout.split('\0'):
+                #ignore the first 3 chars (status, status, space).
+                changed_file_fullpath = changed_file_fullpath[3:]
                 if changed_file_fullpath:
                     fdir = dirname(changed_file_fullpath)
 
                     if not os.path.exists(join(temp_working, repo, fdir)):
                         os.makedirs(join(temp_working, repo, fdir))
-                    symlink(
-                        join(repo, changed_file_fullpath),
-                        join(temp_working, repo, changed_file_fullpath)
-                    )
+                    original = join(repo, changed_file_fullpath)
+                    link = join(temp_working, repo, changed_file_fullpath)
+                    if not os.path.exists(original):
+                        with open(link, 'w') as f:
+                            f.write('File: %s was removed in working dir.' % (changed_file_fullpath,))
+                    else:
+                        symlink(
+                            original,
+                            link
+                        )
 
                     temp_repo_dir = join(temp_repo, repo, fdir)
                     if not os.path.exists(temp_repo_dir):
