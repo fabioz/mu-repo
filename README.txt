@@ -10,7 +10,8 @@ License: GPL 3, Copyright (c) 2012 by Fabio Zadrozny
 INSTALLING
 ===========
 
-Requisite: the python and git executables must be in your path.
+Requisite: the python, git executables must be in your path.
+Requisite for diff: winmerge must be in your path.
 
 Then, grab mu-repo from git:
 
@@ -44,6 +45,20 @@ mu list <-- will print a list of the repositories registered.
 mu status <-- will go into each subdir and do 'git status'.
 
 mu checkout release <-- will go into each subdir and do 'git checkout release'.      
+
+mu dd <-- will create a temporary structure and will invoke winmerge to check that structure.
+
+
+DIFFING MULTIPLE REPOSITORIES
+==============================
+
+The command 'mu dd' provides the means to diff the multiple repository structures with the 
+winmerge tool so that the file can be changed while seeing the differences of the working
+copy with the head in the repository.
+
+It's similar to what would be achieved in the Eclipse synchronize view (where the file may
+be edited to change the original file -- as the structure is created with links to the original
+files, so files edited in winmerge will properly change the original files).
 
 
 PARALLELISM
