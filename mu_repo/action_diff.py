@@ -8,6 +8,9 @@ from mu_repo.print_ import Print
 import os.path
 import shutil
 import subprocess
+from mu_repo.execute_git_command_in_thread import ExecuteGitCommandThread
+from Queue import Queue
+
 
 #===================================================================================================
 # ExecuteGettingStdOutput
@@ -31,15 +34,146 @@ def ExecuteGettingStdOutput(cmd, cwd):
 #===================================================================================================
 class CreateFromGit(object):
 
+    __slots__ = ['_args']
+
     def __init__(self, *args):
         self._args = args
 
     def __call__(self):
-        join, temp_repo, repo, changed_file_fullpath = self._args
+        git, repo, original_repo, target_repo = self._args
         stdout = ExecuteGettingStdOutput(
-            'git show HEAD:%s' % (changed_file_fullpath,), repo)
-        with open(join(temp_repo, repo, changed_file_fullpath), 'wb') as f:
+            '%s show HEAD:%s' % (git, original_repo,), repo)
+        with open(target_repo, 'wb') as f:
             f.write(stdout)
+
+#===================================================================================================
+# Symlink
+#===================================================================================================
+class Symlink(object):
+
+    __slots__ = ['_args']
+
+    def __init__(self, *args):
+        self._args = args
+
+    def __call__(self):
+        symlink, original, link = self._args
+        symlink(
+            original,
+            link
+        )
+
+
+#===================================================================================================
+# StatusEntry
+#===================================================================================================
+class StatusEntry(object):
+
+    __slots__ = ['filename', 'filename_from']
+
+    def __init__(self, filename, filename_from):
+        self.filename = filename
+        self.filename_from = filename_from
+
+    def __str__(self):
+        return 'StatusEntry [%s, %s]' % (self.filename, self.filename_from)
+
+    __repr__ = __str__
+
+    def MakeDirs(self, temp_working, temp_repo, repo):
+        dirname = os.path.dirname
+        join = os.path.join
+        basename = os.path.basename
+        exists = os.path.exists
+        makedirs = os.makedirs
+        filename = self.filename
+
+        #Make the directory structure in the working dir
+        tdir = join(temp_working, repo, dirname(filename))
+        if not exists(tdir):
+            makedirs(tdir)
+
+        #Make the directory structure in the repo dir
+        fdir = join(temp_repo, repo, dirname(filename))
+        if not exists(fdir):
+            makedirs(fdir)
+
+        #Current working dir original file and created link
+        original = join(repo, filename)
+
+        if filename != self.filename_from:
+            filename += '  was  ' + basename(self.filename_from)
+
+        link = join(temp_working, repo, filename)
+
+        #Current repository original file and the target in the diff structure
+        original_repo = self.filename_from
+        target_repo = join(temp_repo, repo, filename)
+
+        return original, link, original_repo, target_repo
+
+
+#===================================================================================================
+# ParsePorcelain
+#===================================================================================================
+def ParsePorcelain(porcelain_output):
+    it = iter(porcelain_output.split('\0'))
+    for entry in it:
+        entry = entry.strip()
+        if not entry:
+            continue
+        for i, c in enumerate(entry):
+            if c == ' ':
+                break
+        st = entry[:i].strip()
+        entry = entry[i:].strip()
+        if not st:
+            continue #Unmodified
+        if 'R' in st:
+            filename_from = next(it)
+            yield StatusEntry(entry, filename_from)
+        else:
+            yield StatusEntry(entry, entry)
+
+
+#===================================================================================================
+# DoDiffOnRepoThread
+#===================================================================================================
+class DoDiffOnRepoThread(ExecuteGitCommandThread):
+
+
+    def __init__(self, config, repo, symlink, temp_working, temp_repo):
+        self.symlink = symlink
+        self.temp_working = temp_working
+        self.temp_repo = temp_repo
+        args = 'status --porcelain -z'.split()
+
+        ExecuteGitCommandThread.__init__(self, repo, args, config, output_queue=Queue(), put_raw_output=True)
+
+
+    def run(self):
+        ExecuteGitCommandThread.run(self, serial=False)
+
+
+    def _HandleOutput(self, msg, stdout):
+        temp_working, temp_repo, repo = self.temp_working, self.temp_repo, self.repo
+        for entry in ParsePorcelain(stdout):
+            original, link, original_repo, target_repo = entry.MakeDirs(temp_working, temp_repo, repo)
+
+            if not os.path.exists(original):
+                with open(link, 'w') as f:
+                    f.write('File: %s was removed in working dir.' % (original,))
+            else:
+                thread_pool.AddTask(
+                    Symlink(self.symlink, original, link)
+                )
+
+            thread_pool.AddTask(
+                CreateFromGit(self.config.git or 'git', self.repo, original_repo, target_repo)
+            )
+
+
+
 
 
 #===================================================================================================
@@ -49,7 +183,6 @@ def Run(params):
     config = params.config
     git = config.git or 'git'
 
-    dirname = os.path.dirname
     join = os.path.join
 
     temp_dir_name = '.mu.diff.git.tmp'
@@ -101,35 +234,15 @@ def Run(params):
     try:
         #Note: we could use diff status --porcelain instead if we wanted to check untracked files.
         #cmd = [git] + 'diff --name-only -z'.split()
-        cmd = [git] + 'status --porcelain -z'.split()
+        threads = []
         for repo in config.repos:
-            stdout = ExecuteGettingStdOutput(cmd, repo)
+            thread = DoDiffOnRepoThread(config, repo, symlink, temp_working, temp_repo)
+            threads.append(thread)
+            thread.start()
 
-            for changed_file_fullpath in stdout.split('\0'):
-                #ignore the first 3 chars (status, status, space).
-                changed_file_fullpath = changed_file_fullpath[3:]
-                if changed_file_fullpath:
-                    fdir = dirname(changed_file_fullpath)
+        for thread in threads:
+            thread.join()
 
-                    if not os.path.exists(join(temp_working, repo, fdir)):
-                        os.makedirs(join(temp_working, repo, fdir))
-                    original = join(repo, changed_file_fullpath)
-                    link = join(temp_working, repo, changed_file_fullpath)
-                    if not os.path.exists(original):
-                        with open(link, 'w') as f:
-                            f.write('File: %s was removed in working dir.' % (changed_file_fullpath,))
-                    else:
-                        symlink(
-                            original,
-                            link
-                        )
-
-                    temp_repo_dir = join(temp_repo, repo, fdir)
-                    if not os.path.exists(temp_repo_dir):
-                        os.makedirs(temp_repo_dir)
-
-                    thread_pool.AddTask(
-                        CreateFromGit(join, temp_repo, repo, changed_file_fullpath))
         thread_pool.Join()
 
         winmerge_cmd = 'WinMergeU.exe /r /u /wr /dl WORKINGCOPY /dr HEAD'.split()

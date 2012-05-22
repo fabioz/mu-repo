@@ -6,61 +6,8 @@ Created on 17/05/2012
 from mu_repo.print_ import Print
 import os.path
 import threading
-import subprocess
 from mu_repo import Status
-
-#===================================================================================================
-# Indent
-#===================================================================================================
-def Indent(txt):
-    return '\n'.join('  ' + line for line in  txt.splitlines()) + '\n'
-
-
-#===================================================================================================
-# ExecuteCommandThread
-#===================================================================================================
-class ExecuteCommandThread(threading.Thread):
-
-    def __init__(self, repo, args, config, output_queue):
-        threading.Thread.__init__(self)
-        self.repo = repo
-        self.config = config
-        self.args = args
-        self.output_queue = output_queue
-
-    def run(self, serial=False):
-        args = self.args
-        repo = self.repo
-        git = self.config.git or 'git'
-        cmd = [git] + args
-        msg = ' '.join(['\n', repo, ':'] + cmd + ['\n'])
-
-        if serial:
-            #Print directly to stdout/stderr without buffering.
-            Print(msg)
-            p = subprocess.Popen(cmd, cwd=repo)
-            p.wait()
-
-        else:
-            try:
-                p = subprocess.Popen(
-                    cmd,
-                    cwd=repo,
-                    stderr=subprocess.STDOUT,
-                    stdout=subprocess.PIPE,
-                    stdin=subprocess.PIPE
-                )
-                #Just in case it tries to read something, put empty stuff in there.
-                p.stdin.write('\n' * 20)
-                p.stdin.close()
-            except:
-                self.output_queue.put('Error executing: %s' % (cmd,))
-                return
-
-            stdout, stderr = p.communicate()
-            if stderr:
-                stdout += ('\n' + stderr)
-            self.output_queue.put(msg + '\n' + Indent(stdout))
+from mu_repo.execute_git_command_in_thread import ExecuteGitCommandThread
 
 
 #===================================================================================================
@@ -87,6 +34,7 @@ class QueuePrinterThread(threading.Thread):
             finally:
                 self.output_queue.task_done()
 
+
 #===================================================================================================
 # Run
 #===================================================================================================
@@ -99,6 +47,8 @@ def Run(params):
 
     if args[0] == 'st':
         args[0] = 'status'
+        if len(args) == 1:
+            args.insert(1, '--porcelain')
 
     elif args[0] == 'co':
         args[0] = 'checkout'
@@ -113,7 +63,7 @@ def Run(params):
         if not os.path.exists(repo):
             Print('%s does not exist' % (repo,), file=stream)
         else:
-            t = ExecuteCommandThread(repo, args, config, output_queue)
+            t = ExecuteGitCommandThread(repo, args, config, output_queue)
             threads.append(t)
 
     if config.serial:

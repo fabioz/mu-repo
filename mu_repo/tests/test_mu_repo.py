@@ -8,6 +8,7 @@ import mu_repo
 import os.path
 from StringIO import StringIO
 from mu_repo.config import Config
+from mu_repo import action_diff
 
 
 #===================================================================================================
@@ -74,6 +75,21 @@ repo=studio3
         status = mu_repo.main(config_file='.bar_file', args=['list'], stream=StringIO())
         self.assertEquals(status.config.repos, ['pydev', 'a', 'b'])
 
+
+    def testActionDiff(self):
+        it = action_diff.ParsePorcelain('''R  f2.txt\0f1.txt\0A  f3.txt\0?? .project\0''')
+        entries = ','.join([str(x) for x in it])
+        self.assertEqual(
+            'StatusEntry [f2.txt, f1.txt],StatusEntry [f3.txt, f3.txt],StatusEntry [.project, .project]',
+            entries
+        )
+
+        it = action_diff.ParsePorcelain('''R f2.txt\0f1.txt\0A f3.txt\0?? .project\0''')
+        entries = ','.join([str(x) for x in it])
+        self.assertEqual(
+            'StatusEntry [f2.txt, f1.txt],StatusEntry [f3.txt, f3.txt],StatusEntry [.project, .project]',
+            entries
+        )
 
 #===================================================================================================
 # main

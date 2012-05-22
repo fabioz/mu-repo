@@ -51,7 +51,6 @@ def PrintTime(func):
 #===================================================================================================
 # main
 #===================================================================================================
-#@PrintTime # -uncomment to see times.
 def main(config_file='.mu_repo', args=None, stream=None):
 
     if args is None:
@@ -113,6 +112,9 @@ mu checkout release
     return Run(Params(config, args, config_file, stream))
 
 
+if '--timeit' in sys.argv:
+    sys.argv.remove('--timeit')
+    main = PrintTime(main)
 
 
 

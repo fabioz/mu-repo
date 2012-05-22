@@ -24,15 +24,16 @@ import os
 from mu_repo.print_ import Print
 import shutil
 
-
+_lock = threading.Lock()
 
 #===================================================================================================
 # KeepInSync
 #===================================================================================================
 def KeepInSync(file1, file2):
-    if _KeepInSyncThread._instance is None:
-        _KeepInSyncThread._instance = _KeepInSyncThread()
-        _KeepInSyncThread._instance.start()
+    with _lock:
+        if _KeepInSyncThread._instance is None:
+            _KeepInSyncThread._instance = _KeepInSyncThread()
+            _KeepInSyncThread._instance.start()
     _KeepInSyncThread._instance.files_to_keep_in_sync_queue.put(_KeepInSyncStruct(file1, file2))
 
 
@@ -41,25 +42,31 @@ def KeepInSync(file1, file2):
 # StopSync
 #===================================================================================================
 def StopSyncs():
-    if _KeepInSyncThread._instance is None:
-        return
+    instance = _KeepInSyncThread._instance
+    with _lock:
+        if instance is None:
+            return
+        #Make sure no one else will register in it.
+        _KeepInSyncThread._instance = None
+
     #size 0... we'll put it and only on its release we'll keep on going...
     semaphore = threading.Semaphore(0)
-    _KeepInSyncThread._instance.semaphore_sync_queue.put((semaphore, 'stop'))
+    instance.semaphore_sync_queue.put((semaphore, 'stop'))
     semaphore.acquire()
-    _KeepInSyncThread._instance = None
 
 
 #===================================================================================================
 # WaitSync
 #===================================================================================================
 def WaitSync():
-    if _KeepInSyncThread._instance is None:
-        return
+    with _lock:
+        instance = _KeepInSyncThread._instance
+        if instance is None:
+            return
 
     #size 0... we'll put it and only on its release we'll keep on going...
     semaphore = threading.Semaphore(0)
-    _KeepInSyncThread._instance.semaphore_sync_queue.put((semaphore, 'regular'))
+    instance.semaphore_sync_queue.put((semaphore, 'regular'))
     semaphore.acquire()
 
 

@@ -32,8 +32,11 @@ class _ThreadPool(object):
     def __init__(self, num_threads=None):
         if num_threads is None:
             #Only for Python 2.6+
-            import multiprocessing
-            num_threads = multiprocessing.cpu_count() * 2
+            try:
+                import multiprocessing
+                num_threads = multiprocessing.cpu_count() * 2
+            except:
+                num_threads = 8
 
 
         self.tasks_queue = Queue()
