@@ -56,29 +56,42 @@ def main(config_file='.mu_repo', args=None, stream=None):
     if args is None:
         args = sys.argv[1:]
 
-    if len(args) == 0:
-        msg = '''Mu is a command-line utility to deal with multiple git repositories.
+    if len(args) == 0 or (len(args) == 1 and args[0] in ('help', '--help')):
+        msg = '''mu-repo is a command-line utility to deal with multiple git repositories.
         
-It works with a .mu_repo file in the current working dir which provides the configuration
-of the directories that should be tracked on commands.
+It works with a .mu_repo file in the current working dir which provides the 
+configuration of the directories that should be tracked on commands.
 
-To add a new repository to be tracked, one can do:
+* mu register repo1 repo2: registers repo1 and repo2 to be tracked.
 
-mu register repo1 repo2
+* mu list: lists the currently tracked repositories.
 
-mu list: lists the currently tracked repositories.
+* mu set_var git=d:/bin/git/bin/git.exe
 
-mu set_var git=d:/bin/git/bin/git.exe
+* mu get_vars: prints the configuration file
 
-mu get_vars
+* mu dd: creates a directory structure with working dir vs head and opens 
+  WinMerge with it.
 
-Any other command (such as the ones below) is passed directly to git through the multiple repositories:
- 
+* mu . command: the config file is ignored, and mu works in the current dir, 
+  not on registered subdirs (useful for "mu . dd" in a given git repository)
+
+Any other command is passed directly to git through the multiple repositories:
+I.e.:
+
 mu pull
 mu fetch
 mu push
 mu checkout release
 
+Also, it defines some shortcuts:
+
+mu st         = git status --porcelain
+mu co branch  = git checkout branch
+mu currbranch = git rev-parse --abbrev-ref HEAD
+
+Note: Passing --timeit in any command will print the time it took
+      to execute the command.
 '''
         Print(msg, file=stream)
         return Status(msg, False)
@@ -86,6 +99,9 @@ mu checkout release
     exists = os.path.exists(config_file)
     if not exists:
         contents = ''
+        if '.' == args[0]:
+            del args[0]
+            contents = 'repo=.'
     else:
         with open(config_file, 'r') as f:
             contents = f.read()

@@ -53,6 +53,11 @@ def Run(params):
     elif args[0] == 'co':
         args[0] = 'checkout'
 
+    elif args[0] == 'currbranch' and len(args) == 1:
+        args[0] = 'rev-parse'
+        args.insert(1, '--abbrev-ref')
+        args.insert(2, 'HEAD')
+
     if not config.repos:
         msg = 'No repository registered. Use mu register repo_name to register repository.'
         Print(msg, file=stream)
