@@ -66,9 +66,9 @@ configuration of the directories that should be tracked on commands.
 
 * mu list: lists the currently tracked repositories.
 
-* mu set_var git=d:/bin/git/bin/git.exe
+* mu set-var git=d:/bin/git/bin/git.exe
 
-* mu get_vars: prints the configuration file
+* mu get-vars: prints the configuration file
 
 * mu dd: creates a directory structure with working dir vs head and opens 
   WinMerge with it.
@@ -88,7 +88,8 @@ Also, it defines some shortcuts:
 
 mu st         = git status --porcelain
 mu co branch  = git checkout branch
-mu currbranch = git rev-parse --abbrev-ref HEAD
+mu mu-patch   = git diff --cached --full-index > pasting output to file for each repo 
+mu mu-branch  = git rev-parse --abbrev-ref HEAD
 
 Note: Passing --timeit in any command will print the time it took
       to execute the command.
@@ -108,10 +109,10 @@ Note: Passing --timeit in any command will print the time it took
     config = Config.Create(contents)
 
     arg0 = args[0]
-    if arg0 == 'set_var':
+    if arg0 == 'set-var':
         from .action_set_var import Run
 
-    elif arg0 == 'get_vars':
+    elif arg0 == 'get-vars':
         from .action_get_vars import Run #@Reimport
 
     elif arg0 == 'register':

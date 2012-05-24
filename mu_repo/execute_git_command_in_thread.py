@@ -10,17 +10,32 @@ def Indent(txt):
 
 
 #===================================================================================================
+# Output
+#===================================================================================================
+class Output(object):
+
+    __slots__ = ['repo', 'msg', 'stdout']
+
+    def __init__(self, repo, msg, stdout):
+        self.repo = repo
+        self.msg = msg
+        self.stdout = stdout
+
+    def __str__(self):
+        return self.msg
+
+#===================================================================================================
 # ExecuteGitCommandThread
 #===================================================================================================
 class ExecuteGitCommandThread(threading.Thread):
 
-    def __init__(self, repo, args, config, output_queue, put_raw_output=False):
+    def __init__(self, repo, args, config, output_queue):
         threading.Thread.__init__(self)
         self.repo = repo
         self.config = config
         self.args = args
-        self.put_raw_output = put_raw_output
         self.output_queue = output_queue
+
 
     def run(self, serial=False):
         args = self.args
@@ -48,7 +63,7 @@ class ExecuteGitCommandThread(threading.Thread):
                 p.stdin.write('\n' * 20)
                 p.stdin.close()
             except:
-                self.output_queue.put('Error executing: %s' % (cmd,))
+                self.output_queue.put(Output(repo, 'Error executing: %s' % (cmd,)))
                 return
 
             stdout, stderr = p.communicate()
@@ -57,9 +72,10 @@ class ExecuteGitCommandThread(threading.Thread):
 
             self._HandleOutput(msg, stdout)
 
+
     def _HandleOutput(self, msg, stdout):
         stdout = stdout.strip()
         if not stdout:
-            self.output_queue.put(msg + ': empty')
+            self.output_queue.put(Output(self.repo, msg + ': empty', stdout))
         else:
-            self.output_queue.put(msg + '\n' + Indent(stdout))
+            self.output_queue.put(Output(self.repo, msg + '\n' + Indent(stdout), stdout))

@@ -9,8 +9,15 @@ import os.path
 import shutil
 import subprocess
 from mu_repo.execute_git_command_in_thread import ExecuteGitCommandThread
-from Queue import Queue
 from mu_repo.rmtree import RmTree
+
+#===================================================================================================
+# DummyQueue
+#===================================================================================================
+class DummyQueue(object):
+
+    def put(self, *args, **kwargs):
+        pass
 
 #Erorr listeners may add themselves here (activated when errors happen in a worker thread).
 on_errors_listeners = set()
@@ -175,7 +182,8 @@ class DoDiffOnRepoThread(ExecuteGitCommandThread):
         self.temp_repo = temp_repo
         args = 'status --porcelain -z'.split()
 
-        ExecuteGitCommandThread.__init__(self, repo, args, config, output_queue=Queue(), put_raw_output=True)
+        ExecuteGitCommandThread.__init__(
+            self, repo, args, config, output_queue=DummyQueue())
 
 
     def run(self):
@@ -188,7 +196,8 @@ class DoDiffOnRepoThread(ExecuteGitCommandThread):
     def _HandleOutput(self, msg, stdout):
         temp_working, temp_repo, repo = self.temp_working, self.temp_repo, self.repo
         for entry in ParsePorcelain(stdout):
-            original, link, original_repo, target_repo = entry.MakeDirs(temp_working, temp_repo, repo)
+            original, link, original_repo, target_repo = entry.MakeDirs(
+                temp_working, temp_repo, repo)
 
             if not os.path.exists(original):
                 with open(link, 'w') as f:
@@ -211,7 +220,6 @@ class DoDiffOnRepoThread(ExecuteGitCommandThread):
 #===================================================================================================
 def Run(params):
     config = params.config
-    git = config.git or 'git'
 
     join = os.path.join
 

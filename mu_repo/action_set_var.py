@@ -14,7 +14,7 @@ from mu_repo.print_ import Print
 def Run(params):
     args = params.args
     if len(args) != 2 or args[1].count('=') != 1:
-        msg = 'Syntax for set_var is "mu set_var key=value"'
+        msg = 'Syntax for set-var is "mu set-var key=value"'
         Print(msg, file=params.stream)
         return Status(msg, True, params.config)
 

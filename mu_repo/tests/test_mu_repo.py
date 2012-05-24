@@ -46,16 +46,16 @@ repo=studio3
 
 
     def testSerial(self):
-        status = mu_repo.main(config_file='.bar_file', args=['set_var', 'serial=1'], stream=StringIO())
+        status = mu_repo.main(config_file='.bar_file', args=['set-var', 'serial=1'], stream=StringIO())
         self.assert_(status.succeeded)
 
-        status = mu_repo.main(config_file='.bar_file', args=['get_vars'], stream=StringIO())
+        status = mu_repo.main(config_file='.bar_file', args=['get-vars'], stream=StringIO())
         self.assert_(status.config.serial)
 
-        status = mu_repo.main(config_file='.bar_file', args=['set_var', 'serial=0'], stream=StringIO())
+        status = mu_repo.main(config_file='.bar_file', args=['set-var', 'serial=0'], stream=StringIO())
         self.assert_(status.succeeded)
 
-        status = mu_repo.main(config_file='.bar_file', args=['get_vars'], stream=StringIO())
+        status = mu_repo.main(config_file='.bar_file', args=['get-vars'], stream=StringIO())
         self.assert_(not status.config.serial)
 
 

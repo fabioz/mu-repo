@@ -48,6 +48,9 @@ mu checkout release <-- will go into each subdir and do 'git checkout release'.
 
 mu dd <-- will create a temporary structure and will invoke winmerge to check that structure.
 
+mu mu-branch <-- will print the current branch for each repository tracked.
+
+mu mu-patch <-- will create a file with diff --cached for each repository in the current dir. 
 
 DIFFING MULTIPLE REPOSITORIES
 ==============================
@@ -69,9 +72,9 @@ actions that require input will not work (and depending on the action,
 may even block), so, it's possible to force it to run in serial mode, where
 no buffering is done by setting the 'serial' flag to 1.
 
-i.e.: mu set_var serial=1
+i.e.: mu set-var serial=1
 
-(and to go back to having commands run in parallel, do mu set_var serial=0)
+(and to go back to having commands run in parallel, do mu set-var serial=0)
 
 
 GIT
@@ -80,6 +83,6 @@ GIT
 If for some reason you don't have git in the path, it's possible to force 
 its location by doing:
 
-mu set_var git=d:\bin\git\bin\git.exe
+mu set-var git=d:\bin\git\bin\git.exe
 
  
