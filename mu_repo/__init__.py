@@ -107,19 +107,20 @@ Note: Passing --timeit in any command will print the time it took
             contents = f.read()
     config = Config.Create(contents)
 
-    if args[0] == 'set_var':
+    arg0 = args[0]
+    if arg0 == 'set_var':
         from .action_set_var import Run
 
-    elif args[0] == 'get_vars':
+    elif arg0 == 'get_vars':
         from .action_get_vars import Run #@Reimport
 
-    elif args[0] == 'register':
+    elif arg0 == 'register':
         from .action_register import Run #@Reimport
 
-    elif args[0] == 'dd':
+    elif arg0 == 'dd':
         from .action_diff import Run #@Reimport
 
-    elif args[0] == 'list':
+    elif arg0 == 'list':
         from .action_list import Run #@Reimport
 
     else:
