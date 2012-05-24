@@ -7,6 +7,7 @@ import unittest
 import os.path
 import shutil
 from mu_repo import keep_files_synched
+from mu_repo.rmtree import RmTree
 
 
 #===================================================================================================
@@ -26,7 +27,7 @@ class Test(unittest.TestCase):
 
     def clear(self):
         if os.path.exists('.test_temp_dir'):
-            shutil.rmtree('.test_temp_dir')
+            RmTree('.test_temp_dir')
 
 
     def read(self, file2):

@@ -40,7 +40,7 @@ class ExecuteGitCommandThread(threading.Thread):
                 p = subprocess.Popen(
                     cmd,
                     cwd=repo,
-                    stderr=subprocess.STDOUT,
+                    #stderr=subprocess.STDOUT, # -- let stderr go to sys.stderr!
                     stdout=subprocess.PIPE,
                     stdin=subprocess.PIPE
                 )

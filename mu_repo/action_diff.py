@@ -10,6 +10,23 @@ import shutil
 import subprocess
 from mu_repo.execute_git_command_in_thread import ExecuteGitCommandThread
 from Queue import Queue
+from mu_repo.rmtree import RmTree
+
+#Erorr listeners may add themselves here (activated when errors happen in a worker thread).
+on_errors_listeners = set()
+
+#===================================================================================================
+# NotifyErrorListeners
+#===================================================================================================
+def NotifyErrorListeners():
+    import StringIO
+    import traceback
+    cstr = StringIO.StringIO()
+    traceback.print_exc(file=cstr)
+    error = cstr.getvalue()
+    for listener in on_errors_listeners:
+        listener(error)
+    Print(error)
 
 
 #===================================================================================================
@@ -19,14 +36,13 @@ def ExecuteGettingStdOutput(cmd, cwd):
     p = subprocess.Popen(
         cmd,
         cwd=cwd,
-        stderr=subprocess.STDOUT,
+        #stderr=subprocess.STDOUT, # -- let stderr go to sys.stderr!
         stdout=subprocess.PIPE,
         stdin=subprocess.PIPE
     )
 
     stdout, _stderr = p.communicate()
     return stdout
-
 
 
 #===================================================================================================
@@ -40,11 +56,19 @@ class CreateFromGit(object):
         self._args = args
 
     def __call__(self):
-        git, repo, original_repo, target_repo = self._args
-        stdout = ExecuteGettingStdOutput(
-            '%s show HEAD:%s' % (git, original_repo,), repo)
-        with open(target_repo, 'wb') as f:
-            f.write(stdout)
+        try:
+            git, repo, original_repo, target_repo = self._args
+            stdout = ExecuteGettingStdOutput(
+                '%s show HEAD:%s' % (git, original_repo,), repo)
+
+            try:
+                if not os.path.isdir(target_repo):
+                    with open(target_repo, 'wb') as f:
+                        f.write(stdout)
+            except:
+                print 'Error writing to file: %s\n%s' % (target_repo, stdout,)
+        except:
+            NotifyErrorListeners()
 
 #===================================================================================================
 # Symlink
@@ -57,11 +81,14 @@ class Symlink(object):
         self._args = args
 
     def __call__(self):
-        symlink, original, link = self._args
-        symlink(
-            original,
-            link
-        )
+        try:
+            symlink, original, link = self._args
+            symlink(
+                original,
+                link
+            )
+        except:
+            NotifyErrorListeners()
 
 
 #===================================================================================================
@@ -152,7 +179,10 @@ class DoDiffOnRepoThread(ExecuteGitCommandThread):
 
 
     def run(self):
-        ExecuteGitCommandThread.run(self, serial=False)
+        try:
+            ExecuteGitCommandThread.run(self, serial=False)
+        except:
+            NotifyErrorListeners()
 
 
     def _HandleOutput(self, msg, stdout):
@@ -195,7 +225,7 @@ def Run(params):
                 (temp_dir_name,)
             ).strip().lower()
             if n == 'y':
-                shutil.rmtree(temp_dir_name)
+                RmTree(temp_dir_name)
                 break
             if n == 'n':
                 Print('Canceling diff action.')
@@ -228,8 +258,20 @@ def Run(params):
     except:
         from mu_repo import keep_files_synched
         def symlink(src, target):
-            shutil.copyfile(src, target)
-            keep_files_synched.KeepInSync(src, target)
+            if os.path.isdir(src):
+                if os.path.exists(target):
+                    os.rmdir(target)
+                shutil.copytree(src, target)
+                #This print is a TODO!
+                Print('WARNING: TODO: Structure from: %s is copied (and not symlinked nor kept in sync).' % (target,))
+            else:
+                if os.path.exists(target):
+                    if os.path.isdir(target):
+                        RmTree(target)
+                    else:
+                        os.remove(target)
+                shutil.copyfile(src, target)
+                keep_files_synched.KeepInSync(src, target)
 
     try:
         #Note: we could use diff status --porcelain instead if we wanted to check untracked files.
@@ -259,7 +301,7 @@ def Run(params):
     finally:
         def onerror(*args):
             Print('Error removing temporary directory structure: %s' % (args,))
-        shutil.rmtree(temp_dir_name, onerror=onerror)
+        RmTree(temp_dir_name, onerror=onerror)
 
 
 
