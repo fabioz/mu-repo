@@ -62,21 +62,33 @@ def main(config_file='.mu_repo', args=None, stream=None):
 It works with a .mu_repo file in the current working dir which provides the 
 configuration of the directories that should be tracked on commands.
 
-* mu register repo1 repo2: registers repo1 and repo2 to be tracked.
+* mu register repo1 repo2: Registers repo1 and repo2 to be tracked.
+* mu register --all: Marks for all subdirs with .git to be tracked.
+* mu list: Lists the currently tracked repositories.
+* mu set-var git=d:/bin/git/bin/git.exe: Set git location to be used.
+* mu get-vars: Prints the configuration file
 
-* mu list: lists the currently tracked repositories.
+* mu dd: 
+     Creates a directory structure with working dir vs head and opens 
+     WinMerge with it (doing mu ac will commit exactly what's compared in this
+     situation)
+     
+     Also accepts a parameter to compare with a different commit/branch. I.e.:
+     mu dd HEAD^^
+     mu dd 9fd88da
+     mu dd development
 
-* mu set-var git=d:/bin/git/bin/git.exe
+* mu . command: 
+     The config file is ignored, and mu works in the current dir, 
+     not on registered subdirs (useful for "mu . dd" in a given git repository)
 
-* mu get-vars: prints the configuration file
+Also, it defines some shortcuts:
 
-* mu dd: creates a directory structure with working dir vs head and opens 
-  WinMerge with it.
-  
-* mu ac: git add -A & git commit -m (the message must always be passed) 
-
-* mu . command: the config file is ignored, and mu works in the current dir, 
-  not on registered subdirs (useful for "mu . dd" in a given git repository)
+mu st         = git status --porcelain
+mu co branch  = git checkout branch
+mu mu-patch   = git diff --cached --full-index > output to file for each repo 
+mu mu-branch  = git rev-parse --abbrev-ref HEAD
+mu ac msg     = git add -A & git commit -m (the message must always be passed) 
 
 Any other command is passed directly to git through the multiple repositories:
 I.e.:
@@ -85,13 +97,6 @@ mu pull
 mu fetch
 mu push
 mu checkout release
-
-Also, it defines some shortcuts:
-
-mu st         = git status --porcelain
-mu co branch  = git checkout branch
-mu mu-patch   = git diff --cached --full-index > pasting output to file for each repo 
-mu mu-branch  = git rev-parse --abbrev-ref HEAD
 
 Note: Passing --timeit in any command will print the time it took
       to execute the command.

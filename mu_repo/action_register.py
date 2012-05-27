@@ -1,5 +1,6 @@
 from mu_repo.print_ import Print
 from mu_repo import Status
+import os
 
 #===================================================================================================
 # Run
@@ -11,12 +12,22 @@ def Run(params):
     config = params.config
 
     if len(args) < 2:
-        msg = 'Repository (dir name) to track not passed'
+        msg = 'Repository (dir name|--all) to track not passed'
         Print(msg, file=stream)
         return Status(msg, False)
     repos = config.repos
     msgs = []
-    for repo in args[1:]:
+    args = args[1:]
+    join = os.path.join
+    isdir = os.path.isdir
+    if '--all' in args:
+        if len(args) > 1:
+            Print('If --all is passed in mu register, no other parameter should be passed.')
+            return
+
+        args = [repo for repo in os.listdir('.') if isdir(join(repo, '.git'))]
+
+    for repo in args:
         if repo in repos:
             msg = 'Repository: %s not added (already there)' % (repo,)
             Print(msg, file=stream)

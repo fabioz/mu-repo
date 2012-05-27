@@ -14,7 +14,7 @@ def Run(params):
         return Status(msg, True, config)
     else:
         repo_str = '\n'.join(sorted(config.repos))
-        Print('Repositories:', file=stream)
+        Print('Tracked Repositories:\n', file=stream)
         Print(repo_str, file=stream)
         return Status(repo_str, True, config)
 
