@@ -87,11 +87,11 @@ Also, it defines some shortcuts:
 mu st         = git status --porcelain
 mu co branch  = git checkout branch
 mu mu-patch   = git diff --cached --full-index > output to file for each repo 
-mu mu-branch  = git rev-parse --abbrev-ref HEAD
+mu mu-branch  = git rev-parse --abbrev-ref HEAD (print current branch)
 mu ac msg     = git add -A & git commit -m (the message must always be passed) 
 mu shell      = On msysgit, call sh --login -i (linux-like env)
 
-Any other command is passed directly to git through the multiple repositories:
+Any other command is passed directly to git for each repository:
 I.e.:
 
 mu pull
