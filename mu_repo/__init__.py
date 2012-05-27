@@ -89,6 +89,7 @@ mu co branch  = git checkout branch
 mu mu-patch   = git diff --cached --full-index > output to file for each repo 
 mu mu-branch  = git rev-parse --abbrev-ref HEAD
 mu ac msg     = git add -A & git commit -m (the message must always be passed) 
+mu shell      = On msysgit, call sh --login -i (linux-like env)
 
 Any other command is passed directly to git through the multiple repositories:
 I.e.:
@@ -133,6 +134,15 @@ Note: Passing --timeit in any command will print the time it took
 
     elif arg0 == 'ac':
         from .action_add_and_commit import Run #@Reimport
+
+    elif arg0 == 'shell':
+        import subprocess
+        try:
+            subprocess.call(['sh', '--login', '-i'])
+        except:
+            #Ignore any error here (if the user pressed Ctrl+C before exit, we'd have an exception).
+            pass
+        return
 
     else:
         from .action_default import Run #@Reimport
