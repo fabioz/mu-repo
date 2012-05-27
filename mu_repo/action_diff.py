@@ -64,9 +64,9 @@ class CreateFromGit(object):
 
     def __call__(self):
         try:
-            git, repo, original_repo, target_repo = self._args
+            git, repo, original_repo, target_repo, branch = self._args
             stdout = ExecuteGettingStdOutput(
-                '%s show HEAD:%s' % (git, original_repo,), repo)
+                '%s show %s:%s' % (git, branch, original_repo,), repo)
 
             try:
                 if not os.path.isdir(target_repo):
@@ -150,7 +150,7 @@ class StatusEntry(object):
 #===================================================================================================
 # ParsePorcelain
 #===================================================================================================
-def ParsePorcelain(porcelain_output):
+def ParsePorcelain(porcelain_output, only_split):
     it = iter(porcelain_output.split('\0'))
     for entry in it:
         entry = entry.strip()
@@ -159,15 +159,18 @@ def ParsePorcelain(porcelain_output):
         for i, c in enumerate(entry):
             if c == ' ':
                 break
-        st = entry[:i].strip()
-        entry = entry[i:].strip()
-        if not st:
-            continue #Unmodified
-        if 'R' in st:
-            filename_from = next(it)
-            yield StatusEntry(entry, filename_from)
-        else:
+        if only_split:
             yield StatusEntry(entry, entry)
+        else:
+            st = entry[:i].strip()
+            entry = entry[i:].strip()
+            if not st:
+                continue #Unmodified
+            if 'R' in st:
+                filename_from = next(it)
+                yield StatusEntry(entry, filename_from)
+            else:
+                yield StatusEntry(entry, entry)
 
 
 #===================================================================================================
@@ -176,11 +179,15 @@ def ParsePorcelain(porcelain_output):
 class DoDiffOnRepoThread(ExecuteGitCommandThread):
 
 
-    def __init__(self, config, repo, symlink, temp_working, temp_repo):
+    def __init__(self, config, repo, symlink, temp_working, temp_repo, branch):
         self.symlink = symlink
         self.temp_working = temp_working
         self.temp_repo = temp_repo
-        args = 'status --porcelain -z'.split()
+        self.branch = branch
+        if not branch:
+            args = 'status --porcelain -z'.split()
+        else:
+            args = 'diff --name-only -z'.split() + [branch]
         self.entry_count = 0
 
         ExecuteGitCommandThread.__init__(
@@ -196,24 +203,37 @@ class DoDiffOnRepoThread(ExecuteGitCommandThread):
 
     def _HandleOutput(self, msg, stdout):
         temp_working, temp_repo, repo = self.temp_working, self.temp_repo, self.repo
-        for entry in ParsePorcelain(stdout):
+        for entry in ParsePorcelain(stdout, only_split=self.branch != ''):
             self.entry_count += 1
             original, link, original_repo, target_repo = entry.MakeDirs(
                 temp_working, temp_repo, repo)
 
-            if not os.path.exists(original):
-                with open(link, 'w') as f:
-                    f.write('File: %s was removed in working dir.' % (original,))
-            else:
+            if not self.branch:
+                #Dealing with working copy
+                if not os.path.exists(original):
+                    with open(link, 'w') as f:
+                        f.write('File: %s was removed in working dir.' % (original,))
+                else:
+                    thread_pool.AddTask(
+                        Symlink(self.symlink, original, link)
+                    )
                 thread_pool.AddTask(
-                    Symlink(self.symlink, original, link)
+                    CreateFromGit(
+                        self.config.git or 'git', self.repo, original_repo, target_repo, 'HEAD')
                 )
 
-            thread_pool.AddTask(
-                CreateFromGit(self.config.git or 'git', self.repo, original_repo, target_repo)
-            )
+            else:
+                #Dealing with some existing branch/commit.
+                original = '/'.join(original.replace('\\', '/').split('/')[1:])
+                thread_pool.AddTask(
+                    CreateFromGit(
+                        self.config.git or 'git', self.repo, original, target_repo, self.branch)
+                )
 
-
+                thread_pool.AddTask(
+                    CreateFromGit(
+                        self.config.git or 'git', self.repo, original_repo, link, 'HEAD')
+                )
 
 
 
@@ -285,9 +305,16 @@ def Run(params):
     try:
         #Note: we could use diff status --porcelain instead if we wanted to check untracked files.
         #cmd = [git] + 'diff --name-only -z'.split()
+        args = params.args
+        branch = ''
+        if len(args) > 1:
+            #Ok, the user is comparing current branch with a previous branch or commit.
+            #i.e.: mu dd HEAD^^
+            branch = args[1]
+
         threads = []
         for repo in config.repos:
-            thread = DoDiffOnRepoThread(config, repo, symlink, temp_working, temp_repo)
+            thread = DoDiffOnRepoThread(config, repo, symlink, temp_working, temp_repo, branch)
             threads.append(thread)
             thread.start()
 

@@ -72,6 +72,8 @@ configuration of the directories that should be tracked on commands.
 
 * mu dd: creates a directory structure with working dir vs head and opens 
   WinMerge with it.
+  
+* mu ac: git add -A & git commit -m (the message must always be passed) 
 
 * mu . command: the config file is ignored, and mu works in the current dir, 
   not on registered subdirs (useful for "mu . dd" in a given git repository)
@@ -123,6 +125,9 @@ Note: Passing --timeit in any command will print the time it took
 
     elif arg0 == 'list':
         from .action_list import Run #@Reimport
+
+    elif arg0 == 'ac':
+        from .action_add_and_commit import Run #@Reimport
 
     else:
         from .action_default import Run #@Reimport
