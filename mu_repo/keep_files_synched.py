@@ -34,8 +34,46 @@ def KeepInSync(file1, file2):
         if _KeepInSyncThread._instance is None:
             _KeepInSyncThread._instance = _KeepInSyncThread()
             _KeepInSyncThread._instance.start()
-    _KeepInSyncThread._instance.files_to_keep_in_sync_queue.put(_KeepInSyncStruct(file1, file2))
+    isfile = os.path.isfile
+    isdir = os.path.isdir
 
+    if isfile(file1) and isfile(file2):
+        _KeepInSyncThread._instance.files_to_keep_in_sync_queue.put(_KeepInSyncStruct(file1, file2))
+
+    elif isdir(file1) and isdir(file2):
+        _KeepDirInSync(file1, file2)
+
+    else:
+        Print('Expected %s and %s to be both files or dirs.' % (file1, file2))
+
+
+#===================================================================================================
+# _KeepDirInSync
+#===================================================================================================
+def _KeepDirInSync(file1, file2):
+    isfile = os.path.isfile
+    isdir = os.path.isdir
+    join = os.path.join
+    names1 = set(os.listdir(file1))
+    names2 = set(os.listdir(file2))
+    both = names1.intersection(names2)
+    if names1 != names2:
+        Print(
+            'Warning: the directory of %s structure is different from %s. Only files in both are kept in sync.' %
+            (names1, names2)
+        )
+
+    for name in both:
+        full1 = join(file1, name)
+        full2 = join(file2, name)
+        if isfile(full1) and isfile(full2):
+            _KeepInSyncThread._instance.files_to_keep_in_sync_queue.put(_KeepInSyncStruct(full1, full2))
+
+        elif isdir(full1) and isdir(full2):
+            _KeepDirInSync(full1, full2)
+
+        else:
+            Print('Expected %s and %s to be both files or dirs.' % (full1, full2))
 
 
 #===================================================================================================

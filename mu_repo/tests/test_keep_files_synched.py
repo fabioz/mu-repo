@@ -72,6 +72,23 @@ class Test(unittest.TestCase):
         self.assertEqual('second', self.read(file2))
 
 
+    def testKeepFilesSynchedDir(self):
+        os.makedirs('.test_temp_dir/d1')
+        os.makedirs('.test_temp_dir/d2')
+        file1 = os.path.join('.test_temp_dir', 'd1', 'f1')
+        file2 = os.path.join('.test_temp_dir', 'd2', 'f1')
+        with open(file1, 'w') as f:
+            f.write('initial')
+        shutil.copyfile(file1, file2)
+        keep_files_synched.KeepInSync('.test_temp_dir/d1', '.test_temp_dir/d2') #Keep dir in sync
+
+        self.assertEqual('initial', self.read(file2))
+        with open(file1, 'w') as f:
+            f.write('second')
+        keep_files_synched.StopSyncs()
+        self.assertEqual('second', self.read(file2))
+
+
 
 
 #===================================================================================================

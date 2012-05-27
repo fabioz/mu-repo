@@ -270,8 +270,7 @@ def Run(params):
                 if os.path.exists(target):
                     os.rmdir(target)
                 shutil.copytree(src, target)
-                #This print is a TODO!
-                Print('WARNING: TODO: Structure from: %s is copied (and not symlinked nor kept in sync).' % (target,))
+                keep_files_synched.KeepInSync(src, target)
             else:
                 if os.path.exists(target):
                     if os.path.isdir(target):
