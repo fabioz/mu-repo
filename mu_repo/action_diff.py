@@ -181,6 +181,7 @@ class DoDiffOnRepoThread(ExecuteGitCommandThread):
         self.temp_working = temp_working
         self.temp_repo = temp_repo
         args = 'status --porcelain -z'.split()
+        self.entry_count = 0
 
         ExecuteGitCommandThread.__init__(
             self, repo, args, config, output_queue=DummyQueue())
@@ -196,6 +197,7 @@ class DoDiffOnRepoThread(ExecuteGitCommandThread):
     def _HandleOutput(self, msg, stdout):
         temp_working, temp_repo, repo = self.temp_working, self.temp_repo, self.repo
         for entry in ParsePorcelain(stdout):
+            self.entry_count += 1
             original, link, original_repo, target_repo = entry.MakeDirs(
                 temp_working, temp_repo, repo)
 
@@ -293,6 +295,12 @@ def Run(params):
             thread.join()
 
         thread_pool.Join()
+        for thread in threads:
+            if thread.entry_count != 0:
+                break
+        else:
+            Print('No changes found.')
+            return
 
         winmerge_cmd = 'WinMergeU.exe /r /u /wr /dl WORKINGCOPY /dr HEAD'.split()
         cmd = winmerge_cmd + [temp_working, temp_repo]
@@ -301,11 +309,12 @@ def Run(params):
         except:
             Print('Error calling: %s' % (' '.join(cmd),))
 
-        #If we've gono to the synching mode, make sure we had a last synchronization before
+    finally:
+        #If we've gone to the synching mode, make sure we had a last synchronization before
         #getting out of the diff.
         if keep_files_synched is not None:
             keep_files_synched.StopSyncs()
-    finally:
+
         def onerror(*args):
             Print('Error removing temporary directory structure: %s' % (args,))
         RmTree(temp_dir_name, onerror=onerror)
