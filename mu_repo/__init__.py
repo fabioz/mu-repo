@@ -17,6 +17,8 @@ else:
     colorama.init()
     COLOR = colorama.Fore.CYAN
     RESET = colorama.Fore.RESET
+    COLOR = ''
+    RESET = ''
 
 
 #===================================================================================================
