@@ -3,6 +3,22 @@ import sys
 from mu_repo.config import Config
 from .print_ import Print
 
+try:
+    #Reference: http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python
+    #To properly support colors, one has to enable http://support.microsoft.com/kb/101875
+    #Or colorama must be used (it's currently distributed along with this project)
+    #Gotten from http://pypi.python.org/pypi/colorama
+    #See COLORAMA_LICENSE for details and copyright.
+    import colorama
+except:
+    COLOR = ''
+    RESET = ''
+else:
+    colorama.init()
+    COLOR = colorama.Fore.CYAN
+    RESET = colorama.Fore.RESET
+
+
 #===================================================================================================
 # Status
 #===================================================================================================
@@ -57,18 +73,19 @@ def main(config_file='.mu_repo', args=None, stream=None):
         args = sys.argv[1:]
 
     if len(args) == 0 or (len(args) == 1 and args[0] in ('help', '--help')):
-        msg = '''mu-repo is a command-line utility to deal with multiple git repositories.
+        from string import Template
+        msg = Template('''mu-repo is a command-line utility to deal with multiple git repositories.
         
 It works with a .mu_repo file in the current working dir which provides the 
 configuration of the directories that should be tracked on commands.
 
-* mu register repo1 repo2: Registers repo1 and repo2 to be tracked.
-* mu register --all: Marks for all subdirs with .git to be tracked.
-* mu list: Lists the currently tracked repositories.
-* mu set-var git=d:/bin/git/bin/git.exe: Set git location to be used.
-* mu get-vars: Prints the configuration file
+* ${START}mu register repo1 repo2:${END} Registers repo1 and repo2 to be tracked.
+* ${START}mu register --all:${END} Marks for all subdirs with .git to be tracked.
+* ${START}mu list:${END} Lists the currently tracked repositories.
+* ${START}mu set-var git=d:/bin/git/bin/git.exe:${END} Set git location to be used.
+* ${START}mu get-vars:${END} Prints the configuration file
 
-* mu dd: 
+* ${START}mu dd:${END}
      Creates a directory structure with working dir vs head and opens 
      WinMerge with it (doing mu ac will commit exactly what's compared in this
      situation)
@@ -78,30 +95,30 @@ configuration of the directories that should be tracked on commands.
      mu dd 9fd88da
      mu dd development
 
-* mu . command: 
+* ${START}mu . command: ${END} 
      The config file is ignored, and mu works in the current dir, 
      not on registered subdirs (useful for "mu . dd" in a given git repository)
 
 Also, it defines some shortcuts:
 
-mu st         = git status --porcelain
-mu co branch  = git checkout branch
-mu mu-patch   = git diff --cached --full-index > output to file for each repo 
-mu mu-branch  = git rev-parse --abbrev-ref HEAD (print current branch)
-mu ac msg     = git add -A & git commit -m (the message must always be passed) 
-mu shell      = On msysgit, call sh --login -i (linux-like env)
+${START}mu st         ${END}= git status --porcelain
+${START}mu co branch  ${END}= git checkout branch
+${START}mu mu-patch   ${END}= git diff --cached --full-index > output to file for each repo 
+${START}mu mu-branch  ${END}= git rev-parse --abbrev-ref HEAD (print current branch)
+${START}mu ac msg     ${END}= git add -A & git commit -m (the message must always be passed) 
+${START}mu shell      ${END}= On msysgit, call sh --login -i (linux-like env)
 
 Any other command is passed directly to git for each repository:
 I.e.:
 
-mu pull
-mu fetch
-mu push
-mu checkout release
+${START}mu pull            ${END}
+${START}mu fetch           ${END}
+${START}mu push            ${END}
+${START}mu checkout release${END}
 
 Note: Passing --timeit in any command will print the time it took
       to execute the command.
-'''
+''').substitute(START=COLOR, END=RESET)
         Print(msg, file=stream)
         return Status(msg, False)
 

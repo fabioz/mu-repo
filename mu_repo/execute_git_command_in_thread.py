@@ -1,6 +1,7 @@
 import threading
 import subprocess
 from mu_repo.print_ import Print
+from mu_repo import COLOR, RESET
 
 #===================================================================================================
 # Indent
@@ -76,6 +77,6 @@ class ExecuteGitCommandThread(threading.Thread):
     def _HandleOutput(self, msg, stdout):
         stdout = stdout.strip()
         if not stdout:
-            self.output_queue.put(Output(self.repo, msg + ': empty', stdout))
+            self.output_queue.put(Output(self.repo, COLOR + msg + ': ' + RESET + 'empty', stdout))
         else:
-            self.output_queue.put(Output(self.repo, msg + '\n' + Indent(stdout), stdout))
+            self.output_queue.put(Output(self.repo, COLOR + msg + RESET + '\n' + Indent(stdout), stdout))

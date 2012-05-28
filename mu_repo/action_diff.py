@@ -150,7 +150,7 @@ class StatusEntry(object):
 #===================================================================================================
 # ParsePorcelain
 #===================================================================================================
-def ParsePorcelain(porcelain_output, only_split):
+def ParsePorcelain(porcelain_output, only_split=False):
     it = iter(porcelain_output.split('\0'))
     for entry in it:
         entry = entry.strip()
