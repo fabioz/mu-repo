@@ -3,12 +3,12 @@ Created on May 17, 2012
 
 @author: Fabio Zadrozny
 '''
-import unittest
+from mu_repo import action_diff
+from mu_repo.config import Config
+from mu_repo.print_ import PushIgnorePrint, PopIgnorePrint
 import mu_repo
 import os.path
-from StringIO import StringIO
-from mu_repo.config import Config
-from mu_repo import action_diff
+import unittest
 
 
 #===================================================================================================
@@ -19,11 +19,13 @@ class Test(unittest.TestCase):
 
     def setUp(self):
         unittest.TestCase.setUp(self)
+        PushIgnorePrint()
         self.clear()
 
 
     def tearDown(self):
         unittest.TestCase.tearDown(self)
+        PopIgnorePrint()
         self.clear()
 
 
@@ -41,38 +43,38 @@ repo=studio3
 
 
     def testMain(self):
-        status = mu_repo.main(config_file='.bar_file', args=[], stream=StringIO())
+        status = mu_repo.main(config_file='.bar_file', args=[])
         self.assert_(not status.succeeded)
 
 
     def testSerial(self):
-        status = mu_repo.main(config_file='.bar_file', args=['set-var', 'serial=1'], stream=StringIO())
+        status = mu_repo.main(config_file='.bar_file', args=['set-var', 'serial=1'])
         self.assert_(status.succeeded)
 
-        status = mu_repo.main(config_file='.bar_file', args=['get-vars'], stream=StringIO())
+        status = mu_repo.main(config_file='.bar_file', args=['get-vars'])
         self.assert_(status.config.serial)
 
-        status = mu_repo.main(config_file='.bar_file', args=['set-var', 'serial=0'], stream=StringIO())
+        status = mu_repo.main(config_file='.bar_file', args=['set-var', 'serial=0'])
         self.assert_(status.succeeded)
 
-        status = mu_repo.main(config_file='.bar_file', args=['get-vars'], stream=StringIO())
+        status = mu_repo.main(config_file='.bar_file', args=['get-vars'])
         self.assert_(not status.config.serial)
 
 
     def testRegister(self):
-        status = mu_repo.main(config_file='.bar_file', args=[], stream=StringIO())
+        status = mu_repo.main(config_file='.bar_file', args=[])
         self.assert_(not status.succeeded, status.status_message)
 
-        status = mu_repo.main(config_file='.bar_file', args=['register', 'pydev'], stream=StringIO())
+        status = mu_repo.main(config_file='.bar_file', args=['register', 'pydev'])
         self.assert_(status.succeeded)
 
-        status = mu_repo.main(config_file='.bar_file', args=['list'], stream=StringIO())
+        status = mu_repo.main(config_file='.bar_file', args=['list'])
         self.assertEquals(status.config.repos, ['pydev'])
 
-        status = mu_repo.main(config_file='.bar_file', args=['register', 'a', 'b'], stream=StringIO())
+        status = mu_repo.main(config_file='.bar_file', args=['register', 'a', 'b'])
         self.assert_(status.succeeded)
 
-        status = mu_repo.main(config_file='.bar_file', args=['list'], stream=StringIO())
+        status = mu_repo.main(config_file='.bar_file', args=['list'])
         self.assertEquals(status.config.repos, ['pydev', 'a', 'b'])
 
 

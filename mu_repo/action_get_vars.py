@@ -12,5 +12,5 @@ from mu_repo import Status
 def Run(params):
 
     msg = str(params.config)
-    Print(msg, file=params.stream)
+    Print(msg)
     return Status(msg, True, params.config)

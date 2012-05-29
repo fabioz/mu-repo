@@ -3,15 +3,15 @@ Created on May 23, 2012
 
 @author: Fabio Zadrozny
 '''
-import unittest
-import os.path
-from mu_repo.config import Config
 from mu_repo import action_diff, Params
-import subprocess
-import sys
-import time
-from mu_repo.rmtree import RmTree
 from mu_repo.action_diff import NotifyErrorListeners
+from mu_repo.config import Config
+from mu_repo.print_ import PushIgnorePrint, PopIgnorePrint
+from mu_repo.rmtree import RmTree
+import os.path
+import subprocess
+import time
+import unittest
 
 
 #===================================================================================================
@@ -22,11 +22,13 @@ class Test(unittest.TestCase):
 
     def setUp(self):
         unittest.TestCase.setUp(self)
+        PushIgnorePrint()
         self.clear()
 
 
     def tearDown(self):
         unittest.TestCase.tearDown(self)
+        PopIgnorePrint()
         self.clear()
 
 
@@ -41,7 +43,7 @@ class Test(unittest.TestCase):
 
     def CallDiff(self, branch=None, check_structure=None):
         config = Config(repos=['test_diff_command_git_repo_dir'], git=self.git)
-        params = Params(config, ['dd'] + [branch] if branch else [], config_file=None, stream=sys.stdout)
+        params = Params(config, ['dd'] + [branch] if branch else [], config_file=None)
 
         called = []
         def Call(cmd, *args, **kwargs):

@@ -1,7 +1,7 @@
 import threading
 import subprocess
 from mu_repo.print_ import Print
-from mu_repo import COLOR, RESET
+from print_ import START_COLOR, RESET_COLOR
 
 #===================================================================================================
 # Indent
@@ -43,7 +43,7 @@ class ExecuteGitCommandThread(threading.Thread):
         repo = self.repo
         git = self.config.git or 'git'
         cmd = [git] + args
-        msg = ' '.join([COLOR, '\n', repo, ':'] + cmd + [RESET])
+        msg = ' '.join([START_COLOR, '\n', repo, ':'] + cmd + [RESET_COLOR])
 
         if serial:
             #Print directly to stdout/stderr without buffering.

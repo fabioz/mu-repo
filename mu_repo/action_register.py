@@ -7,13 +7,12 @@ import os
 #===================================================================================================
 def Run(params):
     args = params.args
-    stream = params.stream
     config_file = params.config_file
     config = params.config
 
     if len(args) < 2:
         msg = 'Repository (dir name|--all) to track not passed'
-        Print(msg, file=stream)
+        Print(msg)
         return Status(msg, False)
     repos = config.repos
     msgs = []
@@ -30,12 +29,12 @@ def Run(params):
     for repo in args:
         if repo in repos:
             msg = 'Repository: %s not added (already there)' % (repo,)
-            Print(msg, file=stream)
+            Print(msg)
             msgs.append(msg)
         else:
             repos.append(repo)
             msg = 'Repository: %s added' % (repo,)
-            Print(msg, file=stream)
+            Print(msg)
             msgs.append(msg)
 
     with open(config_file, 'w') as f:

@@ -3,11 +3,12 @@ Created on 20/05/2012
 
 @author: Fabio Zadrozny
 '''
-import unittest
+from mu_repo import keep_files_synched
+from mu_repo.print_ import PushIgnorePrint, PopIgnorePrint
+from mu_repo.rmtree import RmTree
 import os.path
 import shutil
-from mu_repo import keep_files_synched
-from mu_repo.rmtree import RmTree
+import unittest
 
 
 #===================================================================================================
@@ -17,11 +18,13 @@ class Test(unittest.TestCase):
 
     def setUp(self):
         unittest.TestCase.setUp(self)
+        PushIgnorePrint()
         self.clear()
 
 
     def tearDown(self):
         unittest.TestCase.tearDown(self)
+        PopIgnorePrint()
         self.clear()
 
 

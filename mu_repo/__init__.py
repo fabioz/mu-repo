@@ -3,22 +3,6 @@ import sys
 from mu_repo.config import Config
 from .print_ import Print
 
-try:
-    #Reference: http://stackoverflow.com/questions/287871/print-in-terminal-with-colors-using-python
-    #To properly support colors, one has to enable http://support.microsoft.com/kb/101875
-    #Or colorama must be used (it's currently distributed along with this project)
-    #Gotten from http://pypi.python.org/pypi/colorama
-    #See COLORAMA_LICENSE for details and copyright.
-    import colorama
-except:
-    COLOR = ''
-    RESET = ''
-else:
-    colorama.init()
-    COLOR = colorama.Fore.CYAN
-    RESET = colorama.Fore.RESET
-
-
 
 #===================================================================================================
 # Status
@@ -38,17 +22,15 @@ class Status(object):
 class Params(object):
 
     #args = params.args
-    #stream = params.stream
     #config_file = params.config_file
     #config = params.config
 
-    __slots__ = ['config', 'args', 'config_file', 'stream']
+    __slots__ = ['config', 'args', 'config_file']
 
-    def __init__(self, config, args, config_file, stream):
+    def __init__(self, config, args, config_file):
         self.config = config
         self.args = args
         self.config_file = config_file
-        self.stream = stream
 
 
 #===================================================================================================
@@ -68,26 +50,26 @@ def PrintTime(func):
 #===================================================================================================
 # main
 #===================================================================================================
-def main(config_file='.mu_repo', args=None, stream=None):
+def main(config_file='.mu_repo', args=None):
 
     if args is None:
         args = sys.argv[1:]
 
     if len(args) == 0 or (len(args) == 1 and args[0] in ('help', '--help')):
         from string import Template
-        msg = Template('''mu-repo is a command-line utility to deal with multiple git repositories.
+        msg = '''mu-repo is a command-line utility to deal with multiple git repositories.
         
 It works with a .mu_repo file in the current working dir which provides the 
 configuration of the directories that should be tracked on commands
 (or may be used as a git replacement on directories containing a .git dir).
 
-* ${START}mu register repo1 repo2:${END} Registers repo1 and repo2 to be tracked.
-* ${START}mu register --all:${END} Marks for all subdirs with .git to be tracked.
-* ${START}mu list:${END} Lists the currently tracked repositories.
-* ${START}mu set-var git=d:/bin/git/bin/git.exe:${END} Set git location to be used.
-* ${START}mu get-vars:${END} Prints the configuration file
+* ${START_COLOR}mu register repo1 repo2:${RESET_COLOR} Registers repo1 and repo2 to be tracked.
+* ${START_COLOR}mu register --all:${RESET_COLOR} Marks for all subdirs with .git to be tracked.
+* ${START_COLOR}mu list:${RESET_COLOR} Lists the currently tracked repositories.
+* ${START_COLOR}mu set-var git=d:/bin/git/bin/git.exe:${RESET_COLOR} Set git location to be used.
+* ${START_COLOR}mu get-vars:${RESET_COLOR} Prints the configuration file
 
-* ${START}mu dd:${END}
+* ${START_COLOR}mu dd:${RESET_COLOR}
      Creates a directory structure with working dir vs head and opens 
      WinMerge with it (doing mu ac will commit exactly what's compared in this
      situation)
@@ -99,25 +81,26 @@ configuration of the directories that should be tracked on commands
 
 Also, it defines some shortcuts:
 
-${START}mu st         ${END}= git status --porcelain
-${START}mu co branch  ${END}= git checkout branch
-${START}mu mu-patch   ${END}= git diff --cached --full-index > output to file for each repo 
-${START}mu mu-branch  ${END}= git rev-parse --abbrev-ref HEAD (print current branch)
-${START}mu ac msg     ${END}= git add -A & git commit -m (the message must always be passed) 
-${START}mu shell      ${END}= On msysgit, call sh --login -i (linux-like env)
+${START_COLOR}mu st         ${RESET_COLOR}= git status --porcelain
+${START_COLOR}mu co branch  ${RESET_COLOR}= git checkout branch
+${START_COLOR}mu mu-patch   ${RESET_COLOR}= git diff --cached --full-index > output to file for each repo 
+${START_COLOR}mu mu-branch  ${RESET_COLOR}= git rev-parse --abbrev-ref HEAD (print current branch)
+${START_COLOR}mu ac msg     ${RESET_COLOR}= git add -A & git commit -m (the message must always be passed) 
+${START_COLOR}mu acp msg    ${RESET_COLOR}= same as 'mu ac' + git push origin current branch.
+${START_COLOR}mu shell      ${RESET_COLOR}= On msysgit, call sh --login -i (linux-like env)
 
 Any other command is passed directly to git for each repository:
 I.e.:
 
-${START}mu pull            ${END}
-${START}mu fetch           ${END}
-${START}mu push            ${END}
-${START}mu checkout release${END}
+${START_COLOR}mu pull            ${RESET_COLOR}
+${START_COLOR}mu fetch           ${RESET_COLOR}
+${START_COLOR}mu push            ${RESET_COLOR}
+${START_COLOR}mu checkout release${RESET_COLOR}
 
 Note: Passing --timeit in any command will print the time it took
       to execute the command.
-''').substitute(START=COLOR, END=RESET)
-        Print(msg, file=stream)
+'''
+        Print(msg)
         return Status(msg, False)
 
     exists = os.path.exists(config_file)
@@ -150,17 +133,27 @@ Note: Passing --timeit in any command will print the time it took
     elif arg0 == 'dd':
         from .action_diff import Run #@Reimport
 
+    elif arg0 == 'up':
+        from .action_up import Run #@Reimport
+
     elif arg0 == 'list':
         from .action_list import Run #@Reimport
 
-    elif arg0 == 'ac':
+    elif arg0 == 'ac': #Add, commit
         from .action_add_and_commit import Run #@Reimport
+
+    elif arg0 == 'acp': #Add, commit, push
+        def Run(params):
+            from .action_add_and_commit import Run #@Reimport
+            Run(params, push=True)
+
 
     elif arg0 == 'shell':
         import subprocess
         try:
             subprocess.call(['sh', '--login', '-i'])
         except:
+            import traceback;traceback.print_exc()
             #Ignore any error here (if the user pressed Ctrl+C before exit, we'd have an exception).
             pass
         return
@@ -168,7 +161,7 @@ Note: Passing --timeit in any command will print the time it took
     else:
         from .action_default import Run #@Reimport
 
-    return Run(Params(config, args, config_file, stream))
+    return Run(Params(config, args, config_file))
 
 
 if '--timeit' in sys.argv:
