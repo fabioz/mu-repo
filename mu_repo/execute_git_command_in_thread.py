@@ -43,7 +43,7 @@ class ExecuteGitCommandThread(threading.Thread):
         repo = self.repo
         git = self.config.git or 'git'
         cmd = [git] + args
-        msg = ' '.join(['\n', repo, ':'] + cmd)
+        msg = ' '.join([COLOR, '\n', repo, ':'] + cmd + [RESET])
 
         if serial:
             #Print directly to stdout/stderr without buffering.
@@ -64,7 +64,7 @@ class ExecuteGitCommandThread(threading.Thread):
                 p.stdin.write('\n' * 20)
                 p.stdin.close()
             except:
-                self.output_queue.put(Output(repo, 'Error executing: %s' % (cmd,)))
+                self.output_queue.put(Output(repo, 'Error executing: %s' % (cmd,), ''))
                 return
 
             stdout, stderr = p.communicate()
@@ -77,6 +77,6 @@ class ExecuteGitCommandThread(threading.Thread):
     def _HandleOutput(self, msg, stdout):
         stdout = stdout.strip()
         if not stdout:
-            self.output_queue.put(Output(self.repo, COLOR + msg + ': ' + RESET + 'empty', stdout))
+            self.output_queue.put(Output(self.repo, msg + ': ' + 'empty', stdout))
         else:
-            self.output_queue.put(Output(self.repo, COLOR + msg + RESET + '\n' + Indent(stdout), stdout))
+            self.output_queue.put(Output(self.repo, msg + '\n' + Indent(stdout), stdout))

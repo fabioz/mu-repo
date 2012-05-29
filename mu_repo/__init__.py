@@ -17,8 +17,7 @@ else:
     colorama.init()
     COLOR = colorama.Fore.CYAN
     RESET = colorama.Fore.RESET
-    COLOR = ''
-    RESET = ''
+
 
 
 #===================================================================================================
@@ -79,7 +78,8 @@ def main(config_file='.mu_repo', args=None, stream=None):
         msg = Template('''mu-repo is a command-line utility to deal with multiple git repositories.
         
 It works with a .mu_repo file in the current working dir which provides the 
-configuration of the directories that should be tracked on commands.
+configuration of the directories that should be tracked on commands
+(or may be used as a git replacement on directories containing a .git dir).
 
 * ${START}mu register repo1 repo2:${END} Registers repo1 and repo2 to be tracked.
 * ${START}mu register --all:${END} Marks for all subdirs with .git to be tracked.
@@ -96,10 +96,6 @@ configuration of the directories that should be tracked on commands.
      mu dd HEAD^^
      mu dd 9fd88da
      mu dd development
-
-* ${START}mu . command: ${END} 
-     The config file is ignored, and mu works in the current dir, 
-     not on registered subdirs (useful for "mu . dd" in a given git repository)
 
 Also, it defines some shortcuts:
 
@@ -127,13 +123,19 @@ Note: Passing --timeit in any command will print the time it took
     exists = os.path.exists(config_file)
     if not exists:
         contents = ''
-        if '.' == args[0]:
-            del args[0]
-            contents = 'repo=.'
     else:
         with open(config_file, 'r') as f:
             contents = f.read()
     config = Config.Create(contents)
+
+    if not config.repos:
+        if '.' == args[0]:
+            del args[0]
+            config.repos.append('.')
+        elif os.path.exists('.git'):
+            #Allow it to be used on single git repos too.
+            config.repos.append('.')
+
 
     arg0 = args[0]
     if arg0 == 'set-var':
