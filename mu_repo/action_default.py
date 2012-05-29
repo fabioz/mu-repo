@@ -36,16 +36,6 @@ def Run(params, on_output=Print):
             args[0] = 'rev-parse'
             args.insert(1, '--abbrev-ref')
             args.insert(2, 'HEAD')
-            def OnOutput(output):
-                stdout = output.stdout
-                if stdout.strip():
-                    Print('Writing diff --cached for: ', output.repo)
-                    with open('__diff__.' + output.repo + '.patch', 'w') as f:
-                        f.write(stdout)
-                else:
-                    Print('EMPTY diff --cached for: ', output.repo)
-            on_output = OnOutput
-
 
         elif arg0 == 'mu-patch':
             args[0] = 'diff'
