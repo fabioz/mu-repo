@@ -153,9 +153,8 @@ Note: Passing --timeit in any command will print the time it took
         try:
             subprocess.call(['sh', '--login', '-i'])
         except:
-            import traceback;traceback.print_exc()
             #Ignore any error here (if the user pressed Ctrl+C before exit, we'd have an exception).
-            pass
+            import traceback;traceback.print_exc()
         return
 
     else:
