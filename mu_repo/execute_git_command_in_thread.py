@@ -64,7 +64,7 @@ class ExecuteGitCommandThread(threading.Thread):
                 p.stdin.write('\n' * 20)
                 p.stdin.close()
             except:
-                self.output_queue.put(Output(repo, 'Error executing: %s' % (cmd,), ''))
+                self.output_queue.put(Output(repo, 'Error executing: %s on repo: %s' % (cmd, repo), ''))
                 return
 
             stdout, stderr = p.communicate()

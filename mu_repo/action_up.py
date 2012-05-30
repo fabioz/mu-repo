@@ -48,3 +48,4 @@ def Run(params):
         threads.append(t)
 
     ExecuteThreadsHandlingOutputQueue(threads, output_queue, on_output=Print)
+    return repos_and_curr_branch

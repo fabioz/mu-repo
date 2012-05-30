@@ -51,6 +51,17 @@ def PrintTime(func):
 # main
 #===================================================================================================
 def main(config_file='.mu_repo', args=None):
+    '''
+    Entry point.
+    
+    Some things we may want to support in the future (and if not, at least keep for referencing):
+    
+    Searching (http://gitster.livejournal.com/30195.html)
+        git grep -l --all-match -e Bar -e Foo
+        git log --all-match --grep=APSTUD
+        
+    
+    '''
 
     if args is None:
         args = sys.argv[1:]
@@ -135,6 +146,9 @@ Note: Passing --timeit in any command will print the time it took
 
     elif arg0 == 'up':
         from .action_up import Run #@Reimport
+
+    elif arg0 == 'sync':
+        from .action_sync import Run #@Reimport
 
     elif arg0 == 'list':
         from .action_list import Run #@Reimport
