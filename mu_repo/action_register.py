@@ -26,6 +26,20 @@ def Run(params):
 
         args = [repo for repo in os.listdir('.') if isdir(join(repo, '.git'))]
 
+    elif '--select' in args:
+        if len(args) > 1:
+            Print('If --select is passed in mu register, no other parameter should be passed.')
+            return
+        Print('Still not finished!')
+        return
+
+    elif '--restore' in args:
+        if len(args) > 1:
+            Print('If --restore is passed in mu register, no other parameter should be passed.')
+            return
+        Print('Still not finished!')
+        return
+
     for repo in args:
         if repo in repos:
             msg = 'Repository: %s not added (already there)' % (repo,)

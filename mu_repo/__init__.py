@@ -64,7 +64,9 @@ def main(config_file='.mu_repo', args=None):
     http://stackoverflow.com/questions/61002/how-can-i-generate-a-git-diff-of-whats-changed-since-the-last-time-i-pulled
     git pull origin
     git diff @{1}..
-        
+    
+    Interesting:
+        http://www.saintsjd.com/2012/01/a-better-ui-for-git/ -- https://github.com/saintsjd/gum
     
     '''
 
@@ -81,6 +83,8 @@ configuration of the directories that should be tracked on commands
 
 * ${START_COLOR}mu register repo1 repo2:${RESET_COLOR} Registers repo1 and repo2 to be tracked.
 * ${START_COLOR}mu register --all:${RESET_COLOR} Marks for all subdirs with .git to be tracked.
+* ${START_COLOR}mu register --select:${RESET_COLOR} Select 'enabled' repos.
+* ${START_COLOR}mu register --restore:${RESET_COLOR} Re-enable all repos.
 * ${START_COLOR}mu list:${RESET_COLOR} Lists the currently tracked repositories.
 * ${START_COLOR}mu set-var git=d:/bin/git/bin/git.exe:${RESET_COLOR} Set git location to be used.
 * ${START_COLOR}mu get-vars:${RESET_COLOR} Prints the configuration file
@@ -97,7 +101,7 @@ configuration of the directories that should be tracked on commands
 
 Also, it defines some shortcuts:
 
-${START_COLOR}mu st         ${RESET_COLOR}= git status --porcelain
+${START_COLOR}mu st         ${RESET_COLOR}= git status -s
 ${START_COLOR}mu co branch  ${RESET_COLOR}= git checkout branch
 ${START_COLOR}mu mu-patch   ${RESET_COLOR}= git diff --cached --full-index > output to file for each repo 
 ${START_COLOR}mu mu-branch  ${RESET_COLOR}= git rev-parse --abbrev-ref HEAD (print current branch)
@@ -137,14 +141,20 @@ Note: Passing --timeit in any command will print the time it took
 
 
     arg0 = args[0]
+    change_to_serial_if_possible = True
     if arg0 == 'set-var':
         from .action_set_var import Run
+        change_to_serial_if_possible = False
 
     elif arg0 == 'get-vars':
         from .action_get_vars import Run #@Reimport
+        change_to_serial_if_possible = False
 
     elif arg0 == 'register':
         from .action_register import Run #@Reimport
+
+    elif arg0 == 'list':
+        from .action_list import Run #@Reimport
 
     elif arg0 == 'dd':
         from .action_diff import Run #@Reimport
@@ -154,9 +164,6 @@ Note: Passing --timeit in any command will print the time it took
 
     elif arg0 == 'sync':
         from .action_sync import Run #@Reimport
-
-    elif arg0 == 'list':
-        from .action_list import Run #@Reimport
 
     elif arg0 == 'ac': #Add, commit
         from .action_add_and_commit import Run #@Reimport
@@ -178,6 +185,10 @@ Note: Passing --timeit in any command will print the time it took
 
     else:
         from .action_default import Run #@Reimport
+
+    if change_to_serial_if_possible:
+        if len(config.repos) == 1:
+            config.serial = True
 
     return Run(Params(config, args, config_file))
 

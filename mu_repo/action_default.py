@@ -26,7 +26,7 @@ def Run(params, on_output=Print):
     if arg0 == 'st':
         args[0] = 'status'
         if len(args) == 1:
-            args.insert(1, '--porcelain')
+            args.insert(1, '-s')
 
     elif arg0 == 'co':
         args[0] = 'checkout'
