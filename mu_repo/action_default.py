@@ -3,6 +3,7 @@ Created on 17/05/2012
 
 @author: Fabio Zadrozny
 '''
+from __future__ import with_statement
 from mu_repo.print_ import Print
 import os.path
 from mu_repo import Status
