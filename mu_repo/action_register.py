@@ -1,3 +1,4 @@
+from __future__ import with_statement
 from mu_repo.print_ import Print
 from mu_repo import Status
 import os

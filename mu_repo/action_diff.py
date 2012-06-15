@@ -3,6 +3,7 @@ Created on 19/05/2012
 
 @author: Fabio Zadrozny
 '''
+from __future__ import with_statement
 from mu_repo import thread_pool
 from mu_repo.print_ import Print
 import os.path
