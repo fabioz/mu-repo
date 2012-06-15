@@ -60,6 +60,10 @@ def main(config_file='.mu_repo', args=None):
         git grep -l --all-match -e Bar -e Foo
         git log --all-match --grep=APSTUD
         
+    http://stackoverflow.com/questions/61002/how-can-i-generate-a-git-diff-of-whats-changed-since-the-last-time-i-pulled
+    git pull origin
+    git diff @{1}..
+        
     
     '''
 
