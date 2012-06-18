@@ -8,7 +8,7 @@ from mu_repo.print_ import Print
 #===================================================================================================
 # GetReposAndCurrBranch
 #===================================================================================================
-def GetReposAndCurrBranch(params):
+def GetReposAndCurrBranch(params, verbose=True):
     '''
     :param params: Params
         The parameters used to get the repos and current branch (mostly using config).
@@ -21,9 +21,11 @@ def GetReposAndCurrBranch(params):
         stdout = output.stdout.strip()
         if stdout:
             repos_and_curr_branch.append((output.repo, stdout))
-            Print("Will handle 'origin %s' for '%s'." % (stdout, output.repo))
+            if verbose:
+                Print("Will handle 'origin %s' for '%s'." % (stdout, output.repo))
         else:
-            Print('Unable to update (could not get current branch for: %s)' % (output.repo,))
+            if verbose:
+                Print('Unable to update (could not get current branch for: %s)' % (output.repo,))
 
     on_output = OnOutput
 

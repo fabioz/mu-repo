@@ -168,6 +168,9 @@ Note: Passing --timeit in any command will print the time it took
     elif arg0 == 'ac': #Add, commit
         from .action_add_and_commit import Run #@Reimport
 
+    elif arg0 == 'st': #Concise status message (branch, changes)
+        from .action_st import Run #@Reimport
+
     elif arg0 == 'acp': #Add, commit, push
         def Run(params):
             from .action_add_and_commit import Run #@Reimport
