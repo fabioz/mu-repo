@@ -20,7 +20,7 @@ def Run(params, push=False):
     Run(Params(params.config, ['commit', '-m', ' '.join(args)], params.config_file))
 
     if push:
-        from mu_repo.action_up import GetReposAndCurrBranch
+        from mu_repo.get_repos_and_curr_branch import GetReposAndCurrBranch
         from mu_repo.on_output_thread import ExecuteThreadsHandlingOutputQueue
         from mu_repo.execute_git_command_in_thread import ExecuteGitCommandThread
         import Queue
