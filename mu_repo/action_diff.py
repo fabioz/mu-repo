@@ -188,7 +188,7 @@ class DoDiffOnRepoThread(ExecuteGitCommandThread):
         if not branch:
             args = 'status --porcelain -z'.split()
         else:
-            args = 'diff --name-only -z'.split() + [branch]
+            args = 'diff --name-only -z HEAD'.split() + [branch]
         self.entry_count = 0
 
         ExecuteGitCommandThread.__init__(
@@ -330,8 +330,12 @@ def Run(params):
             Print('No changes found.')
             return
 
+        write_left = ['/wl'] #Cannot write on left
+        if not branch:
+            write_left = [] #Can write on left when not working with branch (i.e.: working dir).
+
         winmerge_cmd = 'WinMergeU.exe /r /u /wr /dl WORKINGCOPY /dr HEAD'.split()
-        cmd = winmerge_cmd + [temp_working, temp_repo]
+        cmd = winmerge_cmd + write_left + [temp_working, temp_repo]
         try:
             subprocess.call(cmd)
         except:

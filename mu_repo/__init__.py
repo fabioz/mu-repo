@@ -79,15 +79,18 @@ def main(config_file='.mu_repo', args=None):
         
 It works with a .mu_repo file in the current working dir which provides the 
 configuration of the directories that should be tracked on commands
-(or may be used as a git replacement on directories containing a .git dir).
+(it may also be used as a git replacement on directories containing a 
+.git dir).
+
+Commands:
 
 * ${START_COLOR}mu register repo1 repo2:${RESET_COLOR} Registers repo1 and repo2 to be tracked.
 * ${START_COLOR}mu register --all:${RESET_COLOR} Marks for all subdirs with .git to be tracked.
-* ${START_COLOR}mu register --select:${RESET_COLOR} Select 'enabled' repos.
-* ${START_COLOR}mu register --restore:${RESET_COLOR} Re-enable all repos.
 * ${START_COLOR}mu list:${RESET_COLOR} Lists the currently tracked repositories.
 * ${START_COLOR}mu set-var git=d:/bin/git/bin/git.exe:${RESET_COLOR} Set git location to be used.
+* ${START_COLOR}mu set-var serial=0|1:${RESET_COLOR} Set commands to be executed serially or in parallel
 * ${START_COLOR}mu get-vars:${RESET_COLOR} Prints the configuration file
+* ${START_COLOR}mu github-request:${RESET_COLOR} Gets a request from github
 
 * ${START_COLOR}mu dd:${RESET_COLOR}
      Creates a directory structure with working dir vs head and opens 
@@ -99,7 +102,7 @@ configuration of the directories that should be tracked on commands
      mu dd 9fd88da
      mu dd development
 
-Also, it defines some shortcuts:
+Shortcuts:
 
 ${START_COLOR}mu st         ${RESET_COLOR}= git status -s
 ${START_COLOR}mu co branch  ${RESET_COLOR}= git checkout branch
@@ -149,6 +152,9 @@ Note: Passing --timeit in any command will print the time it took
     elif arg0 == 'get-vars':
         from .action_get_vars import Run #@Reimport
         change_to_serial_if_possible = False
+
+    elif arg0 == 'github-request':
+        from .action_github_pull_request import Run #@Reimport
 
     elif arg0 == 'register':
         from .action_register import Run #@Reimport

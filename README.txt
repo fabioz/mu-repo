@@ -38,43 +38,72 @@ Then go to the root directory containing the repositories
 (in this case cd /workspace), add the repositories you want 
 to work with and issue commands to all registered repos.
 
-mu register repo1 repo2 <-- register repo1 and repo2 in mu-repo.
+Note that it may also be used as a git replacement on directories 
+containing a .git dir.
 
-mu list <-- will print a list of the repositories registered.
+Commands:
 
-mu status <-- will go into each subdir and do 'git status'.
+* mu register repo1 repo2: Registers repo1 and repo2 to be tracked.
+* mu register --all: Marks for all subdirs with .git to be tracked.
+* mu list: Lists the currently tracked repositories.
+* mu set-var git=d:/bin/git/bin/git.exe: Set git location to be used.
+* mu set-var serial=true|false: Set commands to be executed serially or in parallel
+* mu get-vars: Prints the configuration file
+* mu github-request: Gets a request from github
 
-mu checkout release <-- will go into each subdir and do 'git checkout release'.      
+* mu dd:
+     Creates a directory structure with working dir vs head and opens
+     WinMerge with it (doing mu ac will commit exactly what's compared in this
+     situation)
 
-mu dd <-- will create a temporary structure and will invoke winmerge to check that structure.
+     Also accepts a parameter to compare with a different commit/branch. I.e.:
+     mu dd HEAD^^
+     mu dd 9fd88da
+     mu dd development
 
-mu mu-branch <-- will print the current branch for each repository tracked.
+Shortcuts:
 
-mu mu-patch <-- will create a file with diff --cached for each repository in the current dir. 
+mu st         = git status -s
+mu co branch  = git checkout branch
+mu mu-patch   = git diff --cached --full-index > output to file for each repo
+mu mu-branch  = git rev-parse --abbrev-ref HEAD (print current branch)
+mu ac msg     = git add -A & git commit -m (the message must always be passed)
+mu acp msg    = same as 'mu ac' + git push origin current branch.
+mu shell      = On msysgit, call sh --login -i (linux-like env)
+
+Any other command is passed directly to git for each repository:
+I.e.:
+
+mu pull
+mu fetch
+mu push
+mu checkout release
 
 DIFFING MULTIPLE REPOSITORIES
 ==============================
 
-The command 'mu dd' provides the means to diff the multiple repository structures with the 
-winmerge tool so that the file can be changed while seeing the differences of the working
-copy with the head in the repository.
+The command 'mu dd' provides the means to diff the multiple repository structures 
+with the winmerge tool so that the file can be changed while seeing the differences 
+of the working copy with the head in the repository.
 
-It's similar to what would be achieved in the Eclipse synchronize view (where the file may
-be edited to change the original file -- as the structure is created with links to the original
-files, so files edited in winmerge will properly change the original files).
+It's similar to what would be achieved in the Eclipse synchronize view (where the 
+file may be edited to change the original file -- as the structure is created with 
+links to the original files, so files edited in winmerge will properly change the 
+original files).
 
 
 PARALLELISM
 ============
 
-mu-repo by default will execute commands in parallel, but in this mode,
+mu-repo by default will execute commands in serial, but it's also possible
+to enable commands to be run in parallel, but note that in this mode,
 actions that require input will not work (and depending on the action,
-may even block), so, it's possible to force it to run in serial mode, where
-no buffering is done by setting the 'serial' flag to 1.
+may even block). It's possible to force it to run in parallel mode, by 
+setting the 'serial' flag to false.
 
-i.e.: mu set-var serial=1
+i.e.: mu set-var serial=false
 
-(and to go back to having commands run in parallel, do mu set-var serial=0)
+(and to go back to having commands run in serial, do mu set-var serial=true)
 
 
 GIT
