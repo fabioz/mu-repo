@@ -8,31 +8,34 @@ from mu_repo.print_ import Print
 #===================================================================================================
 # Run
 #===================================================================================================
-def Run(params, push=False):
+def Run(params, commit, push):
     args = params.args[1:]
-    if not args:
+    if commit and not args:
         Print('Message for commit is required for git add -A & git commit -m command.')
         return
 
     from .action_default import Run #@Reimport
     from mu_repo import Params
     Run(Params(params.config, ['add', '-A'], params.config_file))
-    Run(Params(params.config, ['commit', '-m', ' '.join(args)], params.config_file))
 
-    if push:
-        from mu_repo.get_repos_and_curr_branch import GetReposAndCurrBranch
-        from mu_repo.on_output_thread import ExecuteThreadsHandlingOutputQueue
-        from mu_repo.execute_git_command_in_thread import ExecuteGitCommandThread
-        import Queue
+    if commit:
 
-        repos_and_curr_branch = GetReposAndCurrBranch(params)
+        Run(Params(params.config, ['commit', '-m', ' '.join(args)], params.config_file))
 
-        threads = []
-        output_queue = Queue.Queue()
-        for repo, branch in repos_and_curr_branch:
-            t = ExecuteGitCommandThread(
-                repo, ['push', 'origin', branch], params.config, output_queue)
-            threads.append(t)
+        if push:
+            from mu_repo.get_repos_and_curr_branch import GetReposAndCurrBranch
+            from mu_repo.on_output_thread import ExecuteThreadsHandlingOutputQueue
+            from mu_repo.execute_git_command_in_thread import ExecuteGitCommandThread
+            import Queue
 
-        ExecuteThreadsHandlingOutputQueue(threads, output_queue, on_output=Print)
+            repos_and_curr_branch = GetReposAndCurrBranch(params)
+
+            threads = []
+            output_queue = Queue.Queue()
+            for repo, branch in repos_and_curr_branch:
+                t = ExecuteGitCommandThread(
+                    repo, ['push', 'origin', branch], params.config, output_queue)
+                threads.append(t)
+
+            ExecuteThreadsHandlingOutputQueue(threads, output_queue, on_output=Print)
 

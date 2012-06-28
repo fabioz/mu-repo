@@ -47,14 +47,15 @@ Commands:
 * mu register --all: Marks for all subdirs with .git to be tracked.
 * mu list: Lists the currently tracked repositories.
 * mu set-var git=d:/bin/git/bin/git.exe: Set git location to be used.
-* mu set-var serial=0|1: Set commands to be executed serially or in parallel
-* mu get-vars: Prints the configuration file
-* mu github-request: Gets a request from github
+* mu set-var serial=0|1: Set commands to be executed serially or in parallel.
+* mu get-vars: Prints the configuration file.
+* mu github-request: Gets a request from github.
+* mu fix-eol: Changes end of lines to '\n' on all changed files.
 
 * mu dd:
      Creates a directory structure with working dir vs head and opens
      WinMerge with it (doing mu ac will commit exactly what's compared in this
-     situation)
+     situation).
 
      Also accepts a parameter to compare with a different commit/branch. I.e.:
      mu dd HEAD^^
@@ -67,6 +68,7 @@ mu st         = Nice status message for all repos (always in parallel)
 mu co branch  = git checkout branch
 mu mu-patch   = git diff --cached --full-index > output to file for each repo
 mu mu-branch  = git rev-parse --abbrev-ref HEAD (print current branch)
+mu a          = git add -A
 mu ac msg     = git add -A & git commit -m (the message must always be passed)
 mu acp msg    = same as 'mu ac' + git push origin current branch.
 mu shell      = On msysgit, call sh --login -i (linux-like env)
@@ -80,6 +82,7 @@ mu push
 mu checkout release
 
 Note: Some actions considered 'safe' may always be executed in parallel (i.e.: mu st)
+
 
 DIFFING MULTIPLE REPOSITORIES
 ==============================

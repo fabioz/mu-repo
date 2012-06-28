@@ -88,14 +88,15 @@ Commands:
 * ${START_COLOR}mu register --all:${RESET_COLOR} Marks for all subdirs with .git to be tracked.
 * ${START_COLOR}mu list:${RESET_COLOR} Lists the currently tracked repositories.
 * ${START_COLOR}mu set-var git=d:/bin/git/bin/git.exe:${RESET_COLOR} Set git location to be used.
-* ${START_COLOR}mu set-var serial=0|1:${RESET_COLOR} Set commands to be executed serially or in parallel
-* ${START_COLOR}mu get-vars:${RESET_COLOR} Prints the configuration file
-* ${START_COLOR}mu github-request:${RESET_COLOR} Gets a request from github
+* ${START_COLOR}mu set-var serial=0|1:${RESET_COLOR} Set commands to be executed serially or in parallel.
+* ${START_COLOR}mu get-vars:${RESET_COLOR} Prints the configuration file.
+* ${START_COLOR}mu github-request:${RESET_COLOR} Gets a request from github.
+* ${START_COLOR}mu fix-eol:${RESET_COLOR} Changes end of lines to '\\n' on all changed files.
 
 * ${START_COLOR}mu dd:${RESET_COLOR}
      Creates a directory structure with working dir vs head and opens 
      WinMerge with it (doing mu ac will commit exactly what's compared in this
-     situation)
+     situation).
      
      Also accepts a parameter to compare with a different commit/branch. I.e.:
      mu dd HEAD^^
@@ -108,6 +109,7 @@ ${START_COLOR}mu st         ${RESET_COLOR}= Nice status message for all repos (a
 ${START_COLOR}mu co branch  ${RESET_COLOR}= git checkout branch
 ${START_COLOR}mu mu-patch   ${RESET_COLOR}= git diff --cached --full-index > output to file for each repo 
 ${START_COLOR}mu mu-branch  ${RESET_COLOR}= git rev-parse --abbrev-ref HEAD (print current branch)
+${START_COLOR}mu a          ${RESET_COLOR}= git add -A
 ${START_COLOR}mu ac msg     ${RESET_COLOR}= git add -A & git commit -m (the message must always be passed) 
 ${START_COLOR}mu acp msg    ${RESET_COLOR}= same as 'mu ac' + git push origin current branch.
 ${START_COLOR}mu shell      ${RESET_COLOR}= On msysgit, call sh --login -i (linux-like env)
@@ -161,6 +163,9 @@ Note: Passing --timeit in any command will print the time it took
     elif arg0 == 'register':
         from .action_register import Run #@Reimport
 
+    elif arg0 == 'fix-eol':
+        from .action_fix_eol import Run #@Reimport
+
     elif arg0 == 'list':
         from .action_list import Run #@Reimport
 
@@ -173,16 +178,23 @@ Note: Passing --timeit in any command will print the time it took
     elif arg0 == 'sync':
         from .action_sync import Run #@Reimport
 
-    elif arg0 == 'ac': #Add, commit
-        from .action_add_and_commit import Run #@Reimport
+    elif arg0 == 'a': #Add
+        def Run(params):
+            from .action_add_and_commit import Run #@Reimport
+            Run(params, commit=False, push=False)
 
-    elif arg0 == 'st': #Concise status message (branch, changes)
-        from .action_st import Run #@Reimport
+    elif arg0 == 'ac': #Add, commit
+        def Run(params):
+            from .action_add_and_commit import Run #@Reimport
+            Run(params, commit=True, push=False)
 
     elif arg0 == 'acp': #Add, commit, push
         def Run(params):
             from .action_add_and_commit import Run #@Reimport
-            Run(params, push=True)
+            Run(params, commit=True, push=True)
+
+    elif arg0 == 'st': #Concise status message (branch, changes)
+        from .action_st import Run #@Reimport
 
 
     elif arg0 == 'shell':
