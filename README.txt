@@ -47,7 +47,7 @@ Commands:
 * mu register --all: Marks for all subdirs with .git to be tracked.
 * mu list: Lists the currently tracked repositories.
 * mu set-var git=d:/bin/git/bin/git.exe: Set git location to be used.
-* mu set-var serial=true|false: Set commands to be executed serially or in parallel
+* mu set-var serial=0|1: Set commands to be executed serially or in parallel
 * mu get-vars: Prints the configuration file
 * mu github-request: Gets a request from github
 
@@ -63,7 +63,7 @@ Commands:
 
 Shortcuts:
 
-mu st         = git status -s
+mu st         = Nice status message for all repos (always in parallel)
 mu co branch  = git checkout branch
 mu mu-patch   = git diff --cached --full-index > output to file for each repo
 mu mu-branch  = git rev-parse --abbrev-ref HEAD (print current branch)
@@ -78,6 +78,8 @@ mu pull
 mu fetch
 mu push
 mu checkout release
+
+Note: Some actions considered 'safe' may always be executed in parallel (i.e.: mu st)
 
 DIFFING MULTIPLE REPOSITORIES
 ==============================

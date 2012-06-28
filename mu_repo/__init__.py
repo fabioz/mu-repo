@@ -104,7 +104,7 @@ Commands:
 
 Shortcuts:
 
-${START_COLOR}mu st         ${RESET_COLOR}= git status -s
+${START_COLOR}mu st         ${RESET_COLOR}= Nice status message for all repos (always in parallel)
 ${START_COLOR}mu co branch  ${RESET_COLOR}= git checkout branch
 ${START_COLOR}mu mu-patch   ${RESET_COLOR}= git diff --cached --full-index > output to file for each repo 
 ${START_COLOR}mu mu-branch  ${RESET_COLOR}= git rev-parse --abbrev-ref HEAD (print current branch)
@@ -119,6 +119,8 @@ ${START_COLOR}mu pull            ${RESET_COLOR}
 ${START_COLOR}mu fetch           ${RESET_COLOR}
 ${START_COLOR}mu push            ${RESET_COLOR}
 ${START_COLOR}mu checkout release${RESET_COLOR}
+
+Note: Some actions considered 'safe' may always be executed in parallel (i.e.: mu st)
 
 Note: Passing --timeit in any command will print the time it took
       to execute the command.

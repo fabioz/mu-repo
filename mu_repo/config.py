@@ -94,7 +94,7 @@ class Config(object):
             elif isinstance(val, list):
                 assert key.endswith('s')
                 key = key[:-1]
-                for v in val:
+                for v in sorted(val):
                     lst.append('%s=%s' % (key, v))
             else:
                 raise AssertionError('Expecting val to be a list of strings.')

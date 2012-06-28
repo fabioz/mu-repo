@@ -14,6 +14,9 @@ import Queue
 # Run
 #===================================================================================================
 def Run(params):
+    '''
+    Note: this action always runs in parallel.
+    '''
     repos_and_curr_branch = GetReposAndCurrBranch(params, verbose=False)
     as_dict = dict(repos_and_curr_branch)
 
