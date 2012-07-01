@@ -74,7 +74,8 @@ class CreateFromGit(object):
                     with open(target_repo, 'wb') as f:
                         f.write(stdout)
             except:
-                print 'Error writing to file: %s\n%s' % (target_repo, stdout,)
+                import traceback;traceback.print_exc()
+                Print('Error writing to file: %s\n%s' % (target_repo, stdout,))
         except:
             NotifyErrorListeners()
 

@@ -1,9 +1,12 @@
 from __future__ import with_statement
+from . import backwards
 import os.path
 import sys
 from mu_repo.config import Config
 from .print_ import Print
 
+#Just making sure we're in the PYTHONPATH!
+sys.path.append(os.path.dirname(__file__))
 
 #===================================================================================================
 # Status

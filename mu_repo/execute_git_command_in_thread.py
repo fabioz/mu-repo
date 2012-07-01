@@ -2,6 +2,7 @@ import threading
 import subprocess
 from mu_repo.print_ import Print
 from print_ import START_COLOR, RESET_COLOR
+from mu_repo.backwards import AsBytes, AsStr
 
 #===================================================================================================
 # Indent
@@ -61,15 +62,17 @@ class ExecuteGitCommandThread(threading.Thread):
                     stdin=subprocess.PIPE
                 )
                 #Just in case it tries to read something, put empty stuff in there.
-                p.stdin.write('\n' * 20)
+                p.stdin.write(AsBytes('\n' * 20))
                 p.stdin.close()
             except:
+                import traceback;traceback.print_exc()
                 self.output_queue.put(Output(repo, 'Error executing: %s on repo: %s' % (cmd, repo), ''))
                 return
 
             stdout, stderr = p.communicate()
+            stdout = AsStr(stdout)
             if stderr:
-                stdout += ('\n' + stderr)
+                stdout += ('\n' + AsStr(stderr))
 
             self._HandleOutput(msg, stdout)
 

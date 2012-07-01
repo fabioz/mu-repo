@@ -20,7 +20,10 @@ Public API:
 '''
 from __future__ import with_statement
 import threading
-import Queue
+try:
+    import Queue
+except ImportError:
+    import queue as Queue
 import os
 from mu_repo.print_ import Print
 import shutil

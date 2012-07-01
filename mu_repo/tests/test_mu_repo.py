@@ -75,7 +75,7 @@ repo=studio3
         self.assert_(status.succeeded)
 
         status = mu_repo.main(config_file='.bar_file', args=['list'])
-        self.assertEquals(status.config.repos, ['pydev', 'a', 'b'])
+        self.assertEquals(status.config.repos, ['a', 'b', 'pydev'])
 
 
     def testActionDiff(self):

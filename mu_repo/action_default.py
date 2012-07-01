@@ -9,6 +9,10 @@ import os.path
 from mu_repo import Status
 from mu_repo.execute_git_command_in_thread import ExecuteGitCommandThread
 from mu_repo.on_output_thread import ExecuteThreadsHandlingOutputQueue
+try:
+    import Queue
+except ImportError:
+    import queue as Queue
 
 
 
@@ -19,7 +23,6 @@ from mu_repo.on_output_thread import ExecuteThreadsHandlingOutputQueue
 def Run(params, on_output=Print):
     args = params.args
     config = params.config
-    import Queue
     output_queue = Queue.Queue()
 
     arg0 = args[0]

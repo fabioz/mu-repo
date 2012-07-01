@@ -6,7 +6,7 @@ Created on May 23, 2012
 from mu_repo import action_diff, Params
 from mu_repo.action_diff import NotifyErrorListeners
 from mu_repo.config import Config
-from mu_repo.print_ import PushIgnorePrint, PopIgnorePrint
+from mu_repo.print_ import PushIgnorePrint, PopIgnorePrint, Print
 from mu_repo.rmtree import RmTree
 import os.path
 import subprocess
@@ -103,8 +103,8 @@ class Test(unittest.TestCase):
             curr = os.path.join('.mu.diff.git.tmp', 'WORKING', 'test_diff_command_git_repo_dir', 'folder1', 'out.txt')
             self.assert_(os.path.exists(prev))
             self.assert_(os.path.exists(curr))
-            print 'prev', open(prev, 'r').read()
-            print 'curr', open(curr, 'r').read()
+            Print('prev', open(prev, 'r').read())
+            Print('curr', open(curr, 'r').read())
 
         with open(os.path.join(temp_dir, 'folder1', 'out.txt'), 'w') as f:
             f.write('new out')
