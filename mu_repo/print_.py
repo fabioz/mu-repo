@@ -4,6 +4,7 @@ Created on 17/05/2012
 @author: Fabio Zadrozny
 '''
 import sys
+from mu_repo.backwards import AsBytes, PushWriteBinary, PopWriteBinary
 
 START_COLOR = '${START_COLOR}'
 RESET_COLOR = '${RESET_COLOR}'
@@ -80,13 +81,17 @@ except:
         }
 
         def _Escape(self, code):
-            sys.stdout.write('\033[' + code)
+            PushWriteBinary()
+            try:
+                sys.stdout.write(AsBytes('\033[') + code)
+            finally:
+                PopWriteBinary()
 
         def SetColor(self, foreground_color):
-            self._Escape('%dm' % self.color_map[foreground_color])
+            self._Escape(AsBytes('%dm' % self.color_map[foreground_color]))
 
         def Reset(self):
-            self._Escape('0m')
+            self._Escape(AsBytes('0m'))
 
 
     console = _Console()

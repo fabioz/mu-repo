@@ -15,6 +15,12 @@ if IS_PYTHON_3K:
     def AsStr(s):
         return s.decode('utf-8')
 
+    def PushWriteBinary():
+        sys.stdout = sys.__stdout__.buffer
+
+    def PopWriteBinary():
+        sys.stdout = sys.__stdout__
+
     import builtins
     builtins.xrange = range
     builtins.raw_input = input
@@ -24,3 +30,9 @@ else:
 
     def AsStr(s):
         return s
+
+    def PushWriteBinary():
+        pass
+
+    def PopWriteBinary():
+        pass
