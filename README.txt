@@ -20,6 +20,13 @@ git clone git://github.com/fabioz/mu-repo.git
 add the mu-repo directory to your PATH so that after that, 
 doing 'mu' in the command line should give a proper message.
 
+Note:
+======
+
+If your lines are not properly colored on Windows, please install PyWin32
+
+Binaries may be gotten from: http://sourceforge.net/projects/pywin32/files/pywin32/
+
 
 USING
 =======
