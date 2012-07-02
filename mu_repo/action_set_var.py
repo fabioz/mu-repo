@@ -3,6 +3,7 @@ Created on 17/05/2012
 
 @author: Fabio Zadrozny
 '''
+from __future__ import with_statement
 from mu_repo.config import IsFalse
 from mu_repo import Status
 from mu_repo.print_ import Print
