@@ -1,8 +1,8 @@
 mu-repo 
 =========
 
-Tool to help in dealing with multiple repositories
-(currently only supporting git repositories -- in the same dir)
+Tool to help working with multiple git repositories
+(short of 'Multiple repositories')
 
 License: GPL 3, Copyright (c) 2012 by Fabio Zadrozny
 
@@ -45,7 +45,11 @@ Then go to the root directory containing the repositories
 (in this case cd /workspace), add the repositories you want 
 to work with and issue commands to all registered repos.
 
-Note that it may also be used as a git replacement on directories 
+Tip: "mu register --all" registers all subdirs with '.git'
+(and the configuration file may be edited to unregister 
+repositories later on).
+
+Note: it may also be used as a git replacement on directories 
 containing a .git dir.
 
 Commands:
