@@ -66,8 +66,11 @@ class ExecuteGitCommandThread(threading.Thread):
                     stdin=subprocess.PIPE
                 )
                 #Just in case it tries to read something, put empty stuff in there.
-                p.stdin.write(AsBytes('\n' * 20))
-                p.stdin.close()
+                try:
+                    p.stdin.write(AsBytes('\n' * 20))
+                    p.stdin.close()
+                except:
+                    pass #Just ignore any error here!
             except:
                 from .print_ import PrintError
                 PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
