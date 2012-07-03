@@ -5,7 +5,7 @@ Created on 19/05/2012
 '''
 from __future__ import with_statement
 from mu_repo import thread_pool
-from mu_repo.print_ import Print
+from mu_repo.print_ import Print, PrintError
 import os.path
 import shutil
 import subprocess
@@ -20,7 +20,8 @@ class DummyQueue(object):
     def put(self, *args, **kwargs):
         pass
 
-#Erorr listeners may add themselves here (activated when errors happen in a worker thread).
+#Error listeners may add themselves here (activated when errors happen in a worker thread).
+#Used mostly for testing.
 on_errors_listeners = set()
 
 #===================================================================================================
@@ -41,13 +42,17 @@ def NotifyErrorListeners():
 # ExecuteGettingStdOutput
 #===================================================================================================
 def ExecuteGettingStdOutput(cmd, cwd):
-    p = subprocess.Popen(
-        cmd,
-        cwd=cwd,
-        #stderr=subprocess.STDOUT, # -- let stderr go to sys.stderr!
-        stdout=subprocess.PIPE,
-        stdin=subprocess.PIPE
-    )
+    try:
+        p = subprocess.Popen(
+            cmd,
+            cwd=cwd,
+            #stderr=subprocess.STDOUT, # -- let stderr go to sys.stderr!
+            stdout=subprocess.PIPE,
+            stdin=subprocess.PIPE
+        )
+    except:
+        PrintError('Error executing: ' + ' '.join(cmd))
+        raise
 
     stdout, _stderr = p.communicate()
     return stdout
@@ -74,8 +79,7 @@ class CreateFromGit(object):
                     with open(target_repo, 'wb') as f:
                         f.write(stdout)
             except:
-                import traceback;traceback.print_exc()
-                Print('Error writing to file: %s\n%s' % (target_repo, stdout,))
+                PrintError('Error writing to file: %s\n%s' % (target_repo, stdout,))
         except:
             NotifyErrorListeners()
 

@@ -25,7 +25,7 @@ try:
 except ImportError:
     import queue as Queue
 import os
-from mu_repo.print_ import Print
+from mu_repo.print_ import Print, PrintError
 import shutil
 
 _lock = threading.Lock()
@@ -213,7 +213,7 @@ class _KeepInSyncThread(threading.Thread):
 
             except:
                 #Should not happen...
-                import traceback;traceback.print_exc()
+                PrintError()
 
 
 

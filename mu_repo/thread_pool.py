@@ -23,7 +23,8 @@ class _Worker(Thread):
                 try:
                     func()
                 except:
-                    import traceback;traceback.print_exc()
+                    from mu_repo.print_ import PrintError
+                    PrintError()
             finally:
                 self.tasks_queue.task_done()
 

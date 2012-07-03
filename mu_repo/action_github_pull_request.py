@@ -46,7 +46,14 @@ def Run(params):
 
     import subprocess
     git = config.git or 'git'
-    p = subprocess.Popen([git, 'status', '--porcelain'], cwd=repo, stdout=subprocess.PIPE)
+    cmd = [git, 'status', '--porcelain']
+    try:
+        p = subprocess.Popen(cmd, cwd=repo, stdout=subprocess.PIPE)
+    except:
+        from mu_repo.print_ import PrintError
+        PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
+        raise
+
     stdout, stderr = p.communicate()
     if stderr:
         Print('Unable to execute. Stderr:', stderr)
@@ -68,7 +75,12 @@ def Run(params):
     def Exec(cmd):
         msg = ' '.join([START_COLOR, '\n', repo, ':'] + cmd + [RESET_COLOR])
         Print(msg)
-        p = subprocess.Popen(cmd, cwd=repo, stdout=subprocess.PIPE)
+        try:
+            p = subprocess.Popen(cmd, cwd=repo, stdout=subprocess.PIPE)
+        except:
+            from mu_repo.print_ import PrintError
+            PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
+            raise
         p.wait()
 
     Exec([git, 'checkout', '-b', local_pull_request_branch])

@@ -1,7 +1,7 @@
 import threading
 import subprocess
 from mu_repo.print_ import Print
-from print_ import START_COLOR, RESET_COLOR
+from .print_ import START_COLOR, RESET_COLOR
 from mu_repo.backwards import AsBytes, AsStr
 
 #===================================================================================================
@@ -49,7 +49,11 @@ class ExecuteGitCommandThread(threading.Thread):
         if serial:
             #Print directly to stdout/stderr without buffering.
             Print(msg)
-            p = subprocess.Popen(cmd, cwd=repo)
+            try:
+                p = subprocess.Popen(cmd, cwd=repo)
+            except:
+                from .print_ import PrintError
+                PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
             p.wait()
 
         else:
@@ -65,7 +69,8 @@ class ExecuteGitCommandThread(threading.Thread):
                 p.stdin.write(AsBytes('\n' * 20))
                 p.stdin.close()
             except:
-                import traceback;traceback.print_exc()
+                from .print_ import PrintError
+                PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
                 self.output_queue.put(Output(repo, 'Error executing: %s on repo: %s' % (cmd, repo), ''))
                 return
 

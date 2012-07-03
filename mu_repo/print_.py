@@ -116,6 +116,20 @@ def PopIgnorePrint():
     _ignore_print -= 1
 
 
+def PrintError(msg=''):
+    from .backwards_stringio import StringIO
+    s = StringIO()
+    s.write('\n===================================== ERROR =====================================\n')
+    if msg:
+        s.write(msg)
+        s.write('\n\n')
+    import traceback;traceback.print_exc(file=s)
+    s.write('\n=================================================================================\n\n')
+
+    #On a single write, the GIL should be locked, so, the output should still appear to be synched
+    #for a single error.
+    sys.stdout.write(s.getvalue())
+
 
 #===================================================================================================
 # Print
@@ -152,7 +166,6 @@ def Print(*args, **kwargs):
             console.Reset()
         i = msg.find(START_COLOR)
 
-    f.write(msg)
-    f.write('\n')
+    f.write(msg + '\n')
 
 
