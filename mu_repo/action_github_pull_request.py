@@ -5,6 +5,7 @@ Created on Jun 21, 2012
 '''
 from mu_repo.get_repos_and_curr_branch import GetReposAndCurrBranch
 from mu_repo.print_ import Print, START_COLOR, RESET_COLOR
+from mu_repo.execute_command import ExecuteCommand
 
 #=======================================================================================================================
 # Run
@@ -44,17 +45,9 @@ def Run(params):
 
     repo = iter(config.repos).next()
 
-    import subprocess
     git = config.git or 'git'
     cmd = [git, 'status', '--porcelain']
-    try:
-        p = subprocess.Popen(cmd, cwd=repo, stdout=subprocess.PIPE)
-    except:
-        from mu_repo.print_ import PrintError
-        PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
-        raise
-
-    stdout, stderr = p.communicate()
+    stdout, stderr = ExecuteCommand(cmd, repo, communicate=True)
     if stderr:
         Print('Unable to execute. Stderr:', stderr)
         return
@@ -72,19 +65,8 @@ def Run(params):
 
     local_pull_request_branch = user_branch + '-' + user + '-pull-request'
 
-    def Exec(cmd):
-        msg = ' '.join([START_COLOR, '\n', repo, ':'] + cmd + [RESET_COLOR])
-        Print(msg)
-        try:
-            p = subprocess.Popen(cmd, cwd=repo, stdout=subprocess.PIPE)
-        except:
-            from mu_repo.print_ import PrintError
-            PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
-            raise
-        p.wait()
-
-    Exec([git, 'checkout', '-b', local_pull_request_branch])
-    Exec([git, 'pull', 'https://github.com/' + user_repo, user_branch])
+    ExecuteCommand([git, 'checkout', '-b', local_pull_request_branch], communicate=False)
+    ExecuteCommand([git, 'pull', 'https://github.com/' + user_repo, user_branch], communicate=False)
 #    Exec([git, 'checkout', local_branch])
 #    Exec([git, 'merge', local_pull_request_branch, '--no-commit', '--no-ff'])
 

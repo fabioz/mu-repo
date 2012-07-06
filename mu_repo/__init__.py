@@ -95,6 +95,8 @@ Commands:
 * ${START_COLOR}mu get-vars:${RESET_COLOR} Prints the configuration file.
 * ${START_COLOR}mu github-request:${RESET_COLOR} Gets a request from github.
 * ${START_COLOR}mu fix-eol:${RESET_COLOR} Changes end of lines to '\\n' on all changed files.
+* ${START_COLOR}mu auto-update:${RESET_COLOR} Automatically updates mu-repo 
+  (using git -- must have been pulled from git as in the instructions).
 
 * ${START_COLOR}mu dd:${RESET_COLOR}
      Creates a directory structure with working dir vs head and opens 
@@ -168,6 +170,9 @@ Note: Passing --timeit in any command will print the time it took
 
     elif arg0 == 'fix-eol':
         from .action_fix_eol import Run #@Reimport
+
+    elif arg0 == 'auto-update':
+        from .action_auto_update import Run #@Reimport
 
     elif arg0 == 'list':
         from .action_list import Run #@Reimport
