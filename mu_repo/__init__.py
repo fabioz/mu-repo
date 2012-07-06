@@ -117,6 +117,7 @@ ${START_COLOR}mu mu-branch  ${RESET_COLOR}= git rev-parse --abbrev-ref HEAD (pri
 ${START_COLOR}mu a          ${RESET_COLOR}= git add -A
 ${START_COLOR}mu ac msg     ${RESET_COLOR}= git add -A & git commit -m (the message must always be passed) 
 ${START_COLOR}mu acp msg    ${RESET_COLOR}= same as 'mu ac' + git push origin current branch.
+${START_COLOR}mu p          ${RESET_COLOR}= git push origin current branch.
 ${START_COLOR}mu shell      ${RESET_COLOR}= On msysgit, call sh --login -i (linux-like env)
 
 Any other command is passed directly to git for each repository:
@@ -188,18 +189,23 @@ Note: Passing --timeit in any command will print the time it took
 
     elif arg0 == 'a': #Add
         def Run(params):
-            from .action_add_and_commit import Run #@Reimport
-            Run(params, commit=False, push=False)
+            from .action_add_commit_push import Run #@Reimport
+            Run(params, add=True, commit=False, push=False)
 
     elif arg0 == 'ac': #Add, commit
         def Run(params):
-            from .action_add_and_commit import Run #@Reimport
-            Run(params, commit=True, push=False)
+            from .action_add_commit_push import Run #@Reimport
+            Run(params, add=True, commit=True, push=False)
 
     elif arg0 == 'acp': #Add, commit, push
         def Run(params):
-            from .action_add_and_commit import Run #@Reimport
-            Run(params, commit=True, push=True)
+            from .action_add_commit_push import Run #@Reimport
+            Run(params, add=True, commit=True, push=True)
+
+    elif arg0 == 'p': #Push
+        def Run(params):
+            from .action_add_commit_push import Run #@Reimport
+            Run(params, add=False, commit=False, push=True)
 
     elif arg0 == 'st': #Concise status message (branch, changes)
         from .action_st import Run #@Reimport
