@@ -115,6 +115,7 @@ ${START_COLOR}mu co branch  ${RESET_COLOR}= git checkout branch
 ${START_COLOR}mu mu-patch   ${RESET_COLOR}= git diff --cached --full-index > output to file for each repo 
 ${START_COLOR}mu mu-branch  ${RESET_COLOR}= git rev-parse --abbrev-ref HEAD (print current branch)
 ${START_COLOR}mu up         ${RESET_COLOR}= git fetch origin curr_branch:refs/remotes/origin/curr_branch 
+${START_COLOR}mu upd | sync ${RESET_COLOR}= up/diff/rebase
 ${START_COLOR}mu a          ${RESET_COLOR}= git add -A
 ${START_COLOR}mu ac msg     ${RESET_COLOR}= git add -A & git commit -m (the message must always be passed) 
 ${START_COLOR}mu acp msg    ${RESET_COLOR}= same as 'mu ac' + git push origin current branch.
@@ -185,7 +186,7 @@ Note: Passing --timeit in any command will print the time it took
     elif arg0 == 'up':
         from .action_up import Run #@Reimport
 
-    elif arg0 == 'sync':
+    elif arg0 in ('sync', 'upd'):
         from .action_sync import Run #@Reimport
 
     elif arg0 == 'a': #Add
