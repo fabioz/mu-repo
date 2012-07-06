@@ -5,6 +5,7 @@ Created on 28/05/2012
 '''
 
 import threading
+from mu_repo.print_ import Print
 
 
 #===================================================================================================
@@ -48,7 +49,20 @@ def ExecuteThreadsHandlingOutputQueue(threads, output_queue, on_output):
     queue_printer_thread.start()
 
     for t in threads:
-        t.join()
+        try:
+            total_timeout = 0.0
+            timeout = 5.0
+            while True:
+                t.join(timeout=timeout)
+                if t.isAlive():
+                    total_timeout += timeout
+                    output_queue.put('  %s (already waited %.2f seconds)' % (t, total_timeout))
+                else:
+                    break
+
+        except (KeyboardInterrupt, SystemExit):
+            Print('Stopping when executing: %s' % (t,))
+            raise
 
     output_queue.put(OnOutputThread.FINISH_PROCESSING_ITEM)
     output_queue.join()

@@ -1,8 +1,8 @@
 import threading
 import subprocess
-from mu_repo.print_ import Print
+from mu_repo.print_ import Print, PrintError
 from .print_ import START_COLOR, RESET_COLOR
-from mu_repo.backwards import AsBytes, AsStr
+from mu_repo.backwards import AsStr
 
 #===================================================================================================
 # Indent
@@ -52,7 +52,6 @@ class ExecuteGitCommandThread(threading.Thread):
             try:
                 p = subprocess.Popen(cmd, cwd=repo)
             except:
-                from .print_ import PrintError
                 PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
             p.wait()
 
@@ -63,16 +62,8 @@ class ExecuteGitCommandThread(threading.Thread):
                     cwd=repo,
                     #stderr=subprocess.STDOUT, # -- let stderr go to sys.stderr!
                     stdout=subprocess.PIPE,
-                    stdin=subprocess.PIPE
                 )
-                #Just in case it tries to read something, put empty stuff in there.
-                try:
-                    p.stdin.write(AsBytes('\n' * 20))
-                    p.stdin.close()
-                except:
-                    pass #Just ignore any error here!
             except:
-                from .print_ import PrintError
                 PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
                 self.output_queue.put(Output(repo, 'Error executing: %s on repo: %s' % (cmd, repo), ''))
                 return
@@ -83,6 +74,9 @@ class ExecuteGitCommandThread(threading.Thread):
                 stdout += ('\n' + AsStr(stderr))
 
             self._HandleOutput(msg, stdout)
+
+    def __str__(self):
+        return '%s : git %s' % (self.repo, ' '.join(self.args))
 
 
     def _HandleOutput(self, msg, stdout):

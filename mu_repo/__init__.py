@@ -88,7 +88,7 @@ configuration of the directories that should be tracked on commands
 Commands:
 
 * ${START_COLOR}mu register repo1 repo2:${RESET_COLOR} Registers repo1 and repo2 to be tracked.
-* ${START_COLOR}mu register --all:${RESET_COLOR} Marks for all subdirs with .git to be tracked.
+* ${START_COLOR}mu register --all:${RESET_COLOR} Registers all subdirs with .git.
 * ${START_COLOR}mu list:${RESET_COLOR} Lists the currently tracked repositories.
 * ${START_COLOR}mu set-var git=d:/bin/git/bin/git.exe:${RESET_COLOR} Set git location to be used.
 * ${START_COLOR}mu set-var serial=0|1:${RESET_COLOR} Set commands to be executed serially or in parallel.
@@ -114,6 +114,7 @@ ${START_COLOR}mu st         ${RESET_COLOR}= Nice status message for all repos (a
 ${START_COLOR}mu co branch  ${RESET_COLOR}= git checkout branch
 ${START_COLOR}mu mu-patch   ${RESET_COLOR}= git diff --cached --full-index > output to file for each repo 
 ${START_COLOR}mu mu-branch  ${RESET_COLOR}= git rev-parse --abbrev-ref HEAD (print current branch)
+${START_COLOR}mu up         ${RESET_COLOR}= git fetch origin curr_branch:refs/remotes/origin/curr_branch 
 ${START_COLOR}mu a          ${RESET_COLOR}= git add -A
 ${START_COLOR}mu ac msg     ${RESET_COLOR}= git add -A & git commit -m (the message must always be passed) 
 ${START_COLOR}mu acp msg    ${RESET_COLOR}= same as 'mu ac' + git push origin current branch.
