@@ -119,8 +119,8 @@ PARALLELISM
 mu-repo by default will execute commands in serial, but it's also possible
 to enable commands to be run in parallel, but note that in this mode,
 actions that require input will not work (and depending on the action,
-may even block). It's possible to force it to run in parallel mode, by 
-setting the 'serial' flag to false.
+may even block if input is required -- i.e.: password). It's possible 
+to force it to run in parallel mode, by setting the 'serial' flag to false.
 
 i.e.: mu set-var serial=false
 
