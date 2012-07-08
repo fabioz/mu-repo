@@ -11,4 +11,15 @@ git diff @{1}..
 
 Interesting:
     http://www.saintsjd.com/2012/01/a-better-ui-for-git/ -- https://github.com/saintsjd/gum
+    
+Commands TODO:
+
+git stage = git add -A
+git stage -i= interactively stage files
+
+
+git unstage = git reset HEAD
+git unstage -i= interactively unstage files
+
+git ignore
 '''
