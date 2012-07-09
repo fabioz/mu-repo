@@ -117,6 +117,9 @@ def main(config_file='.mu_repo', args=None):
     elif arg0 == 'up':
         from .action_up import Run #@Reimport
 
+    elif arg0 == 'install':
+        from .action_install import Run #@Reimport
+
     elif arg0 in ('sync', 'upd'):
         from .action_sync import Run #@Reimport
 

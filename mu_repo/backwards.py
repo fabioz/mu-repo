@@ -21,7 +21,7 @@ if IS_PYTHON_3K:
     def PopWriteBinary():
         sys.stdout = sys.__stdout__
 
-    import builtins
+    import builtins #@UnresolvedImport
     builtins.xrange = range
     builtins.raw_input = input
 else:
