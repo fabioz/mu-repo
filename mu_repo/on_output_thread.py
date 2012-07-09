@@ -5,7 +5,8 @@ Created on 28/05/2012
 '''
 
 import threading
-from mu_repo.print_ import Print
+from mu_repo.print_ import Print, PrintError
+from mu_repo.execute_git_command_in_thread import Output
 
 
 #===================================================================================================
@@ -26,9 +27,15 @@ class OnOutputThread(threading.Thread):
         while True:
             action = self.output_queue.get(True)
             try:
-                if action == self.FINISH_PROCESSING_ITEM:
+                if action is self.FINISH_PROCESSING_ITEM:
                     return
-                self.on_output(action)
+                if isinstance(action, Output):
+                    self.on_output(action)
+                else:
+                    Print(action) #Progress message.
+            except:
+                PrintError()
+
             finally:
                 self.output_queue.task_done()
 
