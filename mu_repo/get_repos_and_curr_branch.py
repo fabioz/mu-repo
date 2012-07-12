@@ -41,7 +41,7 @@ def GetReposAndCurrBranch(params, verbose=True):
             branch_to_repos.setdefault(branch, []).append(repo)
 
         for branch, repos in branch_to_repos.iteritems():
-            Print("Will handle ${START_COLOR}origin %s${RESET_COLOR} for ${START_COLOR}%s${RESET_COLOR}" % (
+            Print("Will handle ${START_COLOR}origin %s${RESET_COLOR} for: %s\n" % (
                 branch, ', '.join(sorted(repos))))
 
     #Restore serial for next command.
