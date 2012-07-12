@@ -21,8 +21,6 @@ def GetReposAndCurrBranch(params, verbose=True):
         stdout = output.stdout.strip()
         if stdout:
             repos_and_curr_branch.append((output.repo, stdout))
-            if verbose:
-                Print("Will handle 'origin %s' for '%s'." % (stdout, output.repo))
         else:
             if verbose:
                 Print('Unable to update (could not get current branch for: %s)' % (output.repo,))
@@ -37,6 +35,14 @@ def GetReposAndCurrBranch(params, verbose=True):
         Params(params.config, ['rev-parse', '--abbrev-ref', 'HEAD'], params.config_file),
         on_output=on_output
     )
+    if verbose:
+        branch_to_repos = {}
+        for repo, branch in repos_and_curr_branch:
+            branch_to_repos.setdefault(branch, []).append(repo)
+
+        for branch, repos in branch_to_repos.iteritems():
+            Print("Will handle ${START_COLOR}origin %s${RESET_COLOR} for ${START_COLOR}%s${RESET_COLOR}" % (
+                branch, ', '.join(sorted(repos))))
 
     #Restore serial for next command.
     params.config.serial = old_serial
