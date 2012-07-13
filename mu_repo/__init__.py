@@ -69,12 +69,16 @@ def main(config_file='.mu_repo', args=None):
         Print(msg)
         return Status(msg, False)
 
-    exists = os.path.exists(config_file)
-    if not exists:
+    if config_file is None: #Mostly for testing.
         contents = ''
     else:
-        with open(config_file, 'r') as f:
-            contents = f.read()
+        exists = os.path.exists(config_file)
+        if not exists:
+            contents = ''
+        else:
+            with open(config_file, 'r') as f:
+                contents = f.read()
+
     config = Config.Create(contents)
 
     if not config.repos:

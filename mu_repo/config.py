@@ -27,24 +27,32 @@ class Config(object):
     __slots__ = [
         'repos',
         'serial',
-        'git',
+        '_git',
     ]
 
     def __init__(self, **kwargs):
         self.repos = []
         self.serial = True
-        self.git = None
+        self._git = None
         for k, v in kwargs.items():
             setattr(self, k, v)
 
     def __getitem__(self, key):
         return getattr(self, key)
 
+    def _GetGit(self):
+        return self._git or 'git'
+
+    def _SetGit(self, git):
+        self._git = git
+
+    git = property(_GetGit, _SetGit)
+
     def items(self):
         yield ('repos', self.repos)
         yield ('serial', str(self.serial))
-        if self.git:
-            yield ('git', self.git)
+        if self._git:
+            yield ('git', self._git)
 
     def __eq__(self, o):
         if isinstance(o, Config):
@@ -81,7 +89,7 @@ class Config(object):
                     l1 = line[3:].strip()
                     if l1.startswith('='):
                         l1 = l1[1:]
-                        config.git = l1.strip()
+                        config._git = l1.strip()
 
         return config
 

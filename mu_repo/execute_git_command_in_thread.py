@@ -31,19 +31,16 @@ class Output(object):
 #===================================================================================================
 class ExecuteGitCommandThread(threading.Thread):
 
-    def __init__(self, repo, args, config, output_queue):
+    def __init__(self, repo, cmd, output_queue):
         threading.Thread.__init__(self)
         self.repo = repo
-        self.config = config
-        self.args = args
+        self.cmd = cmd
         self.output_queue = output_queue
 
 
     def run(self, serial=False):
-        args = self.args
         repo = self.repo
-        git = self.config.git or 'git'
-        cmd = [git] + args
+        cmd = self.cmd
         msg = ' '.join([START_COLOR, '\n', repo, ':'] + cmd + [RESET_COLOR])
 
         if serial:
@@ -76,7 +73,7 @@ class ExecuteGitCommandThread(threading.Thread):
             self._HandleOutput(msg, stdout)
 
     def __str__(self):
-        return '%s : git %s' % (self.repo, ' '.join(self.args))
+        return '%s : git %s' % (self.repo, ' '.join(self.cmd[1:])) #Remove the 'git' from the first part.
 
 
     def _HandleOutput(self, msg, stdout):

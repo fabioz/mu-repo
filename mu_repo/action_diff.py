@@ -172,6 +172,7 @@ class DoDiffOnRepoThread(ExecuteGitCommandThread):
         self.temp_working = temp_working
         self.temp_repo = temp_repo
         self.branch = branch
+        self.config = config
         if not branch:
             args = 'status --porcelain -z'.split()
         else:
@@ -179,7 +180,7 @@ class DoDiffOnRepoThread(ExecuteGitCommandThread):
         self.entry_count = 0
 
         ExecuteGitCommandThread.__init__(
-            self, repo, args, config, output_queue=DummyQueue())
+            self, repo, [config.git] + args, output_queue=DummyQueue())
 
 
     def run(self):

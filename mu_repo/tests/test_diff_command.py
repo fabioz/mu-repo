@@ -125,6 +125,15 @@ class Test(unittest.TestCase):
         called = self.CallDiff()
         self.assertEqual(['winmergeu.exe'], called)
 
+        # Do mu st/mu up just to check if it works.
+        from mu_repo.action_default import Run
+        config = Config(repos=[temp_dir], git=git)
+        Run(Params(config, ['st'], config_file=None))
+
+        import mu_repo
+        mu_repo.main(config_file=None, args=['up'])
+
+
 #===================================================================================================
 # main
 #===================================================================================================

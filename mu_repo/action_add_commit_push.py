@@ -24,21 +24,13 @@ def Run(params, add, commit, push):
 
     if push:
         from mu_repo.get_repos_and_curr_branch import GetReposAndCurrBranch
-        from mu_repo.on_output_thread import ExecuteThreadsHandlingOutputQueue
-        from mu_repo.execute_git_command_in_thread import ExecuteGitCommandThread
-        try:
-            import Queue
-        except ImportError:
-            import queue as Queue
+        from mu_repo.execute_parallel_command import ParallelCmd, ExecuteInParallel
 
         repos_and_curr_branch = GetReposAndCurrBranch(params)
 
-        threads = []
-        output_queue = Queue.Queue()
+        commands = list()
         for repo, branch in repos_and_curr_branch:
-            t = ExecuteGitCommandThread(
-                repo, ['push', 'origin', branch], params.config, output_queue)
-            threads.append(t)
+            commands.append(ParallelCmd(repo, [params.config.git, 'push', 'origin', branch]))
 
-        ExecuteThreadsHandlingOutputQueue(threads, output_queue, on_output=Print)
+        ExecuteInParallel(commands)
 

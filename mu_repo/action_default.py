@@ -7,14 +7,7 @@ from __future__ import with_statement
 from mu_repo.print_ import Print
 import os.path
 from mu_repo import Status
-from mu_repo.execute_git_command_in_thread import ExecuteGitCommandThread
-from mu_repo.on_output_thread import ExecuteThreadsHandlingOutputQueue
-try:
-    import Queue
-except ImportError:
-    import queue as Queue
-
-
+from mu_repo.execute_parallel_command import ParallelCmd, ExecuteInParallel
 
 
 #===================================================================================================
@@ -23,7 +16,6 @@ except ImportError:
 def Run(params, on_output=Print):
     args = params.args
     config = params.config
-    output_queue = Queue.Queue()
 
     arg0 = args[0]
     if arg0 == 'st':
@@ -61,21 +53,14 @@ def Run(params, on_output=Print):
         Print(msg)
         return Status(msg, True, config)
 
-    threads = []
+    commands = []
     for repo in config.repos:
         if not os.path.exists(repo):
             Print('%s does not exist' % (repo,))
         else:
-            t = ExecuteGitCommandThread(
-                repo, args, config, output_queue)
+            commands.append(ParallelCmd(repo, [config.git] + args))
 
-            threads.append(t)
-
-    if config.serial:
-        for t in threads:
-            t.run(serial=True) #When serial will print as is executing.
-    else:
-        ExecuteThreadsHandlingOutputQueue(threads, output_queue, on_output)
+    ExecuteInParallel(commands, on_output, serial=config.serial)
 
     return Status('Finished', True)
 
