@@ -27,7 +27,6 @@ def ExecuteInParallel(commands, on_output=None, serial=False):
         This probably should not be here, but leave it for now: execute things in parallel instead.
     '''
 
-    from mu_repo.on_output_thread import ExecuteThreadsHandlingOutputQueue
     from mu_repo.execute_git_command_in_thread import ExecuteGitCommandThread
     try:
         import Queue
@@ -49,6 +48,7 @@ def ExecuteInParallel(commands, on_output=None, serial=False):
         for t in threads:
             t.run(serial=True) #When serial will print as is executing.
     else:
+        from mu_repo.execute_git_command_in_thread import ExecuteThreadsHandlingOutputQueue
         ExecuteThreadsHandlingOutputQueue(threads, output_queue, on_output=on_output)
 
 

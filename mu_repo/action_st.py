@@ -20,7 +20,7 @@ def Run(params):
     as_dict = dict(repos_and_curr_branch)
 
     commands = []
-    for repo, branch in repos_and_curr_branch:
+    for repo, _branch in repos_and_curr_branch:
         commands.append(ParallelCmd(repo, [params.config.git] + ['status', '-s']))
 
     def OnOutput(output):
