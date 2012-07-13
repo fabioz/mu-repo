@@ -113,12 +113,12 @@ class ExecuteGitCommandThread(threading.Thread):
 
             self._HandleOutput(msg, stdout)
 
-    def GetPartialOutput(self):
+    def GetPartialStderrOutput(self):
         stderr_thread = getattr(self, 'stderr_thread', None)
         if stderr_thread is not None:
             return stderr_thread.GetPartialOutput()
 
-    def GetFullOutput(self):
+    def GetFullStderrOutput(self):
         stderr_thread = getattr(self, 'stderr_thread', None)
         if stderr_thread is not None:
             return stderr_thread.GetFullOutput()
@@ -189,7 +189,7 @@ def ExecuteThreadsHandlingOutputQueue(threads, output_queue, on_output):
                 t.join(timeout=progress_on_timeout)
                 if t.isAlive():
                     total_timeout += progress_on_timeout
-                    partial_output = t.GetPartialOutput()
+                    partial_output = t.GetPartialStderrOutput()
                     if partial_output:
                         output_queue.put('\n  %s (already waited %.2f seconds)\n%s\n' % (
                             t, total_timeout, Indent(partial_output)))
@@ -197,7 +197,7 @@ def ExecuteThreadsHandlingOutputQueue(threads, output_queue, on_output):
                         output_queue.put('  %s (already waited %.2f seconds)\n' % (t, total_timeout))
                 else:
                     #When on_output=Print, we may want to add stderr to the output too.
-                    #full_output = t.GetFullOutput()
+                    #full_output = t.GetFullStderrOutput()
                     #if full_output:
                     #    output_queue.put('\n  %s\n%s\n' % (
                     #        t, Indent(full_output)))
