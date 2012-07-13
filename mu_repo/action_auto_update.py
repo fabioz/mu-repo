@@ -17,4 +17,4 @@ def Run(params):
 
     config = params.config
     git = config.git or 'git'
-    ExecuteCommand([git, 'pull', '--rebase'], repo=repo_dir, communicate=False)
+    ExecuteCommand([git, 'pull', '--rebase'], repo=repo_dir)

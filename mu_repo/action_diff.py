@@ -11,6 +11,7 @@ import shutil
 import subprocess
 from mu_repo.execute_git_command_in_thread import ExecuteGitCommandThread
 from mu_repo.rmtree import RmTree
+from mu_repo.execute_command import ExecuteGettingStdOutput
 
 #===================================================================================================
 # DummyQueue
@@ -37,25 +38,6 @@ def NotifyErrorListeners():
         listener(error)
     Print(error)
 
-
-#===================================================================================================
-# ExecuteGettingStdOutput
-#===================================================================================================
-def ExecuteGettingStdOutput(cmd, cwd):
-    try:
-        p = subprocess.Popen(
-            cmd,
-            cwd=cwd,
-            #stderr=subprocess.STDOUT, # -- let stderr go to sys.stderr!
-            stdout=subprocess.PIPE,
-            stdin=subprocess.PIPE
-        )
-    except:
-        PrintError('Error executing: ' + ' '.join(cmd))
-        raise
-
-    stdout, _stderr = p.communicate()
-    return stdout
 
 
 #===================================================================================================

@@ -1,3 +1,4 @@
 .metadata
 *.pyc
 .mu_repo
+.settings

@@ -4,7 +4,7 @@ Created on Jun 21, 2012
 @author: Fabio Zadrozny
 '''
 from mu_repo.get_repos_and_curr_branch import GetReposAndCurrBranch
-from mu_repo.print_ import Print, START_COLOR, RESET_COLOR
+from mu_repo.print_ import Print
 from mu_repo.execute_command import ExecuteCommand
 
 #=======================================================================================================================
@@ -47,10 +47,7 @@ def Run(params):
 
     git = config.git or 'git'
     cmd = [git, 'status', '--porcelain']
-    stdout, stderr = ExecuteCommand(cmd, repo, communicate=True)
-    if stderr:
-        Print('Unable to execute. Stderr:', stderr)
-        return
+    stdout = ExecuteCommand(cmd, repo, return_stdout=True)
 
     if stdout:
         Print('Unable to execute because there are changes in the working directory:\n', stdout)
@@ -65,8 +62,8 @@ def Run(params):
 
     local_pull_request_branch = user_branch + '-' + user + '-pull-request'
 
-    ExecuteCommand([git, 'checkout', '-b', local_pull_request_branch], communicate=False)
-    ExecuteCommand([git, 'pull', 'https://github.com/' + user_repo, user_branch], communicate=False)
+    ExecuteCommand([git, 'checkout', '-b', local_pull_request_branch])
+    ExecuteCommand([git, 'pull', 'https://github.com/' + user_repo, user_branch])
 #    Exec([git, 'checkout', local_branch])
 #    Exec([git, 'merge', local_pull_request_branch, '--no-commit', '--no-ff'])
 
