@@ -26,7 +26,7 @@ def Run(params):
     #--- E-mail
     user_email = raw_input('\nUser e-mail:').strip()
     if user_email:
-        ExecuteCommand([git] + 'config --global user.email'.split() + [user_name], '.')
+        ExecuteCommand([git] + 'config --global user.email'.split() + [user_email], '.')
     else:
         Print('Skipping user.email configuration.')
 
