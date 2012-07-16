@@ -25,15 +25,13 @@ def GetReposAndCurrBranch(params, verbose=True):
             if verbose:
                 Print('Unable to update (could not get current branch for: %s)' % (output.repo,))
 
-    on_output = OnOutput
-
     from .action_default import Run #@Reimport
     from mu_repo import Params
     old_serial = params.config.serial
     params.config.serial = False #Cannot be serial as we want to get the output
     Run(
         Params(params.config, ['rev-parse', '--abbrev-ref', 'HEAD'], params.config_file),
-        on_output=on_output
+        on_output=OnOutput
     )
     if verbose:
         branch_to_repos = {}

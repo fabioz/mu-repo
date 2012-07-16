@@ -13,7 +13,7 @@ from mu_repo.execute_parallel_command import ParallelCmd, ExecuteInParallel
 #===================================================================================================
 # Run
 #===================================================================================================
-def Run(params, on_output=Print):
+def Run(params, on_output=None):
     args = params.args
     config = params.config
 

@@ -40,10 +40,6 @@ def ExecuteInParallel(commands, on_output=None, serial=False):
             cmd.repo, cmd.cmd, output_queue)
         threads.append(t)
 
-    if on_output is None:
-        from mu_repo.print_ import Print
-        on_output = Print
-
     if serial:
         for t in threads:
             t.run(serial=True) #When serial will print as is executing.
