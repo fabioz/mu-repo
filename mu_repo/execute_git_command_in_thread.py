@@ -201,10 +201,10 @@ def ExecuteThreadsHandlingOutputQueue(threads, output_queue, on_output=None):
                     total_timeout += progress_on_timeout
                     partial_output = t.GetPartialStderrOutput()
                     if partial_output:
-                        output_queue.put('\n  %s (already waited %.2f seconds)\n%s\n' % (
+                        output_queue.put('\n  %s (elapsed %.2f seconds)\n%s\n' % (
                             t, total_timeout, Indent(partial_output)))
                     else:
-                        output_queue.put('  %s (already waited %.2f seconds)\n' % (t, total_timeout))
+                        output_queue.put('  %s (elapsed %.2f seconds)\n' % (t, total_timeout))
                 else:
                     if on_output is None:
                         # Note: only print when on_output is None (on other situations, nothing
