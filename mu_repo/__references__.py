@@ -22,6 +22,9 @@ git unstage = git reset HEAD
 git unstage -i= interactively unstage files
 
 git ignore
+
+Comparing 2 branches:
+git log --left-right --graph --cherry-pick --oneline etk10-9.9.9...master
 '''
 
 #--------------------------------------------------------------------------------------------- SCITE
