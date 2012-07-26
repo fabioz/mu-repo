@@ -62,8 +62,8 @@ def Run(params):
 
     local_pull_request_branch = user_branch + '-' + user + '-pull-request'
 
-    ExecuteCommand([git, 'checkout', '-b', local_pull_request_branch])
-    ExecuteCommand([git, 'pull', 'https://github.com/' + user_repo, user_branch])
+    ExecuteCommand([git, 'checkout', '-b', local_pull_request_branch], '.')
+    ExecuteCommand([git, 'pull', 'https://github.com/' + user_repo, user_branch], '.')
 #    Exec([git, 'checkout', local_branch])
 #    Exec([git, 'merge', local_pull_request_branch, '--no-commit', '--no-ff'])
 
@@ -74,5 +74,8 @@ def Run(params):
         'To discard/forget this merge, do:',
         '${START_COLOR}mu reset --hard${RESET_COLOR}',
         '${START_COLOR}mu branch -D %s${RESET_COLOR}' % (local_pull_request_branch,),
+        'To merge this request:',
+        '${START_COLOR}mu checkout %s${RESET_COLOR}' % (local_branch,),
+        '${START_COLOR}mu merge %s${RESET_COLOR} --no-comit --no-ff' % (local_pull_request_branch,),
     ])
     Print(msg)
