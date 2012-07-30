@@ -3,6 +3,7 @@ import subprocess
 from mu_repo.print_ import Print, PrintError
 from .print_ import START_COLOR, RESET_COLOR
 from mu_repo.backwards import AsStr
+import time
 
 #===================================================================================================
 # Indent
@@ -36,16 +37,17 @@ class ExecuteGitCommandThread(threading.Thread):
         self.repo = repo
         self.cmd = cmd
         self.output_queue = output_queue
-
+        self._finished_read = False
 
 
     class ReaderThread(threading.Thread):
 
-        def __init__(self, stream):
+        def __init__(self, stream, get_non_full_lines=False):
             threading.Thread.__init__(self)
             self._output = []
             self._full_output = []
             self._stream = stream
+            self._get_non_full_lines = get_non_full_lines
 
         def GetPartialOutput(self):
             output = self._output
@@ -53,6 +55,8 @@ class ExecuteGitCommandThread(threading.Thread):
             return ''.join(output)
 
         def GetFullOutput(self):
+            while not self._finished_read:
+                time.sleep(.001)
             return ''.join(self._full_output)
 
         def run(self):
@@ -61,16 +65,46 @@ class ExecuteGitCommandThread(threading.Thread):
                     line = AsStr(line)
                     self._output.append(line)
                     self._full_output.append(line)
+                    self._finished_read = True
+
+#Trying to get message that username/password is being requested (without success)
+#See: http://stackoverflow.com/questions/11728600/get-output-when-username-is-asked-on-msysgit-in-python-on-windows
+#                if not self._get_non_full_lines:
+#                else:
+#                    curr_time = time.time()
+#                    buf = []
+#                    while True:
+#                        char = self._stream.read(1)
+#
+#                        if not char:
+#                            self._finished_read = True
+#                            line = ''.join(buf)
+#                            del buf[:]
+#                            line = AsStr(line)
+#                            self._output.append(line)
+#                            self._full_output.append(line)
+#                            break
+#                        print('found:', char)
+#
+#                        buf.append(char)
+#                        #Show it on a new line or if 4 seconds elapse.
+#                        if char in ('\r', '\n'):# or (self._get_non_full_lines and (time.time() - curr_time) > 4):
+#                            curr_time = time.time()
+#                            line = ''.join(buf)
+#                            del buf[:]
+#                            line = AsStr(line)
+#                            self._output.append(line)
+#                            self._full_output.append(line)
             except:
                 import traceback;traceback.print_exc()
 
 
-    def _CreateReaderThread(self, p, stream_name):
+    def _CreateReaderThread(self, p, stream_name, get_non_full_lines=False):
         '''
         @param stream_name: 'stdout' or 'stderr'
         '''
         stream = getattr(p, stream_name)
-        thread = self.ReaderThread(stream)
+        thread = self.ReaderThread(stream, get_non_full_lines=get_non_full_lines)
         thread.setDaemon(True)
         thread.start()
         return thread
@@ -104,7 +138,7 @@ class ExecuteGitCommandThread(threading.Thread):
                 return
 
             self.stdout_thread = self._CreateReaderThread(p, 'stdout')
-            self.stderr_thread = self._CreateReaderThread(p, 'stderr')
+            self.stderr_thread = self._CreateReaderThread(p, 'stderr', get_non_full_lines=True)
 
             p.wait()
             self.stdout_thread.join()
