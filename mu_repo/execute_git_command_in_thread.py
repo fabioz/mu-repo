@@ -37,7 +37,6 @@ class ExecuteGitCommandThread(threading.Thread):
         self.repo = repo
         self.cmd = cmd
         self.output_queue = output_queue
-        self._finished_read = False
 
 
     class ReaderThread(threading.Thread):
@@ -48,6 +47,7 @@ class ExecuteGitCommandThread(threading.Thread):
             self._full_output = []
             self._stream = stream
             self._get_non_full_lines = get_non_full_lines
+            self._finished_read = False
 
         def GetPartialOutput(self):
             output = self._output
