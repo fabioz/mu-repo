@@ -62,6 +62,7 @@ Commands:
 * mu get-vars: Prints the configuration file.
 * mu github-request: Gets a request from github.
 * mu fix-eol: Changes end of lines to '\n' on all changed files.
+* mu install: Initial configuration git (username, log, etc.)
 * mu auto-update: Automatically updates mu-repo
   (using git -- must have been pulled from git as in the instructions).
 
@@ -84,6 +85,7 @@ mu mu-branch  = git rev-parse --abbrev-ref HEAD (print current branch)
 mu up         = git fetch origin curr_branch:refs/remotes/origin/curr_branch
 mu upd | sync = up/diff incoming changes
 mu a          = git add -A
+mu c msg      = git commit -m "Message" (the message must always be passed)
 mu ac msg     = git add -A & git commit -m (the message must always be passed)
 mu acp msg    = same as 'mu ac' + git push origin current branch.
 mu p          = git push origin current branch.

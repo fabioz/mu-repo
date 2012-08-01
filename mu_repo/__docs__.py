@@ -15,6 +15,7 @@ Commands:
 * ${START_COLOR}mu get-vars:${RESET_COLOR} Prints the configuration file.
 * ${START_COLOR}mu github-request:${RESET_COLOR} Gets a request from github.
 * ${START_COLOR}mu fix-eol:${RESET_COLOR} Changes end of lines to '\\n' on all changed files.
+* ${START_COLOR}mu install:${RESET_COLOR} Initial configuration git (username, log, etc.)
 * ${START_COLOR}mu auto-update:${RESET_COLOR} Automatically updates mu-repo 
   (using git -- must have been pulled from git as in the instructions).
 
@@ -37,6 +38,7 @@ ${START_COLOR}mu mu-branch  ${RESET_COLOR}= git rev-parse --abbrev-ref HEAD (pri
 ${START_COLOR}mu up         ${RESET_COLOR}= git fetch origin curr_branch:refs/remotes/origin/curr_branch 
 ${START_COLOR}mu upd | sync ${RESET_COLOR}= up/diff incoming changes
 ${START_COLOR}mu a          ${RESET_COLOR}= git add -A
+${START_COLOR}mu c msg      ${RESET_COLOR}= git commit -m "Message" (the message must always be passed)
 ${START_COLOR}mu ac msg     ${RESET_COLOR}= git add -A & git commit -m (the message must always be passed) 
 ${START_COLOR}mu acp msg    ${RESET_COLOR}= same as 'mu ac' + git push origin current branch.
 ${START_COLOR}mu p          ${RESET_COLOR}= git push origin current branch.
