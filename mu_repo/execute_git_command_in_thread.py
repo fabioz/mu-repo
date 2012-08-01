@@ -200,10 +200,18 @@ def ExecuteThreadsHandlingOutputQueue(threads, output_queue, on_output=None):
                     total_timeout += progress_on_timeout
                     partial_output = t.GetPartialStderrOutput()
                     if partial_output:
-                        output_queue.put('\n  %s (elapsed %.2f seconds)\n%s\n' % (
-                            t, total_timeout, Indent(partial_output)))
+                        msg = '\n  %s (elapsed %d seconds)\n%s\n' % (
+                                t, total_timeout, Indent(partial_output))
                     else:
-                        output_queue.put('  %s (elapsed %.2f seconds)\n' % (t, total_timeout))
+                        msg = '  %s (elapsed %d seconds)\n' % (t, total_timeout)
+                    if total_timeout % 60 == 0:
+                        msg += (
+                            '  This command seems to be taking a while.\n'
+                            '  Note that mu is not able to detect if git got stuck waiting for input.\n'
+                            '  Consider executing git directly on the repository to see the output.\n'
+                        )
+
+                    output_queue.put(msg)
                 else:
                     if on_output is None:
                         # Note: only print when on_output is None (on other situations, nothing
