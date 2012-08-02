@@ -137,6 +137,11 @@ def main(config_file='.mu_repo', args=None):
             from .action_add_commit_push import Run #@Reimport
             Run(params, add=True, commit=True, push=False)
 
+    elif arg0 == 'c': #Commit
+        def Run(params):
+            from .action_add_commit_push import Run #@Reimport
+            Run(params, add=False, commit=True, push=False)
+
     elif arg0 == 'acp': #Add, commit, push
         def Run(params):
             from .action_add_commit_push import Run #@Reimport

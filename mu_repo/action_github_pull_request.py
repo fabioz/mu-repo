@@ -76,6 +76,6 @@ def Run(params):
         '${START_COLOR}mu branch -D %s${RESET_COLOR}' % (local_pull_request_branch,),
         'To merge this request:',
         '${START_COLOR}mu checkout %s${RESET_COLOR}' % (local_branch,),
-        '${START_COLOR}mu merge %s${RESET_COLOR} --no-comit --no-ff' % (local_pull_request_branch,),
+        '${START_COLOR}mu merge %s --no-commit --no-ff${RESET_COLOR}' % (local_pull_request_branch,),
     ])
     Print(msg)
