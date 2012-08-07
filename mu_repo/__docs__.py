@@ -42,6 +42,7 @@ ${START_COLOR}mu c msg      ${RESET_COLOR}= git commit -m "Message" (the message
 ${START_COLOR}mu ac msg     ${RESET_COLOR}= git add -A & git commit -m (the message must always be passed) 
 ${START_COLOR}mu acp msg    ${RESET_COLOR}= same as 'mu ac' + git push origin current branch.
 ${START_COLOR}mu p          ${RESET_COLOR}= git push origin current branch.
+${START_COLOR}mu rb         ${RESET_COLOR}= git rebase origin/current branch.
 ${START_COLOR}mu shell      ${RESET_COLOR}= On msysgit, call sh --login -i (linux-like env)
 
 Any other command is passed directly to git for each repository:

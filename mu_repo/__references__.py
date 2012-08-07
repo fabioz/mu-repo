@@ -25,6 +25,25 @@ git ignore
 
 Comparing 2 branches:
 git log --left-right --graph --cherry-pick --oneline etk10-9.9.9...master
+
+
+Creating/applying a patch:
+git diff --cached > ..\out.patch
+git apply ..\out.patch
+
+
+Squashing commits -- Lot's of ways. One of them:
+git reset --soft HEAD^
+And then re-commit after the given point is reached :)
+
+Submit to reviewboard
+git config reviewboard.url=http://reviewboard.hdqt.appcelerator.com/
+#-o: open browser
+#-g: guess description and title
+#--server=http://reviewboard.hdqt.appcelerator.com/
+#--diff-filename=
+d:\bin\Python265\Scripts\post-review.exe -g -o --branch=development --tracking-branch=origin/development --bugs-closed=7224 --target-groups=Studio
+
 '''
 
 #--------------------------------------------------------------------------------------------- SCITE

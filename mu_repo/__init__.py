@@ -155,6 +155,9 @@ def main(config_file='.mu_repo', args=None):
     elif arg0 == 'st': #Concise status message (branch, changes)
         from .action_st import Run #@Reimport
 
+    elif arg0 == 'rb': #Rebase current_branch origin/current_branch
+        from .action_rebase import Run #@Reimport
+
 
     elif arg0 == 'shell':
         import subprocess
