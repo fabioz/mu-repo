@@ -61,6 +61,7 @@ Commands:
 * mu set-var serial=0|1: Set commands to be executed serially or in parallel.
 * mu get-vars: Prints the configuration file.
 * mu github-request: Gets a request from github.
+* mu post-review bug_id group: posts a review with the changes committed.
 * mu fix-eol: Changes end of lines to '\n' on all changed files.
 * mu install: Initial configuration git (username, log, etc.)
 * mu auto-update: Automatically updates mu-repo
@@ -89,6 +90,7 @@ mu c msg      = git commit -m "Message" (the message must always be passed)
 mu ac msg     = git add -A & git commit -m (the message must always be passed)
 mu acp msg    = same as 'mu ac' + git push origin current branch.
 mu p          = git push origin current branch.
+mu rb         = git rebase origin/current branch.
 mu shell      = On msysgit, call sh --login -i (linux-like env)
 
 Any other command is passed directly to git for each repository:

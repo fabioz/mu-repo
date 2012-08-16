@@ -1,27 +1,7 @@
 from mu_repo.get_repos_and_curr_branch import GetReposAndCurrBranch
 from mu_repo.execute_parallel_command import ParallelCmd, ExecuteInParallel
 from mu_repo.print_ import Print
-
-
-
-#===================================================================================================
-# _GetReposWithChanges
-#===================================================================================================
-def _GetReposWithChanges(repos_and_curr_branch, params):
-    commands = []
-    for repo, _branch in repos_and_curr_branch:
-        commands.append(ParallelCmd(repo, [params.config.git] + ['status', '-s']))
-
-    repos_with_changes = {}
-    def OnOutput(output):
-        if not output.stdout:
-            repos_with_changes[output.repo] = False
-        else:
-            repos_with_changes[output.repo] = True
-
-    ExecuteInParallel(commands, on_output=OnOutput)
-    return repos_with_changes
-
+from mu_repo.repos_with_changes import ComputeReposWithChanges
 
 #===================================================================================================
 # _RebaseRepos
@@ -66,7 +46,7 @@ def _StashRepos(repos_and_branch, params, pop=False):
 def Run(params):
     repos_and_curr_branch = GetReposAndCurrBranch(params)
 
-    repos_with_changes = _GetReposWithChanges(repos_and_curr_branch, params)
+    repos_with_changes = ComputeReposWithChanges(repos_and_curr_branch, params)
 
     #Step 1: do a simple rebase on the ones that don't have any changes.
     rebase_repos = []

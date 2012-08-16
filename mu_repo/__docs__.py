@@ -14,6 +14,7 @@ Commands:
 * ${START_COLOR}mu set-var serial=0|1:${RESET_COLOR} Set commands to be executed serially or in parallel.
 * ${START_COLOR}mu get-vars:${RESET_COLOR} Prints the configuration file.
 * ${START_COLOR}mu github-request:${RESET_COLOR} Gets a request from github.
+* ${START_COLOR}mu post-review  bug_id group:${RESET_COLOR} posts a review with the changes committed.
 * ${START_COLOR}mu fix-eol:${RESET_COLOR} Changes end of lines to '\\n' on all changed files.
 * ${START_COLOR}mu install:${RESET_COLOR} Initial configuration git (username, log, etc.)
 * ${START_COLOR}mu auto-update:${RESET_COLOR} Automatically updates mu-repo 

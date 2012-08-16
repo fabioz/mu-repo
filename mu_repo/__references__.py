@@ -35,16 +35,6 @@ git apply ..\out.patch
 Squashing commits -- Lot's of ways. One of them:
 git reset --soft HEAD^
 And then re-commit after the given point is reached :)
-
-Submit to reviewboard
-Note: must have already committed the work.
-git config reviewboard.url=http://reviewboard.hdqt.appcelerator.com/
-#-o: open browser
-#-g: guess description and title
-#--server=http://reviewboard.hdqt.appcelerator.com/
-#--diff-filename=
-d:\bin\Python265\Scripts\post-review.exe -g -o --branch=development --tracking-branch=origin/development --bugs-closed=4654 --target-groups=Studio
-
 '''
 
 #--------------------------------------------------------------------------------------------- SCITE

@@ -103,6 +103,9 @@ def main(config_file='.mu_repo', args=None):
     elif arg0 == 'github-request':
         from .action_github_pull_request import Run #@Reimport
 
+    elif arg0 == 'post-review':
+        from .action_post_review import Run #@Reimport
+
     elif arg0 == 'register':
         from .action_register import Run #@Reimport
 
