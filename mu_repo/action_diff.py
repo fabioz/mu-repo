@@ -155,7 +155,7 @@ def ParsePorcelain(porcelain_output, only_split=False):
             if not st:
                 continue #Unmodified
             if 'R' in st:
-                filename_from = next(it)
+                filename_from = it.next()
                 yield StatusEntry(entry, filename_from)
             else:
                 yield StatusEntry(entry, entry)
