@@ -81,13 +81,23 @@ def main(config_file='.mu_repo', args=None):
 
     config = Config.Create(contents)
 
-    if not config.repos:
-        if '.' == args[0]:
-            del args[0]
-            config.repos.append('.')
-        elif os.path.exists('.git'):
-            #Allow it to be used on single git repos too.
-            config.repos.append('.')
+    for arg in args:
+        if arg.startswith('repo:'):
+            args.remove(arg)
+            config.repos = arg[len('repo:'):].split(',')
+            print(config.repos)
+            if not args:
+                Print('"repo" specified, but no additional args given.')
+                return
+            break
+    else:
+        if not config.repos:
+            if '.' == args[0]:
+                del args[0]
+                config.repos.append('.')
+            elif os.path.exists('.git'):
+                #Allow it to be used on single git repos too.
+                config.repos.append('.')
 
 
     arg0 = args[0]

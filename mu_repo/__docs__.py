@@ -30,6 +30,10 @@ Commands:
      mu dd 9fd88da
      mu dd development
 
+Specifying a repository for a single command (repo: argument):
+   e.g.: ${START_COLOR}mu st repo:repo1,repo2${RESET_COLOR}: Will do st on repo1 and repo2.  
+
+
 Shortcuts:
 
 ${START_COLOR}mu st         ${RESET_COLOR}= Nice status message for all repos (always in parallel)

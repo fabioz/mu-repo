@@ -23,11 +23,11 @@ def Run(params):
     for repo, _branch in repos_and_curr_branch:
         commands.append(ParallelCmd(repo, [params.config.git] + ['status', '-s']))
 
-    empty_repos = []
+    empty_repos_and_branches = []
     def OnOutput(output):
         branch_name = as_dict.get(output.repo, 'UNKNOWN_BRANCH')
         if not output.stdout:
-            empty_repos.append((output.repo, branch_name))
+            empty_repos_and_branches.append((output.repo, branch_name))
         else:
             status = [
                 START_COLOR,
@@ -44,9 +44,9 @@ def Run(params):
 
     ExecuteInParallel(commands, on_output=OnOutput)
 
-    if empty_repos:
+    if empty_repos_and_branches:
         branch_to_repos = {}
-        for repo, branch in repos_and_curr_branch:
+        for repo, branch in empty_repos_and_branches:
             branch_to_repos.setdefault(branch, []).append(repo)
 
         for branch, repos in branch_to_repos.iteritems():
