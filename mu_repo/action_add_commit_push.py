@@ -17,7 +17,16 @@ def Run(params, add, commit, push):
     from .action_default import Run #@Reimport
     from mu_repo import Params
     if add:
-        Run(Params(params.config, ['add', '-A'], params.config_file))
+        repos = []
+        def on_output(output):
+            if output.stdout:
+                Print(output)
+            else:
+                repos.append(output.repo)
+        Run(Params(params.config, ['add', '-A'], params.config_file), on_output)
+        if repos:
+            Print('Executed ${START_COLOR}git add -A${RESET_COLOR} in:\n${START_COLOR}%s${RESET_COLOR}' % (
+                '${RESET_COLOR}, ${START_COLOR}'.join(repos)))
 
     if commit:
         Run(Params(params.config, ['commit', '-m', ' '.join(args)], params.config_file))
