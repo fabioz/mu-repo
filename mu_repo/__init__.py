@@ -85,7 +85,6 @@ def main(config_file='.mu_repo', args=None):
         if arg.startswith('repo:'):
             args.remove(arg)
             config.repos = arg[len('repo:'):].split(',')
-            print(config.repos)
             if not args:
                 Print('"repo" specified, but no additional args given.')
                 return
