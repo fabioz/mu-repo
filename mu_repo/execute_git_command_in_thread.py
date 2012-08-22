@@ -111,8 +111,8 @@ class ExecuteGitCommandThread(threading.Thread):
             self.stderr_thread = self._CreateReaderThread(p, 'stderr')
 
             p.wait()
-            self.stdout_thread.join()
-            self.stderr_thread.join()
+            self.stdout_thread.join(2) #finish in at most 2 seconds
+            self.stderr_thread.join(2) #finish in at most 2 seconds
             stdout = AsStr(self.stdout_thread.GetFullOutput())
             stderr = AsStr(self.stderr_thread.GetFullOutput())
 
@@ -140,7 +140,10 @@ class ExecuteGitCommandThread(threading.Thread):
     def _HandleOutput(self, msg, stdout, stderr):
         stdout = stdout.strip()
         if not stdout:
-            self.output_queue.put(Output(self.repo, msg + ': ' + 'empty', stdout, stderr))
+            if stderr:
+                self.output_queue.put(Output(self.repo, msg + '\n' + Indent(stderr), stdout, stderr))
+            else:
+                self.output_queue.put(Output(self.repo, msg + ': ' + 'empty', stdout, stderr))
         else:
             self.output_queue.put(Output(self.repo, msg + '\n' + Indent(stdout), stdout, stderr))
 
