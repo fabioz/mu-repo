@@ -16,15 +16,20 @@ def Indent(txt):
 #===================================================================================================
 class Output(object):
 
-    __slots__ = ['repo', 'msg', 'stdout']
+    __slots__ = ['repo', 'msg', 'stdout', 'stderr']
 
-    def __init__(self, repo, msg, stdout):
+    def __init__(self, repo, msg, stdout, stderr):
         self.repo = repo
         self.msg = msg
         self.stdout = stdout
+        self.stderr = stderr
 
     def __str__(self):
         return self.msg
+
+    def __repr__(self, *args, **kwargs):
+        return 'Output: %s\nStderr: %s\nStdout: %s\nMessage: %s' % (
+            self.repo, self.stderr, self.stdout, self.msg)
 
 #===================================================================================================
 # ExecuteGitCommandThread
@@ -109,8 +114,9 @@ class ExecuteGitCommandThread(threading.Thread):
             self.stdout_thread.join()
             self.stderr_thread.join()
             stdout = AsStr(self.stdout_thread.GetFullOutput())
+            stderr = AsStr(self.stderr_thread.GetFullOutput())
 
-            self._HandleOutput(msg, stdout)
+            self._HandleOutput(msg, stdout, stderr)
 
     def GetPartialStderrOutput(self):
         stderr_thread = getattr(self, 'stderr_thread', None)
@@ -131,12 +137,12 @@ class ExecuteGitCommandThread(threading.Thread):
         return '${START_COLOR}%s : git %s${RESET_COLOR}' % (self.repo, ' '.join(self.cmd[1:])) #Remove the 'git' from the first part.
 
 
-    def _HandleOutput(self, msg, stdout):
+    def _HandleOutput(self, msg, stdout, stderr):
         stdout = stdout.strip()
         if not stdout:
-            self.output_queue.put(Output(self.repo, msg + ': ' + 'empty', stdout))
+            self.output_queue.put(Output(self.repo, msg + ': ' + 'empty', stdout, stderr))
         else:
-            self.output_queue.put(Output(self.repo, msg + '\n' + Indent(stdout), stdout))
+            self.output_queue.put(Output(self.repo, msg + '\n' + Indent(stdout), stdout, stderr))
 
 
 #===================================================================================================

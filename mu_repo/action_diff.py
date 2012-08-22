@@ -190,7 +190,7 @@ class DoDiffOnRepoThread(ExecuteGitCommandThread):
             NotifyErrorListeners()
 
 
-    def _HandleOutput(self, msg, stdout):
+    def _HandleOutput(self, msg, stdout, stderr):
         temp_working, temp_repo, repo = self.temp_working, self.temp_repo, self.repo
         for entry in ParsePorcelain(stdout, only_split=self.branch != ''):
             self.entry_count += 1

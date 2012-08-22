@@ -41,5 +41,15 @@ def Run(params, add, commit, push):
         for repo, branch in repos_and_curr_branch:
             commands.append(ParallelCmd(repo, [params.config.git, 'push', 'origin', branch]))
 
-        ExecuteInParallel(commands)
+        repos = []
+        def on_output(output):
+            if not output.stdout.strip() and output.stderr.strip() == 'Everything up-to-date':
+                repos.append(output.repo)
+            else:
+                Print(output)
+        ExecuteInParallel(commands, on_output=on_output)
+        if repos:
+            Print('Repositories up-to-date:\n${START_COLOR}%s${RESET_COLOR}' % (
+                '${RESET_COLOR}, ${START_COLOR}'.join(repos)))
+
 
