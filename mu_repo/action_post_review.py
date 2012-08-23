@@ -11,7 +11,9 @@ from mu_repo.execute_command import ExecuteCommand
 def Run(params):
     '''
     Submit to reviewboard
-    Note: must have already committed the work.
+    Note: must have already committed the work. 
+    
+    By default will do a diff from the current_branch to origin/current_branch.
     
     Note: reviewboard must be already configured:
         mu config reviewboard.url http://reviewboard.hdqt.appcelerator.com/
@@ -29,8 +31,17 @@ def Run(params):
     '''
 
     args = params.args
+
+    dirty_flag = False
+    for arg in args:
+        if arg == '--dirty':
+            dirty_flag = True
+            args.remove(arg)
+            break
+
     if len(args) < 3:
-        Print('Expecting 2 parameters: bugs_closed and target_groups (i.e.: mu post-review 4689 Studio)')
+        Print('''Expecting 2 parameters: bugs_closed and target_groups (i.e.: mu post-review 4689 Studio)
+Optional: --dirty: to post a review while there are changes in the working dir.''')
         return
     bug_closed = args[1]
     target_group = args[2]
@@ -38,12 +49,15 @@ def Run(params):
     repos_and_curr_branch = GetReposAndCurrBranch(params)
     repos_with_changes = ComputeReposWithChanges(repos_and_curr_branch, params)
 
-    changed = [repo for repo, has_change in repos_with_changes.items() if has_change]
-    if changed:
-        Print(
-            'Unable to post review. All the contents must be committed before generating a review.\nChanged repos:\n%s' %
-            (' '.join(changed),))
-        return
+    if not dirty_flag:
+        changed = [repo for repo, has_change in repos_with_changes.items() if has_change]
+        if changed:
+            Print(
+                '''Unable to post review. All the contents must be committed before generating a review.
+Note: pass '--dirty' flag to commit with changed resources (will still get changes from branch origin/branch).
+Changed repos:
+%s''' % (' '.join(changed),))
+            return
 
     repos_with_changes = ComputeReposWithChangesFromCurrentBranchToOrigin(repos_and_curr_branch, params)
     if not repos_with_changes:
