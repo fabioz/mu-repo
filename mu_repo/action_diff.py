@@ -12,6 +12,7 @@ import subprocess
 from mu_repo.execute_git_command_in_thread import ExecuteGitCommandThread
 from mu_repo.rmtree import RmTree
 from mu_repo.execute_command import ExecuteGettingStdOutput
+from mu_repo.get_repos_and_curr_branch import GetReposAndCurrBranch
 
 #===================================================================================================
 # DummyQueue
@@ -296,14 +297,27 @@ def Run(params):
         #cmd = [git] + 'diff --name-only -z'.split()
         args = params.args
         branch = ''
+        repos_and_curr_branch = None
         if len(args) > 1:
             #Ok, the user is comparing current branch with a previous branch or commit.
             #i.e.: mu dd HEAD^^
+
             branch = args[1]
+            if branch == '--prev':
+                repos_and_curr_branch = dict(GetReposAndCurrBranch(params, verbose=False))
 
         threads = []
         for repo in config.repos:
-            thread = DoDiffOnRepoThread(config, repo, symlink, temp_working, temp_repo, branch)
+            if repos_and_curr_branch is not None:
+                #Note: if --prev is given, it means current_branch@{1}
+                #But note that users could also do things as: mu dd master@{10.minutes.ago}
+                #References:
+                #http://www.kernel.org/pub/software/scm/git/docs/git-rev-parse.html
+                #http://stackoverflow.com/questions/1362952/detail-change-after-git-pull
+                branch = repos_and_curr_branch[repo] + '@{1}' #Get the version before the last update.
+                thread = DoDiffOnRepoThread(config, repo, symlink, temp_working, temp_repo, branch)
+            else:
+                thread = DoDiffOnRepoThread(config, repo, symlink, temp_working, temp_repo, branch)
             threads.append(thread)
             thread.start()
 
