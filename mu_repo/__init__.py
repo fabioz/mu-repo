@@ -84,11 +84,23 @@ def main(config_file='.mu_repo', args=None):
     for arg in args:
         if arg.startswith('repo:'):
             args.remove(arg)
-            config.repos = arg[len('repo:'):].split(',')
+            config.repos = arg[len('repo:'):].replace(';', ',').split(',')
             if not args:
                 Print('"repo" specified, but no additional args given.')
                 return
+
+        elif arg.startswith('repos:'):
+            args.remove(arg)
+            config.repos = arg[len('repos:'):].replace(';', ',').split(',')
+            if not args:
+                Print('"repos" specified, but no additional args given.')
+                return
+
+        elif arg == '--help':
+            #On a help command, don't execute in multiple repos.
+            config.repos = ['.']
             break
+
     else:
         if not config.repos:
             if '.' == args[0]:
@@ -101,71 +113,46 @@ def main(config_file='.mu_repo', args=None):
 
     arg0 = args[0]
     change_to_serial_if_possible = True
-    if arg0 == 'set-var':
-        from .action_set_var import Run
-        change_to_serial_if_possible = False
 
-    elif arg0 == 'get-vars':
-        from .action_get_vars import Run #@Reimport
-        change_to_serial_if_possible = False
 
-    elif arg0 == 'github-request':
-        from .action_github_pull_request import Run #@Reimport
-
-    elif arg0 == 'post-review':
-        from .action_post_review import Run #@Reimport
-
-    elif arg0 == 'register':
-        from .action_register import Run #@Reimport
-
-    elif arg0 == 'fix-eol':
-        from .action_fix_eol import Run #@Reimport
-
-    elif arg0 == 'auto-update':
-        from .action_auto_update import Run #@Reimport
-
-    elif arg0 == 'list':
-        from .action_list import Run #@Reimport
-
-    elif arg0 == 'dd':
-        from .action_diff import Run #@Reimport
-
-    elif arg0 == 'up':
-        from .action_up import Run #@Reimport
-
-    elif arg0 == 'install':
-        from .action_install import Run #@Reimport
-
-    elif arg0 == 'howto':
-        from .howto import Run #@Reimport
-
-    elif arg0 in ('sync', 'upd'):
-        from .action_sync import Run #@Reimport
-
-    elif arg0 == 'a': #Add
+    # acp variants ---------------------------------------------------------------------------------
+    if arg0 == 'acp': #Add, commit, push
         def Run(params):
             from .action_add_commit_push import Run #@Reimport
-            Run(params, add=True, commit=False, push=False)
+            Run(params, add=True, commit=True, push=True)
 
     elif arg0 == 'ac': #Add, commit
         def Run(params):
             from .action_add_commit_push import Run #@Reimport
             Run(params, add=True, commit=True, push=False)
 
+    elif arg0 == 'a': #Add
+        def Run(params):
+            from .action_add_commit_push import Run #@Reimport
+            Run(params, add=True, commit=False, push=False)
+
     elif arg0 == 'c': #Commit
         def Run(params):
             from .action_add_commit_push import Run #@Reimport
             Run(params, add=False, commit=True, push=False)
 
-    elif arg0 == 'acp': #Add, commit, push
-        def Run(params):
-            from .action_add_commit_push import Run #@Reimport
-            Run(params, add=True, commit=True, push=True)
-
     elif arg0 == 'p': #Push
         def Run(params):
             from .action_add_commit_push import Run #@Reimport
             Run(params, add=False, commit=False, push=True)
+
+
+
+
+    # related to git actions -----------------------------------------------------------------------
+    elif arg0 == 'dd':
+        from .action_diff import Run #@Reimport
+
+    elif arg0 == 'up':
+        from .action_up import Run #@Reimport
+
+    elif arg0 in ('sync', 'upd'):
+        from .action_sync import Run #@Reimport
 
     elif arg0 == 'st': #Concise status message (branch, changes)
         from .action_st import Run #@Reimport
@@ -173,6 +160,43 @@ def main(config_file='.mu_repo', args=None):
     elif arg0 == 'rb': #Rebase current_branch origin/current_branch
         from .action_rebase import Run #@Reimport
 
+
+
+    # actions related to repos or mu itself --------------------------------------------------------
+    elif arg0 == 'set-var':
+        from .action_set_var import Run #@Reimport
+        change_to_serial_if_possible = False
+
+    elif arg0 == 'get-vars':
+        from .action_get_vars import Run #@Reimport
+        change_to_serial_if_possible = False
+
+    elif arg0 == 'auto-update':
+        from .action_auto_update import Run #@Reimport
+
+    elif arg0 == 'list':
+        from .action_list import Run #@Reimport
+
+    elif arg0 == 'register':
+        from .action_register import Run #@Reimport
+
+
+
+    # assorted -------------------------------------------------------------------------------------
+    elif arg0 == 'install':
+        from .action_install import Run #@Reimport
+
+    elif arg0 == 'post-review':
+        from .action_post_review import Run #@Reimport
+
+    elif arg0 == 'fix-eol':
+        from .action_fix_eol import Run #@Reimport
+
+    elif arg0 == 'github-request':
+        from .action_github_pull_request import Run #@Reimport
+
+    elif arg0 == 'howto':
+        from .howto import Run #@Reimport
 
     elif arg0 == 'shell':
         import subprocess
@@ -183,7 +207,14 @@ def main(config_file='.mu_repo', args=None):
             import traceback;traceback.print_exc()
         return
 
+
+    # default action -------------------------------------------------------------------------------
     else:
+        if arg0 == 'stash' and len(args) == 1:
+            #Fixing stash: if git stash is provided without arguments, append a '-u' so that it
+            #also stashes untracked files.
+            args.append('-u')
+
         from .action_default import Run #@Reimport
 
     if change_to_serial_if_possible:

@@ -37,6 +37,10 @@ git reset --soft HEAD^
 And then re-commit after the given point is reached :)
 '''
 
+
+
+
+
 #--------------------------------------------------------------------------------------------- SCITE
 '''
 Using SciTE:

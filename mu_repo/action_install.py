@@ -46,8 +46,8 @@ def Run(params):
     if not config_date:
         config_date = 'y'
     if config_date == 'y':
-        ExecuteCommand([git] + ['config', 'format.pretty', '%h %ad %Cgreen%aN%Creset %s'], '.')
-        ExecuteCommand([git] + 'config log.date short'.split(), '.')
+        ExecuteCommand([git] + ['config', '--global', 'format.pretty', '%h %ad %Cgreen%aN%Creset %s'], '.')
+        ExecuteCommand([git] + 'config --global log.date short'.split(), '.')
 
 
     wrap = raw_input('\nShow logs wrapped? (i.e.: set less -r): (default: y, options: y, n)').strip().lower()
@@ -55,3 +55,10 @@ def Run(params):
         wrap = 'y'
     if wrap == 'y':
         ExecuteCommand([git, 'config', '--global', 'core.pager', 'less -r'], '.')
+
+# Maybe at some point we want to create some git aliases?
+#    wrap = raw_input('\nCreate aliases?').strip().lower()
+#    if not wrap:
+#        wrap = 'y'
+#    if wrap == 'y':
+#        ExecuteCommand([git, 'config', '--global', 'alias.st', 'status -s'], '.')

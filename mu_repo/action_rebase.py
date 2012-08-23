@@ -33,7 +33,7 @@ def _StashRepos(repos_and_branch, params, pop=False):
         if pop:
             cmd = [params.config.git, 'stash', 'pop']
         else:
-            cmd = [params.config.git, 'stash']
+            cmd = [params.config.git, 'stash', '-u'] #-u means also stash untracked files.
         commands.append(ParallelCmd(repo, cmd))
 
     ExecuteInParallel(commands)
