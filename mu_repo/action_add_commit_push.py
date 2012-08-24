@@ -15,33 +15,35 @@ def Run(params, add, commit, push):
         Print('Message for commit is required for git add -A & git commit -m command.')
         return
 
-    from .action_default import Run #@Reimport
-    from . import Params
+    from .execute_parallel_command import ParallelCmd, ExecuteInParallelStackingMessages
 
     if add:
-        repos = []
-        def on_output(output):
-            if output.stdout:
-                Print(output)
-            else:
-                repos.append(output.repo)
-        Run(Params(params.config, ['add', '-A'], params.config_file), on_output)
-        if repos:
-            Print(CreateJoinedReposMsg('Executed "git add -A" in:', repos))
+        commands = [ParallelCmd(repo, [params.config.git, 'add', '-A']) for repo in params.config.repos]
+        ExecuteInParallelStackingMessages(
+            commands,
+            lambda output: not output.stdout.strip(),
+            lambda repos: Print(CreateJoinedReposMsg('Executed "git add -A" in:', repos))
+        )
+
 
     if commit:
-        Run(Params(params.config, ['commit', '-m', ' '.join(args)], params.config_file))
+        commit_msg = ' '.join(args)
+        commands = [ParallelCmd(repo, [params.config.git, 'commit', '-m', commit_msg])
+            for repo in params.config.repos]
+
+        ExecuteInParallelStackingMessages(
+            commands,
+            lambda output: 'nothing to commit (working directory clean)' in output.stdout,
+            lambda repos: Print(CreateJoinedReposMsg('Nothing to commit at:', repos))
+        )
 
 
     if push:
         from .get_repos_and_curr_branch import GetReposAndCurrBranch
-        from .execute_parallel_command import ParallelCmd, ExecuteInParallelStackingMessages
-
         repos_and_curr_branch = GetReposAndCurrBranch(params)
 
-        commands = list()
-        for repo, branch in repos_and_curr_branch:
-            commands.append(ParallelCmd(repo, [params.config.git, 'push', 'origin', branch]))
+        commands = [ParallelCmd(repo, [params.config.git, 'push', 'origin', branch])
+            for (repo, branch) in repos_and_curr_branch]
 
         ExecuteInParallelStackingMessages(
             commands,
