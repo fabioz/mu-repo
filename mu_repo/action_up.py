@@ -5,7 +5,7 @@ Created on 28/05/2012
 '''
 from mu_repo.get_repos_and_curr_branch import GetReposAndCurrBranch
 from mu_repo.execute_parallel_command import ParallelCmd, ExecuteInParallel
-from mu_repo.print_ import Print
+from mu_repo.print_ import Print, CreateJoinedReposMsg
 
 
 
@@ -32,8 +32,7 @@ def Run(params):
             Print(output)
     ExecuteInParallel(commands, on_output=on_output)
     if repos:
-        Print('Repositories fetched with no changes:\n${START_COLOR}%s${RESET_COLOR}' % (
-            '${RESET_COLOR}, ${START_COLOR}'.join(repos)))
+        Print(CreateJoinedReposMsg('Repositories fetched with no changes:', repos))
 
 
     return repos_and_curr_branch

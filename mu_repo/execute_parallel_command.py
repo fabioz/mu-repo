@@ -12,6 +12,42 @@ class ParallelCmd(object):
 
 
 #===================================================================================================
+# ExecuteInParallelStackingMessages
+#===================================================================================================
+def ExecuteInParallelStackingMessages(commands, match_empty_output, execute_on_repos, serial=False):
+    '''
+    @param match_empty_output: callable
+        Either the message we were expecting or a callable that returns True to mean this was
+        the expected message or False otherwise.
+        
+    @param execute_on_repos: callable(str)
+        A callable that receives the repositories that were matched as being empty.
+        Not called if no repositories were matched.
+    
+    @return: list(str)
+        Returns a list with the repositories that matched the expected output as empty.
+        
+    @see ExecuteInParallel for other commands.
+    '''
+    from .print_ import Print
+    repos = []
+
+    def on_output(output):
+        if match_empty_output(output):
+            repos.append(output.repo)
+            return
+
+        # Print message by default.
+        Print(output)
+
+    ExecuteInParallel(commands, on_output=on_output, serial=serial)
+    if repos:
+        execute_on_repos(repos)
+
+    return repos
+
+
+#===================================================================================================
 # ExecuteInParallel
 #===================================================================================================
 def ExecuteInParallel(commands, on_output=None, serial=False):

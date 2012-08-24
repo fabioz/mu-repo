@@ -169,3 +169,15 @@ def Print(*args, **kwargs):
     f.write(msg + '\n')
 
 
+#===================================================================================================
+# CreateJoinedReposMsg
+#===================================================================================================
+def CreateJoinedReposMsg(msg, repos):
+    if msg.endswith(':'):
+        msg += ' '
+    if msg:
+        msg = '${START_COLOR}%s${RESET_COLOR}' % (msg,)
+    #'${START_COLOR}%s${RESET_COLOR}' % '${RESET_COLOR}, ${START_COLOR}'.join(sorted(repos))
+    msg += ', '.join(sorted(repos))
+    return msg
+

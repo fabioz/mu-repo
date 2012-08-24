@@ -10,7 +10,10 @@ License: GPL 3, Copyright (c) 2012 by Fabio Zadrozny
 INSTALLING
 ===========
 
-Requisite: the python, git executables must be in your path.
+Requisite: git (1.7.11 or higher) executable must be in your path (i.e.: at least stash -u must work).
+
+Requisite: python (2.5 or higher) must be in your path.
+
 Requisite for diff: winmerge must be in your path.
 
 Then, grab mu-repo from git:

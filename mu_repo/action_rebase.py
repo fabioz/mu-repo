@@ -1,7 +1,8 @@
-from mu_repo.get_repos_and_curr_branch import GetReposAndCurrBranch
-from mu_repo.execute_parallel_command import ParallelCmd, ExecuteInParallel
-from mu_repo.print_ import Print
-from mu_repo.repos_with_changes import ComputeReposWithChanges
+from .execute_parallel_command import ParallelCmd, ExecuteInParallel, \
+    ExecuteInParallelStackingMessages
+from .get_repos_and_curr_branch import GetReposAndCurrBranch
+from .print_ import Print, CreateJoinedReposMsg
+from .repos_with_changes import ComputeReposWithChanges
 
 #===================================================================================================
 # _RebaseRepos
@@ -17,7 +18,16 @@ def _RebaseRepos(repos_and_branch, params):
         commands.append(ParallelCmd(
             repo, [params.config.git, 'rebase', 'origin/%s' % (branch,)]))
 
-    ExecuteInParallel(commands)
+
+    ExecuteInParallelStackingMessages(
+        commands,
+        lambda output: not output.stderr.strip() and \
+                       output.stdout.strip().startswith('Current branch') and \
+                       output.stdout.strip().endswith('is up to date.'),
+        lambda repos: Print(CreateJoinedReposMsg('Up-to-date: ', repos))
+    )
+
+
 
 #===================================================================================================
 # _StashRepos
@@ -61,7 +71,8 @@ def Run(params):
         _RebaseRepos(rebase_repos, params)
 
     if stash_rebase_repos:
-        Print('\n  Repos with stash/rebase/unstash: ${START_COLOR}%s${RESET_COLOR}' % (' '.join(x[0] for x in stash_rebase_repos)))
+        Print('\n  Repos with stash/rebase/unstash: ${START_COLOR}%s${RESET_COLOR}' % (
+            ' '.join(x[0] for x in stash_rebase_repos)))
         _StashRepos(stash_rebase_repos, params)
         _RebaseRepos(stash_rebase_repos, params)
         _StashRepos(stash_rebase_repos, params, pop=True)
