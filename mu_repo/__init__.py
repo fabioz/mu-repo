@@ -186,6 +186,9 @@ def main(config_file='.mu_repo', args=None):
     elif arg0 == 'install':
         from .action_install import Run #@Reimport
 
+    elif arg0 == 'mu-patch':
+        from .action_mu_patch import Run #@Reimport
+
     elif arg0 == 'post-review':
         from .action_post_review import Run #@Reimport
 

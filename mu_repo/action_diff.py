@@ -241,7 +241,7 @@ def Run(params):
         n = ''
         while n not in ('y', 'n'):
             n = raw_input(
-                'Temporary dir for diff: %s already exists. Delete and continue (y) or cancel (n)?' %
+                'Temporary dir for diff: %s already exists. Delete and continue (y) or cancel (n)? ' %
                 (temp_dir_name,)
             ).strip().lower()
             if n == 'y':

@@ -28,6 +28,8 @@ def Run(params):
         
     Should do:
     d:\bin\Python265\Scripts\post-review.exe -g -o --branch=development --tracking-branch=origin/development --bugs-closed=4654 --target-groups=Studio
+    
+    d:\bin\Python265\Scripts\post-review -g -o --diff-filename=mycode.diff --bugs-closed=4654 --target-groups=Studio
     '''
 
     args = params.args

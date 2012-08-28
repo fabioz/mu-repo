@@ -32,7 +32,7 @@ class Config(object):
 
     def __init__(self, **kwargs):
         self.repos = []
-        self.serial = True
+        self.serial = False #Default is now in parallel.
         self._git = None
         for k, v in kwargs.items():
             setattr(self, k, v)
