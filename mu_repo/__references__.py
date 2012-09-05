@@ -1,6 +1,9 @@
 '''
 Some things we may want to support in the future (and if not, at least keep for referencing):
 
+Log since date:
+mu log -n 10 --author=fabioz --since=2012-08-01 --no-decorate --format="%ad %aN %s"
+
 Searching (http://gitster.livejournal.com/30195.html)
     git grep -l --all-match -e Bar -e Foo
     git log --all-match --grep=APSTUD
