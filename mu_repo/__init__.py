@@ -113,7 +113,40 @@ def main(config_file='.mu_repo', args=None):
 
     arg0 = args[0]
     change_to_serial_if_possible = True
+    update_repos_from_groups = True
+    
+    Run = None
+    
+    # actions related to repos or mu itself --------------------------------------------------------
+    # This should be executed first, because some of them expect to see config as it was loaded
+    if arg0 == 'set-var':
+        from .action_set_var import Run #@Reimport
+        change_to_serial_if_possible = False
+        update_repos_from_groups = False
 
+    elif arg0 == 'get-vars':
+        from .action_get_vars import Run #@Reimport
+        change_to_serial_if_possible = False
+
+    elif arg0 == 'auto-update':
+        from .action_auto_update import Run #@Reimport
+
+    elif arg0 == 'list':
+        from .action_list import Run #@Reimport
+
+    elif arg0 == 'register':
+        from .action_register import Run #@Reimport
+        update_repos_from_groups = False
+        
+    elif arg0 == 'group':
+        from .action_group import Run #@Reimport
+        update_repos_from_groups = False
+
+    # change global repos list to the current group, if any
+    if update_repos_from_groups:
+        group_repos = config.groups.get(config.current_group, None)
+        if group_repos is not None:
+            config.repos = group_repos 
 
     # acp variants ---------------------------------------------------------------------------------
     if arg0 == 'acp': #Add, commit, push
@@ -161,27 +194,6 @@ def main(config_file='.mu_repo', args=None):
         from .action_rebase import Run #@Reimport
 
 
-
-    # actions related to repos or mu itself --------------------------------------------------------
-    elif arg0 == 'set-var':
-        from .action_set_var import Run #@Reimport
-        change_to_serial_if_possible = False
-
-    elif arg0 == 'get-vars':
-        from .action_get_vars import Run #@Reimport
-        change_to_serial_if_possible = False
-
-    elif arg0 == 'auto-update':
-        from .action_auto_update import Run #@Reimport
-
-    elif arg0 == 'list':
-        from .action_list import Run #@Reimport
-
-    elif arg0 == 'register':
-        from .action_register import Run #@Reimport
-
-
-
     # assorted -------------------------------------------------------------------------------------
     elif arg0 == 'install':
         from .action_install import Run #@Reimport
@@ -209,7 +221,7 @@ def main(config_file='.mu_repo', args=None):
 
 
     # default action -------------------------------------------------------------------------------
-    else:
+    if Run is None:
         if arg0 == 'stash' and len(args) == 1:
             #Fixing stash: if git stash is provided without arguments, append a '-u' so that it
             #also stashes untracked files.
