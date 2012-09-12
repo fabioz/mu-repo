@@ -3,6 +3,7 @@ Created on 20/05/2012
 
 @author: Fabio Zadrozny
 '''
+from __future__ import with_statement
 from mu_repo import keep_files_synched
 from mu_repo.print_ import PushIgnorePrint, PopIgnorePrint
 from mu_repo.rmtree import RmTree
