@@ -88,11 +88,13 @@ class ExecuteGitCommandThread(threading.Thread):
         if serial:
             #Print directly to stdout/stderr without buffering.
             Print(msg)
+            p = None
             try:
                 p = subprocess.Popen(cmd, cwd=repo, shell=True)
             except:
                 PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
-            p.wait()
+            if p is not None:
+                p.wait()
 
         else:
             try:
