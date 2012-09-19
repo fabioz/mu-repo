@@ -34,6 +34,17 @@ Specifying a repository for a single command (repo: argument):
    e.g.: ${START_COLOR}mu st repo:repo1,repo2${RESET_COLOR}: Will do st on repo1 and repo2.  
 
 
+* ${START_COLOR}mu group:${RESET_COLOR} Repository grouping 
+
+  * ${START_COLOR}mu group add <name> [--empty]:${RESET_COLOR} Creates new group using current repositories, unless --empty is given
+  * ${START_COLOR}mu group rm <name>:${RESET_COLOR} Removes a group
+  * ${START_COLOR}mu group switch <name>:${RESET_COLOR} Switches to an existing group
+  * ${START_COLOR}mu group:${RESET_COLOR} With no parameters, just lists current groups
+  
+  Use ${START_COLOR}mu register${RESET_COLOR} normally to add repositories to the current group
+  Use ${START_COLOR}mu list${RESET_COLOR} to list repositories in the current group
+
+
 Shortcuts:
 
 ${START_COLOR}mu st         ${RESET_COLOR}= Nice status message for all repos (always in parallel)
