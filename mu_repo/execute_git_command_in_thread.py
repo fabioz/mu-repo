@@ -90,7 +90,7 @@ class ExecuteGitCommandThread(threading.Thread):
             Print(msg)
             p = None
             try:
-                p = subprocess.Popen(cmd, cwd=repo, shell=True)
+                p = subprocess.Popen(cmd, cwd=repo)
             except:
                 PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
             if p is not None:
@@ -102,8 +102,7 @@ class ExecuteGitCommandThread(threading.Thread):
                     cmd,
                     cwd=repo,
                     stderr=subprocess.PIPE,
-                    stdout=subprocess.PIPE,
-                    shell=True,
+                    stdout=subprocess.PIPE,                    
                 )
             except:
                 PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
