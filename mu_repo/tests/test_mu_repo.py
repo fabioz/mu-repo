@@ -35,11 +35,21 @@ class Test(unittest.TestCase):
 
 
     def testMuRepo(self):
-        contents = '''repo=pydev
-repo=studio3
-'''
+        contents = '''
+        repo=pydev
+        repo=studio3
+        repo=python-devel
+        repo=django
+        current_group=pydev-devel
+        group=pydev-devel, pydev, studio3
+        '''
         config = Config.Create(contents)
-        self.assertEqual(config, mu_repo.Config(repos=['pydev', 'studio3']))
+        expected_config = mu_repo.Config(
+            repos=['pydev', 'studio3', 'python-devel', 'django'],
+            current_group='pydev-devel',
+            groups={'pydev-devel' : ['pydev', 'studio3'] },
+        )
+        self.assertEqual(config, expected_config)
 
 
     def testMain(self):
@@ -92,6 +102,67 @@ repo=studio3
             'StatusEntry [f2.txt, f1.txt],StatusEntry [f3.txt, f3.txt],StatusEntry [.project, .project]',
             entries
         )
+        
+        
+    def testGroups(self):
+        status = mu_repo.main(config_file='.bar_file', args=['register', 'pydev'])
+        self.assert_(status.succeeded)
+        self.assertEqual(status.config.repos, ['pydev'])
+        self.assertEqual(status.config.current_group, None)
+        self.assertEqual(status.config.groups, {})
+
+        # calling group without enough arguments and invalid group        
+        status = mu_repo.main(config_file='.bar_file', args=['group', 'add'])
+        self.assert_(not status.succeeded)
+        
+        status = mu_repo.main(config_file='.bar_file', args=['group', 'rm', 'invalid-group'])
+        self.assert_(not status.succeeded)
+        
+        # create group, copying current repos
+        status = mu_repo.main(config_file='.bar_file', args=['group', 'add', 'group1'])
+        self.assertEquals(status.config.repos, ['pydev'])
+        self.assertEqual(status.config.current_group, 'group1')
+        self.assertEqual(status.config.groups, {'group1' : ['pydev']})
+        
+        # create group from scratch and add one repo
+        status = mu_repo.main(config_file='.bar_file', args=['group', 'add', 'group2', '--clean'])
+        self.assertEquals(status.config.repos, ['pydev'])
+        self.assertEqual(status.config.current_group, 'group2')
+        self.assertEqual(status.config.groups, {'group1' : ['pydev'], 'group2' : []})
+        
+        status = mu_repo.main(config_file='.bar_file', args=['register', 'studio3'])
+        self.assertEquals(status.config.repos, ['pydev', 'studio3'])
+        self.assertEqual(status.config.current_group, 'group2')
+        self.assertEqual(status.config.groups, {'group1' : ['pydev'], 'group2' : ['studio3']})
+        
+        # group switch
+        status = mu_repo.main(config_file='.bar_file', args=['group', 'switch', 'group1'])
+        self.assertEqual(status.config.current_group, 'group1')
+        
+        # group del
+        status = mu_repo.main(config_file='.bar_file', args=['group', 'del', 'group1'])
+        self.assertEquals(status.config.repos, ['pydev', 'studio3'])
+        self.assertEqual(status.config.current_group, None)
+        self.assertEqual(status.config.groups, {'group2' : ['studio3']})
+        
+        # make sure state is to the rest of the application in other commands
+        
+        # switch back to group1 and make sure "list" picks only the repos in that group
+        status = mu_repo.main(config_file='.bar_file', args=['group', 'switch', 'group2'])
+        self.assertEqual(status.config.current_group, 'group2')
+        
+        status = mu_repo.main(config_file='.bar_file', args=['list'])
+        self.assertEquals(status.config.repos, ['studio3'])
+        self.assertEqual(status.config.current_group, 'group2')
+        
+        # reset grouping and make sure "list" picks all repos
+        status = mu_repo.main(config_file='.bar_file', args=['group', 'reset'])
+        self.assertEqual(status.config.current_group, None)
+        
+        status = mu_repo.main(config_file='.bar_file', args=['list'])
+        self.assertEquals(status.config.repos, ['pydev', 'studio3'])
+        self.assertEqual(status.config.current_group, None)
+        
 
 #===================================================================================================
 # main

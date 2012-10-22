@@ -3,6 +3,7 @@ Created on May 23, 2012
 
 @author: Fabio Zadrozny
 '''
+from __future__ import with_statement 
 from mu_repo import action_diff, Params
 from mu_repo.action_diff import NotifyErrorListeners
 from mu_repo.config import Config

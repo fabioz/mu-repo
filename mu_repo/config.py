@@ -28,12 +28,20 @@ class Config(object):
         'repos',
         'serial',
         '_git',
+        'current_group',
+        'groups',
     ]
 
     def __init__(self, **kwargs):
         self.repos = []
         self.serial = False #Default is now in parallel.
         self._git = None
+        
+        # contains the current group; if None, all repos will be used
+        self.current_group = None
+        
+        # groups of repositories, as a dict of { group_name : list of repo names }
+        self.groups = {}
         for k, v in kwargs.items():
             setattr(self, k, v)
 
@@ -53,10 +61,15 @@ class Config(object):
         yield ('serial', str(self.serial))
         if self._git:
             yield ('git', self._git)
+        if self.current_group:
+            yield ('current_group', self.current_group)
+        yield ('groups', self.groups)
 
     def __eq__(self, o):
         if isinstance(o, Config):
-            return self.repos == o.repos
+            return self.repos == o.repos and \
+                self.current_group == o.current_group and \
+                self.groups == o.groups
 
         return False
 
@@ -69,27 +82,33 @@ class Config(object):
         lines = contents.splitlines()
 
         config = Config()
+        
+        def GetField(line):
+            name, value = line.split('=')
+            return name.strip(), value.strip()
 
         for line in lines:
             line = line.strip()
             if line:
-                if line.startswith('repo'):
-                    l1 = line[4:].strip()
-                    if l1.startswith('='):
-                        l1 = l1[1:].strip()
-                        config.repos.append(l1)
+                name, value = GetField(line)
+                if name == 'repo':
+                    config.repos.append(value)
 
-                elif line.startswith('serial'):
-                    l1 = line[6:].strip()
-                    if l1.startswith('='):
-                        l1 = l1[1:]
-                        config.serial = IsTrue(l1)
+                elif name == 'serial':
+                    config.serial = IsTrue(value)
 
-                elif line.startswith('git'):
-                    l1 = line[3:].strip()
-                    if l1.startswith('='):
-                        l1 = l1[1:]
-                        config._git = l1.strip()
+                elif name == 'git':
+                    config._git = value
+                    
+                elif name == 'current_group' and value:
+                    config.current_group = value
+                    
+                elif name == 'group':
+                    values = [x.strip() for x in value.split(',')]
+                    if values:
+                        group_name = values[0]
+                        repos = values[1:]
+                        config.groups[group_name] = repos
 
         return config
 
@@ -100,11 +119,22 @@ class Config(object):
                 lst.append('%s=%s' % (key, val))
 
             elif isinstance(val, list):
-                assert key.endswith('s')
+                assert key == 'repos'
                 key = key[:-1]
                 for v in sorted(val):
                     lst.append('%s=%s' % (key, v))
+                    
+            elif isinstance(val, dict):
+                assert key == 'groups'
+                for group_name, repos in sorted(val.iteritems()):
+                    values = [group_name] + repos
+                    lst.append('group=%s' % ', '.join(values))
             else:
                 raise AssertionError('Expecting val to be a list of strings.')
 
         return '\n'.join(lst)
+    
+    
+    def __repr__(self):
+        attrs = ['%s=%r' % (k, v) for (k, v) in self.items()]
+        return 'Config(%s)' % ', '.join(attrs)
