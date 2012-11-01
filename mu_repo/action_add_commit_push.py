@@ -17,12 +17,14 @@ def Run(params, add, commit, push):
 
     from .execute_parallel_command import ParallelCmd, ExecuteInParallelStackingMessages
 
+    serial = params.config.serial
     if add:
         commands = [ParallelCmd(repo, [params.config.git, 'add', '-A']) for repo in params.config.repos]
         ExecuteInParallelStackingMessages(
             commands,
             lambda output: not output.stdout.strip(),
-            lambda repos: Print(CreateJoinedReposMsg('Executed "git add -A" in:', repos))
+            lambda repos: Print(CreateJoinedReposMsg('Executed "git add -A" in:', repos)),
+            serial=serial,
         )
 
 
@@ -34,7 +36,8 @@ def Run(params, add, commit, push):
         ExecuteInParallelStackingMessages(
             commands,
             lambda output: 'nothing to commit (working directory clean)' in output.stdout,
-            lambda repos: Print(CreateJoinedReposMsg('Nothing to commit at:', repos))
+            lambda repos: Print(CreateJoinedReposMsg('Nothing to commit at:', repos)),
+            serial=serial,
         )
 
 
@@ -48,5 +51,6 @@ def Run(params, add, commit, push):
         ExecuteInParallelStackingMessages(
             commands,
             lambda output: not output.stdout.strip() and output.stderr.strip() == 'Everything up-to-date',
-            lambda repos: Print(CreateJoinedReposMsg('Up-to-date:', repos))
+            lambda repos: Print(CreateJoinedReposMsg('Up-to-date:', repos)),
+            serial=serial,
         )

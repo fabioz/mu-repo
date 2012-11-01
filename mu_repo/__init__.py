@@ -114,9 +114,9 @@ def main(config_file='.mu_repo', args=None):
     arg0 = args[0]
     change_to_serial_if_possible = True
     update_repos_from_groups = True
-    
+
     Run = None
-    
+
     # actions related to repos or mu itself --------------------------------------------------------
     # This should be executed first, because some of them expect to see config as it was loaded
     if arg0 == 'set-var':
@@ -137,7 +137,7 @@ def main(config_file='.mu_repo', args=None):
     elif arg0 == 'register':
         from .action_register import Run #@Reimport
         update_repos_from_groups = False
-        
+
     elif arg0 == 'group':
         from .action_group import Run #@Reimport
         update_repos_from_groups = False
@@ -146,7 +146,7 @@ def main(config_file='.mu_repo', args=None):
     if update_repos_from_groups:
         group_repos = config.groups.get(config.current_group, None)
         if group_repos is not None:
-            config.repos = group_repos 
+            config.repos = group_repos
 
     # acp variants ---------------------------------------------------------------------------------
     if arg0 == 'acp': #Add, commit, push
