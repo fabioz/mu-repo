@@ -106,7 +106,7 @@ class ExecuteGitCommandThread(threading.Thread):
                 )
             except:
                 PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
-                self.output_queue.put(Output(repo, 'Error executing: %s on repo: %s' % (cmd, repo), ''))
+                self.output_queue.put(Output(repo, 'Error executing: %s on repo: %s' % (cmd, repo), '', ''))
                 return
 
             self.stdout_thread = self._CreateReaderThread(p, 'stdout')
