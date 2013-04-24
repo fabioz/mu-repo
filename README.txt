@@ -59,6 +59,7 @@ Commands:
 
 * mu register repo1 repo2: Registers repo1 and repo2 to be tracked.
 * mu register --all: Registers all subdirs with .git.
+* mu unregister repo1 repo2: Unregisters previously tracked repositories (also accepts --all).
 * mu list: Lists the currently tracked repositories.
 * mu set-var git=d:/bin/git/bin/git.exe: Set git location to be used.
 * mu set-var serial=0|1: Set commands to be executed serially or in parallel.
