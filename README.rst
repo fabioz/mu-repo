@@ -34,15 +34,15 @@ Binaries may be gotten from: http://sourceforge.net/projects/pywin32/files/pywin
 USING
 =======
 
-The idea is that you have a structure such as:
+The idea is that you have a structure such as::
 
-/workspace
-    .mu_repo <- configuration file (created by mu commands)
-    /repo1   <- git repository name (i.e.: directory name with .git file)
-        /.git
-    /repo2
-        /.git
-    ...
+    /workspace
+        .mu_repo <- configuration file (created by mu commands)
+        /repo1   <- git repository name (i.e.: directory name with .git file)
+            /.git
+        /repo2
+            /.git
+        ...
     
 Then go to the root directory containing the repositories 
 (in this case cd /workspace), add the repositories you want 
@@ -55,10 +55,12 @@ repositories later on).
 Note: it may also be used as a git replacement on directories 
 containing a .git dir.
 
-Commands:
+Commands
+--------
 
 * mu register repo1 repo2: Registers repo1 and repo2 to be tracked.
 * mu register --all: Registers all subdirs with .git.
+* mu unregister repo1 repo2: Unregisters previously tracked repositories (also accepts --all).
 * mu list: Lists the currently tracked repositories.
 * mu set-var git=d:/bin/git/bin/git.exe: Set git location to be used.
 * mu set-var serial=0|1: Set commands to be executed serially or in parallel.
