@@ -137,7 +137,11 @@ def main(config_file='.mu_repo', args=None):
     elif arg0 == 'register':
         from .action_register import Run #@Reimport
         update_repos_from_groups = False
-
+        
+    elif arg0 == 'unregister':
+        from .action_unregister import Run #@Reimport
+        update_repos_from_groups = False
+        
     elif arg0 == 'group':
         from .action_group import Run #@Reimport
         update_repos_from_groups = False

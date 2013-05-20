@@ -86,6 +86,26 @@ class Test(unittest.TestCase):
 
         status = mu_repo.main(config_file='.bar_file', args=['list'])
         self.assertEquals(status.config.repos, ['a', 'b', 'pydev'])
+        
+        
+    def testUnregister(self):
+        status = mu_repo.main(config_file='.bar_file', args=['register', 'pydev', 'a', 'b'])
+        self.assert_(status.succeeded)
+        
+        status = mu_repo.main(config_file='.bar_file', args=['list'])
+        self.assertEquals(status.config.repos, ['a', 'b', 'pydev'])
+        
+        status = mu_repo.main(config_file='.bar_file', args=['unregister', 'a'])
+        self.assert_(status.succeeded)
+        
+        status = mu_repo.main(config_file='.bar_file', args=['list'])
+        self.assertEquals(status.config.repos, ['b', 'pydev'])
+        
+        status = mu_repo.main(config_file='.bar_file', args=['unregister', '--all'])
+        self.assert_(status.succeeded)
+        
+        status = mu_repo.main(config_file='.bar_file', args=['list'])
+        self.assertEquals(status.config.repos, [])
 
 
     def testActionDiff(self):
