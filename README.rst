@@ -44,7 +44,7 @@ Then go to the root directory containing the repositories
 (in this case ``cd /workspace``), add the repositories you want 
 to work with and issue commands to all registered repos.
 
-**Tip:** ``mu register --all" registers all sub directories that contain
+**Tip:** ``mu register --all`` registers all sub directories that contain
 a ``.git`` subdirectory.
 
 **Note:** it may also be used as a git replacement on directories 
