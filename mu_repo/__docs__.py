@@ -9,6 +9,7 @@ Commands:
 
 * ${START_COLOR}mu register repo1 repo2:${RESET_COLOR} Registers repo1 and repo2 to be tracked.
 * ${START_COLOR}mu register --all:${RESET_COLOR} Registers all subdirs with .git.
+* ${START_COLOR}mu unregister repo1 repo2 | --all:${RESET_COLOR} Stops tracking some repository.
 * ${START_COLOR}mu list:${RESET_COLOR} Lists the currently tracked repositories.
 * ${START_COLOR}mu set-var git=d:/bin/git/bin/git.exe:${RESET_COLOR} Set git location to be used.
 * ${START_COLOR}mu set-var serial=0|1:${RESET_COLOR} Set commands to be executed serially or in parallel.
