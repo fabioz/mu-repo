@@ -17,21 +17,37 @@ def Run(params):
         Print('No tracked repos!')
         return
 
-    #Check if all on the same branch
-    initial_branch = None
-    initial_repo = None
-    for repo, branch in repos_and_curr_branch:
-        if initial_branch is None:
-            initial_branch = branch
-            initial_repo = repo
+    branch_to_repos = {}
 
-        if initial_branch != branch:
-            Print('All repos are expected to be in the same branch (%s in %s and %s in %s)' % (
-                initial_repo, initial_branch, repo, branch))
+    #Check if all on the same branch
+    for repo, branch in repos_and_curr_branch:
+        curr = branch_to_repos.setdefault(branch, [])
+        curr.append(repo)
+
+    if len(branch_to_repos) > 1:
+        msg = '\n${START_COLOR}Warning: found repos in different branches${RESET_COLOR}:\n  %s\nProceed?(y/n)' % ('\n  '.join([str('Branch: ${START_COLOR}%s${RESET_COLOR} (%s)' % (key, ', '.join(val))) for (key, val) in branch_to_repos.items()]))
+        ret = ''
+        while ret not in ('y', 'n'):
+            Print(msg)
+            ret = raw_input().strip().lower()
+
+        if ret != 'y':
             return
 
     #Diff it
-    from .action_diff import Run #@Reimport
-    params.args.append('origin/' + initial_branch)
-    Run(params)
+    from .action_diff import Run  #@Reimport
+
+    initial_args = params.args[:]
+    initial_repos = params.config.repos[:]
+
+    for branch, repos in branch_to_repos.iteritems():
+        params.args = initial_args + ['origin/' + branch]
+        params.config.repos = repos
+        if len(branch_to_repos) > 1:
+            Print('\nOutput for branch: ${START_COLOR}%s${RESET_COLOR} (%s)' % (branch, ', '.join(repos)))
+        Run(params)
+
+    params.args = initial_args
+    params.config.repos = initial_repos
+
 
