@@ -13,13 +13,18 @@ if IS_PYTHON_3K:
         return s.encode('utf-8')
 
     def AsStr(s):
-        return s.decode('utf-8')
+        if not isinstance(s, str):
+            return s.decode('utf-8')
+        return s
 
     def PushWriteBinary():
         sys.stdout = sys.__stdout__.buffer
 
     def PopWriteBinary():
         sys.stdout = sys.__stdout__
+
+    def iteritems(d):
+        return d.items()
 
     import builtins #@UnresolvedImport
     builtins.xrange = range
@@ -36,3 +41,6 @@ else:
 
     def PopWriteBinary():
         pass
+
+    def iteritems(d):
+        return d.iteritems()

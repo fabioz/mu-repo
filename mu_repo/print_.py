@@ -4,7 +4,7 @@ Created on 17/05/2012
 @author: Fabio Zadrozny
 '''
 import sys
-from mu_repo.backwards import AsBytes, PushWriteBinary, PopWriteBinary
+from mu_repo.backwards import AsBytes, PushWriteBinary, PopWriteBinary, iteritems
 
 START_COLOR = '${START_COLOR}'
 RESET_COLOR = '${RESET_COLOR}'
@@ -35,7 +35,7 @@ try:
 
 
                 self._foreground_map = color_map = { '' : 0 }
-                for color_name, color_components in colors.iteritems():
+                for color_name, color_components in iteritems(colors):
                     if color_components:
                         value = getattr(win32console, 'FOREGROUND_INTENSITY')
                     else:

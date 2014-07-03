@@ -7,6 +7,7 @@ from mu_repo.execute_git_command_in_thread import Indent
 from mu_repo.get_repos_and_curr_branch import GetReposAndCurrBranch
 from mu_repo.print_ import Print, START_COLOR, RESET_COLOR, CreateJoinedReposMsg
 from mu_repo.execute_parallel_command import ParallelCmd, ExecuteInParallel
+from mu_repo.backwards import iteritems
 
 
 #===================================================================================================
@@ -49,7 +50,7 @@ def Run(params):
         for repo, branch in empty_repos_and_branches:
             branch_to_repos.setdefault(branch, []).append(repo)
 
-        for branch, repos in branch_to_repos.iteritems():
+        for branch, repos in iteritems(branch_to_repos):
             Print("${START_COLOR}Unchanged:${RESET_COLOR} %s\nat branch: ${START_COLOR}%s${RESET_COLOR}\n" % (
                 CreateJoinedReposMsg('', repos), branch))
 

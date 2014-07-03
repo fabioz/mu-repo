@@ -4,6 +4,7 @@ Created on 30/05/2012
 @author: Fabio Zadrozny
 '''
 from mu_repo.print_ import Print
+from mu_repo.backwards import iteritems
 
 #===================================================================================================
 # Run
@@ -40,7 +41,7 @@ def Run(params):
     initial_args = params.args[:]
     initial_repos = params.config.repos[:]
 
-    for branch, repos in branch_to_repos.iteritems():
+    for branch, repos in iteritems(branch_to_repos):
         params.args = initial_args + ['origin/' + branch]
         params.config.repos = repos
         if len(branch_to_repos) > 1:

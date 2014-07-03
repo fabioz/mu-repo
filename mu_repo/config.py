@@ -3,6 +3,7 @@ Created on 17/05/2012
 
 @author: Fabio Zadrozny
 '''
+from mu_repo.backwards import iteritems
 
 #===================================================================================================
 # IsFalse
@@ -36,10 +37,10 @@ class Config(object):
         self.repos = []
         self.serial = False #Default is now in parallel.
         self._git = None
-        
+
         # contains the current group; if None, all repos will be used
         self.current_group = None
-        
+
         # groups of repositories, as a dict of { group_name : list of repo names }
         self.groups = {}
         for k, v in kwargs.items():
@@ -82,7 +83,7 @@ class Config(object):
         lines = contents.splitlines()
 
         config = Config()
-        
+
         def GetField(line):
             name, value = line.split('=')
             return name.strip(), value.strip()
@@ -99,10 +100,10 @@ class Config(object):
 
                 elif name == 'git':
                     config._git = value
-                    
+
                 elif name == 'current_group' and value:
                     config.current_group = value
-                    
+
                 elif name == 'group':
                     values = [x.strip() for x in value.split(',')]
                     if values:
@@ -123,18 +124,18 @@ class Config(object):
                 key = key[:-1]
                 for v in sorted(val):
                     lst.append('%s=%s' % (key, v))
-                    
+
             elif isinstance(val, dict):
                 assert key == 'groups'
-                for group_name, repos in sorted(val.iteritems()):
+                for group_name, repos in sorted(iteritems(val)):
                     values = [group_name] + repos
                     lst.append('group=%s' % ', '.join(values))
             else:
                 raise AssertionError('Expecting val to be a list of strings.')
 
         return '\n'.join(lst)
-    
-    
+
+
     def __repr__(self):
         attrs = ['%s=%r' % (k, v) for (k, v) in self.items()]
         return 'Config(%s)' % ', '.join(attrs)

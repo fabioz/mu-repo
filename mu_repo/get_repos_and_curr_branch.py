@@ -4,6 +4,7 @@ Created on Jun 16, 2012
 @author: Fabio Zadrozny
 '''
 from mu_repo.print_ import Print
+from mu_repo.backwards import iteritems
 
 #===================================================================================================
 # GetReposAndCurrBranch
@@ -12,7 +13,7 @@ def GetReposAndCurrBranch(params, verbose=True):
     '''
     :param params: Params
         The parameters used to get the repos and current branch (mostly using config).
-        
+
     :return: list(tuple(str, str))
         A list with the repository and current branch for that repository.
     '''
@@ -38,7 +39,7 @@ def GetReposAndCurrBranch(params, verbose=True):
         for repo, branch in repos_and_curr_branch:
             branch_to_repos.setdefault(branch, []).append(repo)
 
-        for branch, repos in branch_to_repos.iteritems():
+        for branch, repos in iteritems(branch_to_repos):
             Print("Will handle ${START_COLOR}origin %s${RESET_COLOR} for: %s\n" % (
                 branch, ', '.join(sorted(repos))))
 
