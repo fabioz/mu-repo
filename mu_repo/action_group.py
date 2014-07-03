@@ -43,7 +43,7 @@ def Run(params):
             return Status(msg, False)
         
         if group_name in config.groups:
-            msg = 'Group %s already exists.' % group_name
+            msg = 'Group ${START_COLOR}%s${RESET_COLOR} already exists.' % group_name
             Print(msg)
             return Status(msg, False)
         
@@ -66,10 +66,10 @@ def Run(params):
             return Status(msg, False)
         
         if command == 'switch':
-            msg = 'Switched to group "%s"' % group_name
+            msg = 'Switched to group ${START_COLOR}%s${RESET_COLOR}' % group_name
             config.current_group = group_name
         else:
-            msg = 'Group "%s" removed' % group_name
+            msg = 'Group ${START_COLOR}%s${RESET_COLOR} removed' % group_name
             if config.current_group == group_name:
                 config.current_group = None
                 msg += ' (no current group)'
