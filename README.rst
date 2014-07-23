@@ -2,21 +2,50 @@ mu-repo
 =========
 
 Tool to help working with multiple git repositories
-(short of *Multiple Repositories*).
+(short for *Multiple Repositories*).
 
-:License: GPL 3, Copyright (c) 2012 by Fabio Zadrozny
+Overview
+--------
+
+``mu`` is a command line tool that helps you execute the same commands in multiple ``git`` repositories.
+
+Suppose you have repositories that are related, and want to execute the same ``git`` commands in each (for instance, create
+a branch with the same name in all of them).
+
+
+.. code-block:: bash
+
+    $ cd my-project
+    $ ls 
+    repo1 repo2
+    $ cd repo1
+    $ git fetch && git checkout -b my-feature origin/master
+    ...
+    $ cd repo2
+    $ git fetch && git checkout -b my-feature origin/master
+    ...
+
+
+Besides being tedious, it is easy to forget some of the repositories when you're dealing with several.
+
+Using ``mu``, you register the repositories you want only once:
+
+.. code-block:: bash
+    
+    cd my-project
+    mu register repo1 repo2
+    mu fetch && mu checkout -b my-feature origin/master
 
 
 INSTALLING
-===========
+----------
 
-**Requisite:** git (1.7.11 or higher) executable must be in your path. Make sure at least ``git stash -u`` works.
+**Requirements** 
 
-**Requisite:** Python (2.5 or higher) must be in your path.
-
-**Requisite:** (for diffing) winmerge must be in your path.
-
-**Requisite:** PyWin32_ for coloring lines on Windows.
+- Python 2.5+, 3.2+
+- git 1.7.11+ (executable must be in your path. Make sure at least ``git stash -u`` works)
+- winmerge (optional, for diffing, Windows)
+- pywin32_ for lines coloring (Windows).
 
 .. _PyWin32: http://sourceforge.net/projects/pywin32/files/pywin32
 
@@ -28,7 +57,7 @@ add the mu-repo directory to your ``PATH`` so that after that,
 executing ``mu`` in the command line should give a proper message.
 
 USING
-=======
+-----
 
 The idea is that you have a structure such as::
 
@@ -51,7 +80,7 @@ a ``.git`` subdirectory.
 containing a ``.git`` dir.
 
 Commands
---------
+~~~~~~~~
 
 * ``mu register repo1 repo2`` 
     Registers repo1 and repo2 to be tracked. Also accepts an ``--all`` parameter, that automatically
@@ -176,7 +205,7 @@ Any other command is passed directly to git for each repository, for example::
 
 
 DIFFING MULTIPLE REPOSITORIES
-==============================
+-----------------------------
 
 The command ``mu dd`` provides the means to diff the multiple repository structures 
 with the winmerge tool so that the file can be changed while seeing the differences 
@@ -191,7 +220,7 @@ original files).
 .. _parallel:
 
 PARALLELISM
-============
+-----------
 
 mu-repo by default will execute commands in serial, but it's also possible
 to enable commands to be run in parallel, but note that in this mode,
@@ -202,13 +231,10 @@ to force it to run in parallel mode, by setting the 'serial' flag to false::
     mu set-var serial=false
 
 
-Note
-----
-
-Some actions considered 'safe' may always be executed in parallel (i.e.: mu st)
+.. note:: Some actions considered 'safe' will always be executed in parallel (i.e.: mu st)
 
 GIT
-====
+---
 
 If for some reason you don't have git in the path, it's possible to force 
 its location by doing::
@@ -216,3 +242,8 @@ its location by doing::
     mu set-var git=d:\bin\git\bin\git.exe
 
  
+LICENSE
+-------
+
+GPL 3, Copyright (c) 2012 by Fabio Zadrozny
+
