@@ -4,6 +4,13 @@ mu-repo
 Tool to help working with multiple git repositories
 (short for *Multiple Repositories*).
 
+Note: in case you're seeing this repo wondering why the last commit
+was so long ago, I'd like to mention that this is because it's a
+pretty stable tool and seldomly needs maintanance
+(i.e.: it hasn't become abandoned -- quite the contrary,
+I use it daily without any hiccups).
+
+
 Overview
 --------
 
@@ -245,5 +252,5 @@ its location by doing::
 LICENSE
 -------
 
-GPL 3, Copyright (c) 2012 by Fabio Zadrozny
+GPL 3, Copyright (c) 2012-2014 by Fabio Zadrozny
 
