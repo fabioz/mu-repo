@@ -13,6 +13,7 @@ from mu_repo.execute_git_command_in_thread import ExecuteGitCommandThread
 from mu_repo.rmtree import RmTree
 from mu_repo.execute_command import ExecuteGettingStdOutput
 from mu_repo.get_repos_and_curr_branch import GetReposAndCurrBranch
+import sys
 
 #===================================================================================================
 # DummyQueue
@@ -55,7 +56,7 @@ class CreateFromGit(object):
         try:
             git, repo, original_repo, target_repo, branch = self._args
             stdout = ExecuteGettingStdOutput(
-                '%s show %s:%s' % (git, branch, original_repo,), repo)
+                [git, 'show', '%s:%s' % (branch, original_repo,)], repo)
 
             try:
                 if not os.path.isdir(target_repo):
@@ -271,7 +272,10 @@ def Run(params):
             def symlink(src, target):
                 win32file.CreateSymbolicLink(src, target, 1)
         else:
-            symlink = os.symlink
+            raise AssertionError(
+                'The base symlink is not working for comparisons on Linux, so, ' 
+                'disabling it and going to the fallback implementation.')
+            #symlink = os.symlink
 
         #Just check if it does indeed work... if it doesn't redefine and use our polling strategy.
         symlink(temp_working, join(temp_dir_name, 'lnk_test'))
@@ -332,16 +336,24 @@ def Run(params):
             Print('No changes found.')
             return
 
-        write_left = ['/wl'] #Cannot write on left
-        if not branch:
-            write_left = [] #Can write on left when not working with branch (i.e.: working dir).
-
-        winmerge_cmd = 'WinMergeU.exe /r /u /wr /dl WORKINGCOPY /dr HEAD'.split()
-        cmd = winmerge_cmd + write_left + [temp_working, temp_repo]
-        try:
-            subprocess.call(cmd)
-        except:
-            Print('Error calling: %s' % (' '.join(cmd),))
+        if sys.platform == 'win32':
+            write_left = ['/wl'] #Cannot write on left
+            if not branch:
+                write_left = [] #Can write on left when not working with branch (i.e.: working dir).
+    
+            winmerge_cmd = 'WinMergeU.exe /r /u /wr /dl WORKINGCOPY /dr HEAD'.split()
+            cmd = winmerge_cmd + write_left + [temp_working, temp_repo]
+            try:
+                subprocess.call(cmd)
+            except:
+                Print('Error calling: %s' % (' '.join(cmd),))
+        else:
+            # Winmerge is not available on Linux, so, let's use another option (meld)
+            cmd = ['meld', temp_working, temp_repo]
+            try:
+                subprocess.call(cmd)
+            except:
+                Print('Error calling: %s' % (' '.join(cmd),))
 
     finally:
         #If we've gone to the synching mode, make sure we had a last synchronization before
