@@ -125,8 +125,8 @@ Commands
 
 * ``mu dd``:
      Creates a directory structure with working dir vs head and opens
-     WinMerge with it (doing mu ac will commit exactly what's compared in this
-     situation).
+     WinMerge on Windows or meld on Linux with it (doing mu ac will commit exactly 
+     what's compared in this situation).
 
      Also accepts a parameter to compare with a different commit/branch. I.e.::
 
@@ -215,12 +215,12 @@ DIFFING MULTIPLE REPOSITORIES
 -----------------------------
 
 The command ``mu dd`` provides the means to diff the multiple repository structures 
-with the winmerge tool so that the file can be changed while seeing the differences 
-of the working copy with the head in the repository.
+with winmerge (Windows) or meld (Linux) so that the file can be changed 
+while seeing the differences of the working copy with the head in the repository.
 
 It's similar to what would be achieved in the Eclipse synchronize view (where the 
 file may be edited to change the original file -- as the structure is created with 
-links to the original files, so files edited in winmerge will properly change the 
+links to the original files, so files edited in winmerge/meld will properly change the 
 original files).
 
 
