@@ -24,6 +24,13 @@ def Run(params):
         msg = 'If --all is given, no other parameter should be passed.'
         Print(msg)
         return Status(msg, False)
+        
+    new_args = []
+    for arg in args:
+        if arg.endswith('\\') or arg.endswith('/'):
+            arg = arg[:-1]
+        new_args.append(arg)
+    args = new_args
 
     group_repos = config.groups.get(config.current_group, None)
 
