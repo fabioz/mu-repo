@@ -121,6 +121,7 @@ Commands
     Finds and prints the branches which match a given pattern. 
     (fnmatch style with auto-surrounded with asterisk)
     (-r to match remote branches) 
+    Note: a shortcut exists for find-branch: mu fb pattern [-r]
 
 * ``mu install``
     Initial configuration git (username, log, etc.)

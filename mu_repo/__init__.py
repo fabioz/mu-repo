@@ -217,7 +217,7 @@ def main(config_file='.mu_repo', args=None):
     elif arg0 == 'howto':
         from .howto import Run #@Reimport
 
-    elif arg0 == 'find-branch':
+    elif arg0 in ('find-branch', 'fb'):
         from .action_find_branch import Run  # @Reimport
 
     elif arg0 in ('checkout', 'co'):
