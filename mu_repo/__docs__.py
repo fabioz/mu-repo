@@ -17,7 +17,7 @@ Commands:
 * ${START_COLOR}mu github-request:${RESET_COLOR} Gets a request from github.
 * ${START_COLOR}mu post-review bug_id group:${RESET_COLOR} posts a review with the changes committed.
 * ${START_COLOR}mu fix-eol:${RESET_COLOR} Changes end of lines to '\\n' on all changed files.
-* ${START_COLOR}mu find-branch pattern:${RESET_COLOR} Finds all branches matching a given pattern.
+* ${START_COLOR}mu find-branch pattern [-r]:${RESET_COLOR} Finds all branches matching a given pattern.
 * ${START_COLOR}mu install:${RESET_COLOR} Initial configuration git (username, log, etc.)
 * ${START_COLOR}mu auto-update:${RESET_COLOR} Automatically updates mu-repo 
   (using git -- must have been pulled from git as in the instructions).

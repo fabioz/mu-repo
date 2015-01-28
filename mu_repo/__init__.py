@@ -223,7 +223,7 @@ def main(config_file='.mu_repo', args=None):
     elif arg0 in ('checkout', 'co'):
         # If the user did a simple "git checkout branch", we'll try to match using patterns to do
         # a checkout just using a part of the name (say bug ID).
-        if len(args) == 2:
+        if len(args) == 2 and not args[1].startswith('-') and not args[1].startswith('@'):
             from .action_checkout import Run  # @Reimport
 
     elif arg0 == 'shell':
