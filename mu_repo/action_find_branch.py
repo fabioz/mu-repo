@@ -10,6 +10,12 @@ def Run(params):
         params, patterns=['*%s*' % x for x in params.args[1:]])
 
     # Now, do things the other way, show a connection from the branch to the repos which have it!
+    branch_to_repos = ConvertRepoToBranchesToBranchToRepos(repos_and_local_branches)
+
+    # Print it for the user
+    PrintBranchToRepos(branch_to_repos, params)
+
+def ConvertRepoToBranchesToBranchToRepos(repos_and_local_branches):
     branch_to_repos = {}
     for repo, branches in repos_and_local_branches:
         for branch in branches:
@@ -17,11 +23,14 @@ def Run(params):
             if repos is None:
                 repos = branch_to_repos[branch] = set()
             repos.add(repo)
+    return branch_to_repos
 
-    # Print it for the user
-    for branch, repo in sorted(iteritems(branch_to_repos)):
+def PrintBranchToRepos(branch_to_repos, params):
+    for branch, repos in sorted(iteritems(branch_to_repos)):
         if len(repos) == 1:
             msg = '${START_COLOR}%s${RESET_COLOR}' % (branch,)
+        elif len(repos) == len(set(params.config.repos)):
+            msg = '${START_COLOR}%s${RESET_COLOR}   (all repos)' % (branch,)
         else:
-            msg = '${START_COLOR}%s${RESET_COLOR}\n    %s\n' % (branch, ', '.join(sorted(repos)))
+            msg = '${START_COLOR}%s${RESET_COLOR}   (%s)' % (branch, ', '.join(sorted(repos)))
         Print(msg)

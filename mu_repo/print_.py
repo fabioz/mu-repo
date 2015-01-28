@@ -3,8 +3,8 @@ Created on 17/05/2012
 
 @author: Fabio Zadrozny
 '''
+from mu_repo.backwards import AsBytes, PopWriteBinary, PushWriteBinary, iteritems
 import sys
-from mu_repo.backwards import AsBytes, PushWriteBinary, PopWriteBinary, iteritems
 
 START_COLOR = '${START_COLOR}'
 RESET_COLOR = '${RESET_COLOR}'
@@ -138,6 +138,8 @@ def Print(*args, **kwargs):
     if _ignore_print:
         return
 
+    color = kwargs.pop('__color__', 'CYAN')  # Default for ${START_COLOR} is CYAN
+
     assert 'file' not in kwargs
     f = sys.stdout
     try:
@@ -159,7 +161,7 @@ def Print(*args, **kwargs):
             write_in_colors = msg
             msg = '' #No RESET after start: go until end of string.
 
-        console.SetColor('CYAN')
+        console.SetColor(color)
         try:
             f.write(write_in_colors)
         finally:

@@ -220,6 +220,12 @@ def main(config_file='.mu_repo', args=None):
     elif arg0 == 'find-branch':
         from .action_find_branch import Run  # @Reimport
 
+    elif arg0 in ('checkout', 'co'):
+        # If the user did a simple "git checkout branch", we'll try to match using patterns to do
+        # a checkout just using a part of the name (say bug ID).
+        if len(args) == 2:
+            from .action_checkout import Run  # @Reimport
+
     elif arg0 == 'shell':
         import subprocess
         try:
