@@ -6,7 +6,7 @@ Tool to help working with multiple git repositories
 
 Note: in case you're seeing this repo wondering why the last commit
 was so long ago, I'd like to mention that this is because it's a
-pretty stable tool and seldomly needs maintanance
+pretty stable tool and seldomly needs maintenance
 (i.e.: it hasn't become abandoned -- quite the contrary,
 I use it daily without any hiccups).
 
