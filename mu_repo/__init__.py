@@ -1,9 +1,9 @@
 from __future__ import with_statement
 from . import backwards
+from .print_ import Print
+from mu_repo.config import Config
 import os.path
 import sys
-from mu_repo.config import Config
-from .print_ import Print
 
 #Just making sure we're in the PYTHONPATH!
 sys.path.append(os.path.dirname(__file__))
@@ -216,6 +216,9 @@ def main(config_file='.mu_repo', args=None):
 
     elif arg0 == 'howto':
         from .howto import Run #@Reimport
+
+    elif arg0 == 'find-branch':
+        from .action_find_branch import Run  # @Reimport
 
     elif arg0 == 'shell':
         import subprocess
