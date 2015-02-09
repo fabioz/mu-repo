@@ -4,7 +4,7 @@ from mu_repo.print_ import Print
 #===================================================================================================
 # GetReposAndLocalBranches
 #===================================================================================================
-def GetReposAndLocalBranches(params, patterns=()):
+def GetReposAndLocalBranches(params, patterns=(), remote=False):
     '''
     :param params: Params
         The parameters used to get the repos and current branch (mostly using config).
@@ -38,8 +38,11 @@ def GetReposAndLocalBranches(params, patterns=()):
     from mu_repo import Params
     old_serial = params.config.serial
     params.config.serial = False  # Cannot be serial as we want to get the output
+    args = ['branch']
+    if remote:
+        args.append('-r')
     Run(
-        Params(params.config, ['branch'], params.config_file),
+        Params(params.config, args, params.config_file),
         on_output=OnOutput
     )
 

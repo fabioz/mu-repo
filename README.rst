@@ -117,11 +117,11 @@ Commands
 * ``mu fix-eol``
     Changes end of lines to ``'\n'`` on all changed files.
 
-* ``mu find-branch pattern [-r]``
+* ``mu find-branch [-r] pattern``
     Finds and prints the branches which match a given pattern. 
     (fnmatch style with auto-surrounded with asterisk)
     (-r to match remote branches) 
-    Note: a shortcut exists for find-branch: mu fb pattern [-r]
+    Note: a shortcut exists for find-branch: mu fb  [-r] pattern
 
 * ``mu install``
     Initial configuration git (username, log, etc.)

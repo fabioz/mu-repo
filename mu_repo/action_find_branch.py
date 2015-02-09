@@ -6,8 +6,15 @@ from mu_repo.print_ import Print
 # Run
 #===================================================================================================
 def Run(params):
+    args = params.args[1:]
+    remote = False
+    if len(args) > 0:
+        if args[0] == '-r':
+            del args[0]
+            remote = True
+
     repos_and_local_branches = GetReposAndLocalBranches(
-        params, patterns=['*%s*' % x for x in params.args[1:]])
+        params, patterns=['*%s*' % x for x in args], remote=remote)
 
     # Now, do things the other way, show a connection from the branch to the repos which have it!
     branch_to_repos = ConvertRepoToBranchesToBranchToRepos(repos_and_local_branches)
