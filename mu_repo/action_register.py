@@ -12,7 +12,7 @@ def Run(params):
     config = params.config
 
     if len(args) < 2:
-        msg = 'Repository (dir name|--all) to track not passed'
+        msg = 'Repository (dir name|--all|--current|--recursive) to track not passed'
         Print(msg)
         return Status(msg, False)
     repos = config.repos
@@ -20,12 +20,22 @@ def Run(params):
     args = args[1:]
     join = os.path.join
     isdir = os.path.isdir
-    if '--all' in args:
-        if len(args) > 1:
-            Print('If --all is passed in mu register, no other parameter should be passed.')
+    # Either accept options or dir names, but not both.
+    if '--all' in args or '--current' in args or '--recursive' in args:
+        if [arg for arg in args if not arg.startswith('--')]:
+            Print('If an option is passed in mu register, no other dir names should be passed.')
             return
 
-        args = [repo for repo in os.listdir('.') if isdir(join(repo, '.git'))]
+        if '--all' in args or '--current' in args:
+            args = [repo for repo in os.listdir('.') if isdir(join(repo, '.git'))]
+        elif '--recursive' in args:
+            args = []
+            for root, directories, filenames in os.walk('.'):
+                if '.git' in directories:
+                    directories.remove('.git')
+                for directory in directories:
+                    if isdir(os.path.join(root, directory, '.git')):
+                        args.append(os.path.relpath(os.path.join(root, directory)))
 
     new_args = []
     for arg in args:
