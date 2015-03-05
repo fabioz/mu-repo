@@ -80,8 +80,9 @@ Then go to the root directory containing the repositories
 (in this case ``cd /workspace``), add the repositories you want 
 to work with and issue commands to all registered repos.
 
-**Tip:** ``mu register --all`` registers all sub directories that contain
-a ``.git`` subdirectory.
+**Tip:** ``mu register --recursive`` registers all sub directories that contain
+a ``.git`` subdirectory. To register only sub directories within the current
+directory, issue ``mu register --current``.
 
 **Note:** it may also be used as a git replacement on directories 
 containing a ``.git`` dir.
@@ -90,8 +91,10 @@ Commands
 ~~~~~~~~
 
 * ``mu register repo1 repo2`` 
-    Registers repo1 and repo2 to be tracked. Also accepts an ``--all`` parameter, that automatically
-    adds all repositories found in the current directory (but not recursively).
+    Registers repo1 and repo2 to be tracked. Also accepts a ``--all`` or
+    ``--current`` parameter, that automatically adds all repositories found in
+    the current directory (but not recursively). To automatically add all
+    repositories recursively, use ``--recursive``.
 
 * ``mu unregister repo1 repo2``
     Unregisters previously tracked repositories (also accepts ``--all``).
