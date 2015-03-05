@@ -21,11 +21,17 @@ def Run(params):
     join = os.path.join
     isdir = os.path.isdir
     if '--all' in args:
-        if len(args) > 1:
-            Print('If --all is passed in mu register, no other parameter should be passed.')
+        if [arg for arg in args if not arg.startswith('--')]:
+            Print('If --all is passed in mu register, no other dir names should be passed.')
             return
 
-        args = [repo for repo in os.listdir('.') if isdir(join(repo, '.git'))]
+        args = []
+        for root, directories, filenames in os.walk('.'):
+            if '.git' in directories:
+                directories.remove('.git')
+            for directory in directories:
+                if isdir(os.path.join(root, directory, '.git')):
+                    args.append(os.path.relpath(os.path.join(root, directory)))
 
     new_args = []
     for arg in args:
