@@ -9,3 +9,8 @@ setup(
     scripts=['mu'],
     packages=['mu_repo'],
 )
+
+# Note: nice reference: https://jamie.curle.io/blog/my-first-experience-adding-package-pypi/
+# New version: change version and then:
+# python setup.py sdist
+# python setup.py sdist upload
