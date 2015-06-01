@@ -143,6 +143,51 @@ Commands
          mu dd 9fd88da
          mu dd development
      
+* ``mu clone``:
+
+    mu-repo allows clones to work in multiple projects at once.
+    
+    For this to work, 2 things are needed:
+    
+    1. The base remote hosts have to be configured (through git)
+    
+    i.e.:
+
+        Say that someone is working with 2 projects: projectA and projectB and projectB depends on projectA
+        and they're all available on https://github.com/myuser
+    
+        The urls in this case to be checked out would be something as:
+    
+        ssh://git@github.com:myuser/projectXXX
+        https://github.com/myuser/projectXXX
+    
+        So, the url: https://github.com/myuser or git@github.com:myuser has to be configured as a
+        remote host for clones:
+    
+        `git config --global --add mu-repo.remote-host ssh://git@github.com:myuser`
+    
+        Note that it's possible to add as many urls as wanted (they'll all be checked later on
+        when cloning the project).
+    
+        To check what are the actual urls that mu-repo will use (and the order in which they'll be
+        tried, it's possible to execute):
+    
+        `git config --get-regexp mu-repo.remote-host`
+    
+    
+    2. Each directory has to be configured to add the projects of the dependent projects (by committing a .mu_repo file with that information)::
+    
+        /libA
+        /projectA (depends on libA)
+        
+        >> cd projectA
+        >> mu register ../libA
+        >> mu add .mu_repo
+        >> mu commit -m "Adding dependency to mu-repo"
+        
+    Then, by cloning with ``mu clone projectA``, both projectA and libA will be cloned (and by going
+    to projectA and using any mu command there, the commands will be propagated to dependent projects).
+
 * ``mu group``:
     Grouping can be used so you can have separate sets of projects that may not be related to each
     other. For instance, suppose you work on project A, which depends on this repositories::
@@ -160,9 +205,9 @@ Commands
     Grouping enables you to switch easily between the two projects. To create a group to work on 
     projectA and its dependencies, use "mu group add <name>" to create the new group::
     
-        ] mu group add pA --empty   # not passing --empty means using the current repositories as starting point
-        ] mu register libA mylib projectA
-        ] mu list
+        >> mu group add pA --empty   # not passing --empty means using the current repositories as starting point
+        >> mu register libA mylib projectA
+        >> mu list
         Tracked repositories:
         
         libA
@@ -171,9 +216,9 @@ Commands
    
     The same goes for project B::
     
-        ] mu group add pB  --empty
-        ] mu register libB mylib projectB
-        ] mu list
+        >> mu group add pB  --empty
+        >> mu register libB mylib projectB
+        >> mu list
         Tracked repositories:
         
         libB
@@ -182,18 +227,18 @@ Commands
     
     You can see which group you're on::
     
-        ] mu group
+        >> mu group
           pA
         * pB
         
     And switch between the two::
     
-        ] mu group switch pA
+        >> mu group switch pA
         Switched to group "pA".
     
     If you are done with a group, use "mu group rm" to remove it::
         
-        ] mu group rm pA
+        >> mu group rm pA
         Group "pA" removed (no current group).
     
 Shortcuts:

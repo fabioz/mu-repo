@@ -31,6 +31,7 @@ class Config(object):
         '_git',
         'current_group',
         'groups',
+        '_remote_hosts'
     ]
 
     def __init__(self, **kwargs):
@@ -46,6 +47,8 @@ class Config(object):
         for k, v in kwargs.items():
             setattr(self, k, v)
 
+        self._remote_hosts = None
+
     def __getitem__(self, key):
         return getattr(self, key)
 
@@ -57,6 +60,30 @@ class Config(object):
 
     git = property(_GetGit, _SetGit)
 
+    def _GetRemoteHosts(self):
+        remote_hosts = self._remote_hosts
+        if remote_hosts is None:
+            # Lazily-calculate (and then cache it).
+            git = self.git
+            from mu_repo.execute_command import ExecuteCommand
+            output = ExecuteCommand(
+                [git] + 'config --get-regexp mu-repo.remote-host'.split(), '.', return_stdout=True)
+
+            remotes_hosts = []
+            for line in output.splitlines():
+                if line.startswith('mu-repo.remote-host '):
+                    line = line[len('mu-repo.remote-host '):]
+                    remotes_hosts.append(line)
+            self._remote_hosts = remotes_hosts
+
+        return self._remote_hosts
+
+    def _SetRemoteHosts(self, remote_hosts):
+        self._remote_hosts = remote_hosts[:]
+
+    remote_hosts = property(_GetRemoteHosts, _SetRemoteHosts)
+
+
     def items(self):
         yield ('repos', self.repos)
         yield ('serial', str(self.serial))
@@ -65,6 +92,9 @@ class Config(object):
         if self.current_group:
             yield ('current_group', self.current_group)
         yield ('groups', self.groups)
+
+        if self._remote_hosts:
+            yield ('remote_hosts', self.remote_hosts)
 
     def __eq__(self, o):
         if isinstance(o, Config):
@@ -85,7 +115,10 @@ class Config(object):
         config = Config()
 
         def GetField(line):
-            name, value = line.split('=')
+            try:
+                name, value = line.split('=')
+            except:
+                raise ValueError('Error when splitting line: %s at "="' % (line,))
             return name.strip(), value.strip()
 
         for line in lines:
@@ -100,6 +133,11 @@ class Config(object):
 
                 elif name == 'git':
                     config._git = value
+
+                elif name == 'remote_host':
+                    if config._remote_hosts is None:
+                        config._remote_hosts = []
+                    config._remote_hosts.append(value)
 
                 elif name == 'current_group' and value:
                     config.current_group = value
@@ -120,7 +158,7 @@ class Config(object):
                 lst.append('%s=%s' % (key, val))
 
             elif isinstance(val, list):
-                assert key == 'repos'
+                assert key[-1] == 's'  # (change repos->repo or remote_hosts->remote_host)
                 key = key[:-1]
                 for v in sorted(val):
                     lst.append('%s=%s' % (key, v))

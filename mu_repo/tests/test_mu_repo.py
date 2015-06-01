@@ -5,7 +5,7 @@ Created on May 17, 2012
 '''
 from mu_repo import action_diff
 from mu_repo.config import Config
-from mu_repo.print_ import PushIgnorePrint, PopIgnorePrint
+from mu_repo.print_ import PopIgnorePrint, PushIgnorePrint
 import mu_repo
 import os.path
 import unittest
@@ -21,6 +21,8 @@ class Test(unittest.TestCase):
         unittest.TestCase.setUp(self)
         PushIgnorePrint()
         self.clear()
+
+        os.chdir(os.path.dirname(__file__))
 
 
     def tearDown(self):

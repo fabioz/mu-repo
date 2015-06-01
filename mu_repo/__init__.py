@@ -54,7 +54,7 @@ def PrintTime(func):
 #===================================================================================================
 # main
 #===================================================================================================
-def main(config_file='.mu_repo', args=None):
+def main(config_file='.mu_repo', args=None, config=None):
     '''
     Entry point.
     '''
@@ -79,7 +79,8 @@ def main(config_file='.mu_repo', args=None):
             with open(config_file, 'r') as f:
                 contents = f.read()
 
-    config = Config.Create(contents)
+    if config is None:
+        config = Config.Create(contents)
 
     for arg in args:
         if arg.startswith('repo:'):
@@ -199,6 +200,9 @@ def main(config_file='.mu_repo', args=None):
 
 
     # assorted -------------------------------------------------------------------------------------
+    elif arg0 == 'clone':
+        from .action_clone import Run  # @Reimport
+
     elif arg0 == 'install':
         from .action_install import Run #@Reimport
 
