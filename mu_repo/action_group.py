@@ -1,6 +1,6 @@
 from __future__ import with_statement
-from mu_repo.print_ import Print
 from mu_repo import Status
+from mu_repo.print_ import Print
 import os
 
 try:
@@ -75,7 +75,10 @@ def Run(params):
 
                 Print('\n[${START_COLOR}C${RESET_COLOR}]: Cancel')
 
-                user_entered = raw_input('\nSelect: ').strip()
+                try:
+                    user_entered = raw_input('\nSelect: ').strip()
+                except KeyboardInterrupt:
+                    return Status('Cancelled', False)
 
                 if user_entered in i_to_group:
                     group_name = i_to_group[user_entered]
