@@ -278,33 +278,3 @@ links to the original files, so files edited in winmerge/meld will properly chan
 original files).
 
 
-.. _parallel:
-
-PARALLELISM
------------
-
-mu-repo by default will execute commands in serial, but it's also possible
-to enable commands to be run in parallel, but note that in this mode,
-actions that require input will not work (and depending on the action,
-may even block if input is required -- i.e.: password). It's possible 
-to force it to run in parallel mode, by setting the 'serial' flag to false::
-
-    mu set-var serial=false
-
-
-.. note:: Some actions considered 'safe' will always be executed in parallel (i.e.: mu st)
-
-GIT
----
-
-If for some reason you don't have git in the path, it's possible to force 
-its location by doing::
-
-    mu set-var git=d:\bin\git\bin\git.exe
-
- 
-LICENSE
--------
-
-GPL 3, Copyright (c) 2012-2014 by Fabio Zadrozny
-

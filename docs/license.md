@@ -1,4 +1,10 @@
-Copyright (c) 2012-2015 by Fabio Zadrozny. 
+LICENSE
+-------
+
+GPL 3, Copyright (c) 2012-2015 by Fabio Zadrozny
+
+Full License Terms
+-------------------
 
 This program is distributed under the GNU General Public license.
 
