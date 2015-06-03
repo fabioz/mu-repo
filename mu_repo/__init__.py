@@ -203,7 +203,7 @@ def main(config_file='.mu_repo', args=None, config=None):
     elif arg0 == 'clone':
         from .action_clone import Run  # @Reimport
 
-    elif arg0 == 'install':
+    elif arg0 == 'git-init-config':
         from .action_install import Run #@Reimport
 
     elif arg0 == 'fix-eol':

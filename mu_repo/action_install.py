@@ -57,7 +57,7 @@ def Run(params):
     if wrap == 'y':
         ExecuteCommand([git, 'config', '--global', 'core.pager', 'less -r'], '.')
 
-    wrap = raw_input('\nCreate aliases? (default: y, options: y, n)').strip().lower()
+    wrap = raw_input('\nCreate "git st" and "git create-branch" aliases? (default: y, options: y, n)').strip().lower()
     if not wrap:
         wrap = 'y'
     if wrap == 'y':

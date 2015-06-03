@@ -42,6 +42,12 @@ def Run(params):
     args = params.args
     assert args[0] == 'clone'
     args = args[1:]
+    
+    if len(args) == 1 and args[0] == '--help':
+        import webbrowser
+        webbrowser.open("http://fabioz.github.io/mu-repo/cloning/")
+        Print('Opening http://fabioz.github.io/mu-repo/cloning/ for help on cloning...')
+        return
 
     repos = []
     other_cmd_line_args = []

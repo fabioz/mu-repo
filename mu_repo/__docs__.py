@@ -18,7 +18,7 @@ Commands:
 * ${START_COLOR}mu get-vars:${RESET_COLOR} Prints the configuration file.
 * ${START_COLOR}mu fix-eol:${RESET_COLOR} Changes end of lines to '\\n' on all changed files.
 * ${START_COLOR}mu find-branch [-r] *pat*:${RESET_COLOR} Finds all branches matching a given pattern (or simply mu fb).
-* ${START_COLOR}mu install:${RESET_COLOR} Initial configuration git (username, log, etc.)
+* ${START_COLOR}mu git-init-config:${RESET_COLOR} Initial git configuration (username, log, etc.)
 * ${START_COLOR}mu auto-update:${RESET_COLOR} Automatically updates mu-repo
   (using git -- must have been pulled from git as in the instructions).
 
@@ -47,25 +47,10 @@ Specifying a repository for a single command (repo: argument):
   Use ${START_COLOR}mu register${RESET_COLOR} normally to add repositories to the current group
   Use ${START_COLOR}mu list${RESET_COLOR} to list repositories in the current group
 
-* ${START_COLOR}mu clone:${RESET_COLOR} Repository cloning
-
-  In mu it's possible to clone multiple repositories at once. To do that, configure
-  your remote hosts for mu-repo through git:
-
-  ${START_COLOR}git config --global --add mu-repo.remote-base-url ssh://git@github.com:myuser${RESET_COLOR}
-
-  and then you can clone just by passing the project name (i.e.: ${START_COLOR}mu clone myproject${RESET_COLOR}).
-
-  If the project itself has a .mu_repo file committed with the dependencies
-  i.e. a .mu_repo file which makes that directory work as a group, where you did something as:
-
-      mu register .
-      mu register ../projectB
-      mu register ../projectA
-
-  the relative projects will also be cloned (if they reside in one of the hosts previously
-  registered). And by doing so, that folder will actually work as a group for any mu command.
-
+* ${START_COLOR}mu clone:${RESET_COLOR} Repository cloning. 
+  
+  Use mu clone --help for more details.
+  
 Shortcuts:
 
 ${START_COLOR}mu st         ${RESET_COLOR}= Nice status message for all repos (always in parallel)
