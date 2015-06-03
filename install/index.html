@@ -7,14 +7,14 @@
         
         
         
-        <link rel="shortcut icon" href="./img/favicon.ico">
+        <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>mu-repo</title>
+	<title>Install - mu-repo</title>
 
-        <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="./css/font-awesome-4.0.3.css" rel="stylesheet">
-        <link href="./css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="./css/highlight.css">
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -35,7 +35,7 @@
         
     </head>
 
-    <body class="homepage">
+    <body>
 
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
@@ -53,7 +53,7 @@
             
 
             <!-- Main title -->
-            <a class="navbar-brand" href=".">mu-repo</a>
+            <a class="navbar-brand" href="..">mu-repo</a>
         </div>
 
         <!-- Expanded navigation -->
@@ -63,14 +63,14 @@
                 <ul class="nav navbar-nav">
                 
                 
-                    <li class="active">
-                        <a href=".">Home</a>
+                    <li >
+                        <a href="..">Home</a>
                     </li>
                 
                 
                 
-                    <li >
-                        <a href="install/">Install</a>
+                    <li class="active">
+                        <a href="./">Install</a>
                     </li>
                 
                 
@@ -81,25 +81,25 @@
                         
                             
 <li >
-    <a href="using/">Using</a>
+    <a href="../using/">Using</a>
 </li>
 
                         
                             
 <li >
-    <a href="config/">Configuration</a>
+    <a href="../config/">Configuration</a>
 </li>
 
                         
                             
 <li >
-    <a href="grouping/">Grouping Repositories</a>
+    <a href="../grouping/">Grouping Repositories</a>
 </li>
 
                         
                             
 <li >
-    <a href="cloning/">Cloning Multiple Repositories</a>
+    <a href="../cloning/">Cloning Multiple Repositories</a>
 </li>
 
                         
@@ -109,13 +109,13 @@
                 
                 
                     <li >
-                        <a href="tips_and_tricks/">Tips & Tricks</a>
+                        <a href="../tips_and_tricks/">Tips & Tricks</a>
                     </li>
                 
                 
                 
                     <li >
-                        <a href="license/">License</a>
+                        <a href="../license/">License</a>
                     </li>
                 
                 
@@ -129,13 +129,13 @@
                     </a>
                 </li>
                 
-                    <li class="disabled">
-                        <a rel="next" >
+                    <li >
+                        <a rel="next" href="..">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="install/">
+                        <a rel="prev" href="../using/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -160,45 +160,29 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#mu-repo">mu-repo</a></li>
-        
-            <li><a href="#overview">Overview</a></li>
+        <li class="main active"><a href="#installing">INSTALLING</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="mu-repo">mu-repo</h1>
-<p>Tool to help working with multiple git repositories
-(short for <em>Multiple Repositories</em>).</p>
-<h2 id="overview">Overview</h2>
-<p><code>mu</code> is a command line tool that helps you execute the same commands in multiple <code>git</code> repositories.</p>
-<p>Suppose you have repositories that are related, and want to execute the same <code>git</code> commands in each (for instance, create
-a branch with the same name in all of them).</p>
-<pre><code>$ cd my-project
-$ ls 
-repo1 repo2
-$ cd repo1
-$ git fetch &amp;&amp; git checkout -b my-feature origin/master
-...
-$ cd repo2
-$ git fetch &amp;&amp; git checkout -b my-feature origin/master
-...
-</code></pre>
-<p>Besides being tedious, it is easy to forget some of the repositories when you're dealing with several.</p>
-<p>Using <code>mu</code>, you register the repositories you want only once and then issue the commands to all of them at once:</p>
-<pre><code>cd my-project
-mu register repo1 repo2
-mu fetch &amp;&amp; mu checkout -b my-feature origin/master
-</code></pre>
-<p><code>mu</code> also provides other useful features such as:</p>
+<h2 id="installing">INSTALLING</h2>
+<p><strong>Requirements</strong> </p>
 <ul>
-<li>Creating groups of repositories</li>
-<li>Diffing changes for edition with WinMerge or meld</li>
-<li>Cloning multiple repositories</li>
-<li>Checking out branches by partial name matching</li>
-</ul></div>
+<li>Python 2.5+, 3.2+</li>
+<li>git 1.7.11+ (executable must be in your path. Make sure at least <code>git stash -u</code> works)</li>
+<li>winmerge (optional, for diffing, Windows)</li>
+<li>meld (optional, for diffing, Linux)</li>
+<li>pywin32_ for lines coloring (Windows).</li>
+</ul>
+<p>.. _PyWin32: http://sourceforge.net/projects/pywin32/files/pywin32</p>
+<p>Then if you want to get the last released version, you can do:</p>
+<p><code>pip install mu-repo</code></p>
+<p>If you want to develop it, you can clone it from the path:</p>
+<p><code>git clone git://github.com/fabioz/mu-repo.git</code></p>
+<p>and then add the mu-repo directory to your <code>PATH</code>, that way, 
+executing <code>mu</code> in the command line should give a proper message.</p></div>
             
         </div>
 
@@ -208,12 +192,12 @@ mu fetch &amp;&amp; mu checkout -b my-feature origin/master
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
 
-        <script src="./js/jquery-1.10.2.min.js"></script>
-        <script src="./js/bootstrap-3.0.3.min.js"></script>
-        <script src="./js/highlight.pack.js"></script>
-        <script>var base_url = '.';</script>
-        <script data-main="./mkdocs/js/search.js" src="./mkdocs/js/require.js"></script>
-        <script src="./js/base.js"></script>
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script>
+        <script>var base_url = '..';</script>
+        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+        <script src="../js/base.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
             <div class="modal-dialog">
@@ -242,8 +226,3 @@ mu fetch &amp;&amp; mu checkout -b my-feature origin/master
 
     </body>
 </html>
-
-<!--
-MkDocs version : 0.13.3
-Build Date UTC : 2015-06-03 16:13:16.290000
--->

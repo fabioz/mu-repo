@@ -35,7 +35,7 @@
         
     </head>
 
-    <body class="homepage">
+    <body>
 
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
@@ -63,7 +63,7 @@
                 <ul class="nav navbar-nav">
                 
                 
-                    <li class="active">
+                    <li >
                         <a href=".">Home</a>
                     </li>
                 
@@ -134,8 +134,8 @@
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
-                    <li >
-                        <a rel="prev" href="install/">
+                    <li class="disabled">
+                        <a rel="prev" >
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -157,49 +157,15 @@
 
         <div class="container">
             
-                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-    
-        <li class="main active"><a href="#mu-repo">mu-repo</a></li>
-        
-            <li><a href="#overview">Overview</a></li>
-        
-    
-    </ul>
-</div></div>
-                <div class="col-md-9" role="main">
 
-<h1 id="mu-repo">mu-repo</h1>
-<p>Tool to help working with multiple git repositories
-(short for <em>Multiple Repositories</em>).</p>
-<h2 id="overview">Overview</h2>
-<p><code>mu</code> is a command line tool that helps you execute the same commands in multiple <code>git</code> repositories.</p>
-<p>Suppose you have repositories that are related, and want to execute the same <code>git</code> commands in each (for instance, create
-a branch with the same name in all of them).</p>
-<pre><code>$ cd my-project
-$ ls 
-repo1 repo2
-$ cd repo1
-$ git fetch &amp;&amp; git checkout -b my-feature origin/master
-...
-$ cd repo2
-$ git fetch &amp;&amp; git checkout -b my-feature origin/master
-...
-</code></pre>
-<p>Besides being tedious, it is easy to forget some of the repositories when you're dealing with several.</p>
-<p>Using <code>mu</code>, you register the repositories you want only once and then issue the commands to all of them at once:</p>
-<pre><code>cd my-project
-mu register repo1 repo2
-mu fetch &amp;&amp; mu checkout -b my-feature origin/master
-</code></pre>
-<p><code>mu</code> also provides other useful features such as:</p>
-<ul>
-<li>Creating groups of repositories</li>
-<li>Diffing changes for edition with WinMerge or meld</li>
-<li>Cloning multiple repositories</li>
-<li>Checking out branches by partial name matching</li>
-</ul></div>
-            
+    <div class="row-fluid">
+      <div id="main-content" class="span12">
+        <h1 id="404-page-not-found" style="text-align: center">404</h1>
+        <p style="text-align: center"><strong>Page not found</strong></p>
+      </div>
+    </div>
+
+
         </div>
 
         <footer class="col-md-12">
@@ -242,8 +208,3 @@ mu fetch &amp;&amp; mu checkout -b my-feature origin/master
 
     </body>
 </html>
-
-<!--
-MkDocs version : 0.13.3
-Build Date UTC : 2015-06-03 16:13:16.290000
--->

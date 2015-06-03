@@ -7,14 +7,14 @@
         
         
         
-        <link rel="shortcut icon" href="./img/favicon.ico">
+        <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>mu-repo</title>
+	<title>Tips & Tricks - mu-repo</title>
 
-        <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="./css/font-awesome-4.0.3.css" rel="stylesheet">
-        <link href="./css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="./css/highlight.css">
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -35,7 +35,7 @@
         
     </head>
 
-    <body class="homepage">
+    <body>
 
         <div class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
@@ -53,7 +53,7 @@
             
 
             <!-- Main title -->
-            <a class="navbar-brand" href=".">mu-repo</a>
+            <a class="navbar-brand" href="..">mu-repo</a>
         </div>
 
         <!-- Expanded navigation -->
@@ -63,14 +63,14 @@
                 <ul class="nav navbar-nav">
                 
                 
-                    <li class="active">
-                        <a href=".">Home</a>
+                    <li >
+                        <a href="..">Home</a>
                     </li>
                 
                 
                 
                     <li >
-                        <a href="install/">Install</a>
+                        <a href="../install/">Install</a>
                     </li>
                 
                 
@@ -81,25 +81,25 @@
                         
                             
 <li >
-    <a href="using/">Using</a>
+    <a href="../using/">Using</a>
 </li>
 
                         
                             
 <li >
-    <a href="config/">Configuration</a>
+    <a href="../config/">Configuration</a>
 </li>
 
                         
                             
 <li >
-    <a href="grouping/">Grouping Repositories</a>
+    <a href="../grouping/">Grouping Repositories</a>
 </li>
 
                         
                             
 <li >
-    <a href="cloning/">Cloning Multiple Repositories</a>
+    <a href="../cloning/">Cloning Multiple Repositories</a>
 </li>
 
                         
@@ -108,14 +108,14 @@
                 
                 
                 
-                    <li >
-                        <a href="tips_and_tricks/">Tips & Tricks</a>
+                    <li class="active">
+                        <a href="./">Tips & Tricks</a>
                     </li>
                 
                 
                 
                     <li >
-                        <a href="license/">License</a>
+                        <a href="../license/">License</a>
                     </li>
                 
                 
@@ -129,13 +129,13 @@
                     </a>
                 </li>
                 
-                    <li class="disabled">
-                        <a rel="next" >
+                    <li >
+                        <a rel="next" href="../cloning/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
                     <li >
-                        <a rel="prev" href="install/">
+                        <a rel="prev" href="../license/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -160,45 +160,45 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
-        <li class="main active"><a href="#mu-repo">mu-repo</a></li>
+        <li class="main active"><a href="#tips-tricks">Tips  Tricks</a></li>
         
-            <li><a href="#overview">Overview</a></li>
+            <li><a href="#grouping-by-project-directories">Grouping by project directories</a></li>
+        
+            <li><a href="#mu_repo">.mu_repo</a></li>
         
     
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="mu-repo">mu-repo</h1>
-<p>Tool to help working with multiple git repositories
-(short for <em>Multiple Repositories</em>).</p>
-<h2 id="overview">Overview</h2>
-<p><code>mu</code> is a command line tool that helps you execute the same commands in multiple <code>git</code> repositories.</p>
-<p>Suppose you have repositories that are related, and want to execute the same <code>git</code> commands in each (for instance, create
-a branch with the same name in all of them).</p>
-<pre><code>$ cd my-project
-$ ls 
-repo1 repo2
-$ cd repo1
-$ git fetch &amp;&amp; git checkout -b my-feature origin/master
-...
-$ cd repo2
-$ git fetch &amp;&amp; git checkout -b my-feature origin/master
-...
+<h2 id="tips-tricks">Tips &amp; Tricks</h2>
+<h4 id="grouping-by-project-directories">Grouping by project directories</h4>
+<p>To make the most out of <code>mu-repo</code>, it's recommended that the projects you work with specify
+their own dependencies by committing the <code>.mu_repo</code> file with relative dirs so that it's
+possible to go inside any of those repository dirs and issue commands not only to the repository,
+but all the dependent repositories at once (and this will also enable you to <a href="../cloning/">clone</a> the all
+the needed repositories at once).</p>
+<p>Example:</p>
+<p>Say you have <code>projectA</code>, <code>projectB</code> and <code>projectC</code> and have a dependency so that:</p>
+<pre><code>projectC -&gt; projectB, projectA
+projectB -&gt; projectA
 </code></pre>
-<p>Besides being tedious, it is easy to forget some of the repositories when you're dealing with several.</p>
-<p>Using <code>mu</code>, you register the repositories you want only once and then issue the commands to all of them at once:</p>
-<pre><code>cd my-project
-mu register repo1 repo2
-mu fetch &amp;&amp; mu checkout -b my-feature origin/master
+<p>It's recommended that you go into projectC and do:</p>
+<pre><code>mu register ../projectA
+mu register ../projectB
 </code></pre>
-<p><code>mu</code> also provides other useful features such as:</p>
-<ul>
-<li>Creating groups of repositories</li>
-<li>Diffing changes for edition with WinMerge or meld</li>
-<li>Cloning multiple repositories</li>
-<li>Checking out branches by partial name matching</li>
-</ul></div>
+<p>and in projectB:</p>
+<pre><code>mu register ../projectA
+</code></pre>
+<p>By doing so, when going into projectC and doing a command using <code>mu</code>, the command will also be issued
+to <code>projectB</code> and <code>projectA</code> and by going into <code>projectB</code> it'll also execute commands in <code>projectA</code>.</p>
+<p>Also, this will enable the command <code>mu clone projectC</code> to clone <code>projectB</code> and <code>projectC</code> all at once
+(See the <a href="../cloning/">Cloning</a> for further details).</p>
+<p><strong>Tip:</strong> If you have several projects and need even finer grained control over where to execute a command, it's possible
+to create a group identify a subset of the repositories (See the <a href="../grouping/">Grouping Repositories</a> for further details). </p>
+<h4 id="mu_repo">.mu_repo</h4>
+<p>The <code>.mu_repo</code> file has a simple format (each line must be something as name=var or name=var1, var2), so, it's straightforward
+to edit it with your favorite editor.</p></div>
             
         </div>
 
@@ -208,12 +208,12 @@ mu fetch &amp;&amp; mu checkout -b my-feature origin/master
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
 
-        <script src="./js/jquery-1.10.2.min.js"></script>
-        <script src="./js/bootstrap-3.0.3.min.js"></script>
-        <script src="./js/highlight.pack.js"></script>
-        <script>var base_url = '.';</script>
-        <script data-main="./mkdocs/js/search.js" src="./mkdocs/js/require.js"></script>
-        <script src="./js/base.js"></script>
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script>
+        <script>var base_url = '..';</script>
+        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+        <script src="../js/base.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
             <div class="modal-dialog">
@@ -242,8 +242,3 @@ mu fetch &amp;&amp; mu checkout -b my-feature origin/master
 
     </body>
 </html>
-
-<!--
-MkDocs version : 0.13.3
-Build Date UTC : 2015-06-03 16:13:16.290000
--->
