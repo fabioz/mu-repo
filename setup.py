@@ -1,13 +1,22 @@
-from distutils.core import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 setup(
     name='mu_repo',
-    version='1.0.0',
+    version='1.1.0',
     description = 'Tool to work with multiple git repositories',
     author='Fabio Zadrozny',
-    url='https://github.com/fabioz/mu-repo',
-    scripts=['mu'],
+    url='http://fabioz.github.io/mu-repo',
+    # scripts=['mu'], -- entry_points:console_scripts should do what we want.
     packages=['mu_repo'],
+    
+    entry_points = {
+        'console_scripts': [
+            'mu = mu_repo:main',                  
+        ],
+    },
 )
 
 # Note: nice reference: https://jamie.curle.io/blog/my-first-experience-adding-package-pypi/
