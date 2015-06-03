@@ -1,8 +1,3 @@
-# Commands
-# Install with: pip install mkdocs
-# Build with: mkdocs.exe build
-# Develop with: mkdocs.exe serve
-
 site_name: mu-repo
 
 pages:
@@ -16,4 +11,4 @@ repo_url: https://github.com/fabioz/mu-repo/
 
 google_analytics: ['UA-153541-11', 'fabioz.github.io/mu-repo']
 
-site_dir: .
+site_dir: ../site
