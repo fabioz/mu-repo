@@ -14,6 +14,7 @@ from mu_repo.rmtree import RmTree
 from mu_repo.execute_command import ExecuteGettingStdOutput
 from mu_repo.get_repos_and_curr_branch import GetReposAndCurrBranch
 import sys
+from mu_repo.backwards import raw_input
 
 #===================================================================================================
 # DummyQueue
@@ -31,9 +32,9 @@ on_errors_listeners = set()
 # NotifyErrorListeners
 #===================================================================================================
 def NotifyErrorListeners():
-    import StringIO
+    from mu_repo.backwards_stringio import StringIO
     import traceback
-    cstr = StringIO.StringIO()
+    cstr = StringIO()
     traceback.print_exc(file=cstr)
     error = cstr.getvalue()
     for listener in on_errors_listeners:

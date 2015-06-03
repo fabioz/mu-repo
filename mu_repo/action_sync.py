@@ -4,7 +4,7 @@ Created on 30/05/2012
 @author: Fabio Zadrozny
 '''
 from mu_repo.print_ import Print
-from mu_repo.backwards import iteritems
+from mu_repo.backwards import iteritems, raw_input
 
 #===================================================================================================
 # Run

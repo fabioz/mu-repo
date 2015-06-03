@@ -1,12 +1,7 @@
 from __future__ import with_statement
 from mu_repo import Status
 from mu_repo.print_ import Print
-import os
-
-try:
-    raw_input = raw_input
-except:
-    raw_input = input
+from mu_repo.backwards import raw_input
 
 #===================================================================================================
 # Run

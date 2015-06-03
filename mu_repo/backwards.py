@@ -2,6 +2,12 @@ import sys
 IS_PYTHON_3K = 0
 
 try:
+    raw_input = raw_input
+except:
+    raw_input = input
+
+
+try:
     if sys.version_info[0] == 3:
         IS_PYTHON_3K = 1
 except:

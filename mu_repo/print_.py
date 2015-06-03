@@ -117,7 +117,7 @@ def PopIgnorePrint():
 
 
 def PrintError(msg=''):
-    from .backwards_stringio import StringIO
+    from mu_repo.backwards_stringio import StringIO
     s = StringIO()
     s.write('\n===================================== ERROR =====================================\n')
     if msg:

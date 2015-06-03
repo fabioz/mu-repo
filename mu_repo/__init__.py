@@ -206,20 +206,8 @@ def main(config_file='.mu_repo', args=None, config=None):
     elif arg0 == 'install':
         from .action_install import Run #@Reimport
 
-    elif arg0 == 'mu-patch':
-        from .action_mu_patch import Run #@Reimport
-
-    elif arg0 == 'post-review':
-        from .action_post_review import Run #@Reimport
-
     elif arg0 == 'fix-eol':
         from .action_fix_eol import Run #@Reimport
-
-    elif arg0 == 'github-request':
-        from .action_github_pull_request import Run #@Reimport
-
-    elif arg0 == 'howto':
-        from .howto import Run #@Reimport
 
     elif arg0 in ('find-branch', 'fb'):
         from .action_find_branch import Run  # @Reimport

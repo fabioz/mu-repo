@@ -16,8 +16,6 @@ Commands:
 * ${START_COLOR}mu set-var git=d:/bin/git/bin/git.exe:${RESET_COLOR} Set git location to be used.
 * ${START_COLOR}mu set-var serial=0|1:${RESET_COLOR} Set commands to be executed serially or in parallel.
 * ${START_COLOR}mu get-vars:${RESET_COLOR} Prints the configuration file.
-* ${START_COLOR}mu github-request:${RESET_COLOR} Gets a request from github.
-* ${START_COLOR}mu post-review bug_id group:${RESET_COLOR} posts a review with the changes committed.
 * ${START_COLOR}mu fix-eol:${RESET_COLOR} Changes end of lines to '\\n' on all changed files.
 * ${START_COLOR}mu find-branch [-r] *pat*:${RESET_COLOR} Finds all branches matching a given pattern (or simply mu fb).
 * ${START_COLOR}mu install:${RESET_COLOR} Initial configuration git (username, log, etc.)
@@ -72,7 +70,6 @@ Shortcuts:
 
 ${START_COLOR}mu st         ${RESET_COLOR}= Nice status message for all repos (always in parallel)
 ${START_COLOR}mu co branch  ${RESET_COLOR}= git checkout branch
-${START_COLOR}mu mu-patch   ${RESET_COLOR}= git diff --cached --full-index > output to file for each repo
 ${START_COLOR}mu mu-branch  ${RESET_COLOR}= git rev-parse --abbrev-ref HEAD (print current branch)
 ${START_COLOR}mu up         ${RESET_COLOR}= git fetch origin curr_branch:refs/remotes/origin/curr_branch
 ${START_COLOR}mu upd | sync ${RESET_COLOR}= up/diff incoming changes
