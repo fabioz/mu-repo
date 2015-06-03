@@ -1,11 +1,4 @@
-'''mu-repo is a command-line utility to deal with multiple git repositories.
-
-It works with a .mu_repo file in the current working dir which provides the
-configuration of the directories that should be tracked on commands
-(it may also be used as a git replacement on directories containing a
-.git dir).
-
-Commands:
+'''Commands:
 
 * ${START_COLOR}mu register repo1 repo2:${RESET_COLOR} Registers repo1 and repo2 to be tracked.
 * ${START_COLOR}mu register --all:${RESET_COLOR} Registers all subdirs with .git (non-recursive).
@@ -17,7 +10,8 @@ Commands:
 * ${START_COLOR}mu set-var serial=0|1:${RESET_COLOR} Set commands to be executed serially or in parallel.
 * ${START_COLOR}mu get-vars:${RESET_COLOR} Prints the configuration file.
 * ${START_COLOR}mu fix-eol:${RESET_COLOR} Changes end of lines to '\\n' on all changed files.
-* ${START_COLOR}mu find-branch [-r] *pat*:${RESET_COLOR} Finds all branches matching a given pattern (or simply mu fb).
+* ${START_COLOR}mu find-branch [-r] *pat*:${RESET_COLOR} 
+    Finds all branches matching a given pattern (or simply mu fb).
 * ${START_COLOR}mu git-init-config:${RESET_COLOR} Initial git configuration (username, log, etc.)
 * ${START_COLOR}mu auto-update:${RESET_COLOR} Automatically updates mu-repo
   (using git -- must have been pulled from git as in the instructions).
@@ -32,13 +26,17 @@ Commands:
      mu dd 9fd88da
      mu dd development
 
-Specifying a repository for a single command (repo: argument):
+* ${START_COLOR}mu clone:${RESET_COLOR} Cloning multiple repos from a base url.
+  Use mu clone --help to open browser with more details.
+  
+* ${START_COLOR}mu <command> repo:<repo1>,<repo2>${RESET_COLOR}
+   Allows specifying target repositories for a single command:
    e.g.: ${START_COLOR}mu st repo:repo1,repo2${RESET_COLOR}: Will do st on repo1 and repo2.
-
 
 * ${START_COLOR}mu group:${RESET_COLOR} Repository grouping
 
-  * ${START_COLOR}mu group add <name> [--empty]:${RESET_COLOR} Creates new group using current repositories, unless --empty is given
+  * ${START_COLOR}mu group add <name> [--empty]:${RESET_COLOR} 
+      Creates new group with current repositories, unless --empty is given
   * ${START_COLOR}mu group rm <name>:${RESET_COLOR} Removes a group
   * ${START_COLOR}mu group switch <name>:${RESET_COLOR} Switches to an existing group
   * ${START_COLOR}mu group reset:${RESET_COLOR} Stops using the current group (uses all repos again).
@@ -46,10 +44,6 @@ Specifying a repository for a single command (repo: argument):
 
   Use ${START_COLOR}mu register${RESET_COLOR} normally to add repositories to the current group
   Use ${START_COLOR}mu list${RESET_COLOR} to list repositories in the current group
-
-* ${START_COLOR}mu clone:${RESET_COLOR} Repository cloning. 
-  
-  Use mu clone --help for more details.
   
 Shortcuts:
 
@@ -75,8 +69,7 @@ ${START_COLOR}mu fetch           ${RESET_COLOR}
 ${START_COLOR}mu push            ${RESET_COLOR}
 ${START_COLOR}mu checkout release${RESET_COLOR}
 
-Note: Some actions considered 'safe' may always be executed in parallel (i.e.: mu st)
+Note: Actions considered safe may always be executed in parallel (i.e.: mu st)
 
-Note: Passing --timeit in any command will print the time it took
-      to execute the command.
+Note: Passing --timeit in any command will print the time for the command.
 '''
