@@ -1,4 +1,5 @@
 from mu_repo.execute_command import ExecuteCommand
+from mu_repo.print_ import Print
 import os
 
 #===================================================================================================
@@ -30,11 +31,10 @@ def Run(params):
 
     git config --global --add mu-repo.remote-host ssh://git@github.com:myuser
 
-    Note that it's possible to add as many urls as wanted (they'll all be checked later on
-    when cloning the project). Note that multiple remote hosts may be added that way.
+    Note that it's possible to add as many urls as wanted.
 
     To check what are the actual urls that mu-repo will use (and the order in which they'll be
-    tried, one can do):
+    tried, it's possible to do):
 
     git config --get-regexp mu-repo.remote-host
     '''
@@ -53,18 +53,20 @@ def Run(params):
             other_cmd_line_args.append(arg)
 
 
-    git = params.config.git
-
-    if not repos:
-        # We do not have any base: do a regular clone
-        ExecuteCommand([git] + params.args)
-        return
-
     remote_hosts = params.config.remote_hosts
 
+    if not repos:
+        Print('Unable to clone because the repository name for cloning with mu was not detected.')
+        return
+
+
     if not remote_hosts:
-        # We do not have any base: do a regular clone
-        ExecuteCommand([git] + params.args)
+        Print(
+            'No mu-repo.remote-host specified for mu to work with.\n'
+            'Please specify the remote hosts for cloning with mu. i.e.:\n'
+            '\n'
+            'git config --global --add mu-repo.remote-host ssh://git@github.com:myuser'
+        )
         return
 
     # If we got here we have a name which we should be able to concatenate with one of our base
@@ -85,7 +87,12 @@ def Run(params):
                         mu_config = mu_repo.Config.Create(stream.read())
 
                     for new_repo in mu_config.repos:
-                        if new_repo.startswith('../'):
+                        if new_repo in ('.', './', '.\\'):
+                            continue
+
+                        if not new_repo.startswith('../') and not new_repo.startswith('..\\'):
+                            Print('Cannot clone: %s (currently only works with relative repositories matching: ../name or ..\\name)' % (new_repo,))
+                        else:
                             # I.e.: can only clone repositories that would appear alongside
                             # the repository just cloned.
                             new_repo_name = new_repo[3:]
@@ -102,6 +109,8 @@ def Run(params):
                                     if _Clone(remote, new_repo_name, params, other_cmd_line_args):
                                         # Ok, worked for this repo
                                         break
+                            else:
+                                Print('Cannot clone: %s (currently only works with relative repositories matching: ../name or ..\\name)' % (new_repo,))
 
                 # Ok, we did the work for this repo (go on to the next)
                 break
