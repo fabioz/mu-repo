@@ -49,6 +49,24 @@ Specifying a repository for a single command (repo: argument):
   Use ${START_COLOR}mu register${RESET_COLOR} normally to add repositories to the current group
   Use ${START_COLOR}mu list${RESET_COLOR} to list repositories in the current group
 
+* ${START_COLOR}mu clone:${RESET_COLOR} Repository cloning
+
+  In mu it's possible to clone multiple repositories at once. To do that, configure
+  your remote hosts for mu-repo through git:
+
+  ${START_COLOR}git config --global --add mu-repo.remote-base-url ssh://git@github.com:myuser${RESET_COLOR}
+
+  and then you can clone just by passing the project name (i.e.: ${START_COLOR}mu clone myproject${RESET_COLOR}).
+
+  If the project itself has a .mu_repo file committed with the dependencies
+  i.e. a .mu_repo file which makes that directory work as a group, where you did something as:
+
+      mu register .
+      mu register ../projectB
+      mu register ../projectA
+
+  the relative projects will also be cloned (if they reside in one of the hosts previously
+  registered). And by doing so, that folder will actually work as a group for any mu command.
 
 Shortcuts:
 
