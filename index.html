@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="./img/favicon.ico">
+
+	<title>mu-repo</title>
+
+        <link href="./css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="./css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link rel="stylesheet" href="./css/highlight.css">
+        <link href="./css/base.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-153541-11', 'fabioz.github.io/mu-repo');
+            ga('send', 'pageview');
+        </script>
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Main title -->
+            <a class="navbar-brand" href=".">mu-repo</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li class="active">
+                    <a href=".">Home</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="config/">Configuration</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="license/">License</a>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                <li class="disabled">
+                    <a rel="next" >
+                        <i class="fa fa-arrow-left"></i> Previous
+                    </a>
+                </li>
+                <li >
+                    <a rel="prev" href="config/">
+                        Next <i class="fa fa-arrow-right"></i>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="https://github.com/fabioz/mu-repo/">
+                        
+                            <i class="fa fa-github"></i>
+                        
+                        GitHub
+                    </a>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#mu-repo">mu-repo</a></li>
+        
+            <li><a href="#overview">Overview</a></li>
+        
+            <li><a href="#installing">INSTALLING</a></li>
+        
+            <li><a href="#using">USING</a></li>
+        
+            <li><a href="#diffing-multiple-repositories">DIFFING MULTIPLE REPOSITORIES</a></li>
+        
+    
+    </ul>
+</div></div>
+            <div class="col-md-9" role="main">
+
+<h1 id="mu-repo">mu-repo</h1>
+<p>Tool to help working with multiple git repositories
+(short for <em>Multiple Repositories</em>).</p>
+<p>Note: in case you're seeing this repo wondering why the last commit
+was so long ago, I'd like to mention that this is because it's a
+pretty stable tool and seldomly needs maintenance
+(i.e.: it hasn't become abandoned -- quite the contrary,
+I use it daily without any hiccups).</p>
+<h2 id="overview">Overview</h2>
+<p><code>mu</code> is a command line tool that helps you execute the same commands in multiple <code>git</code> repositories.</p>
+<p>Suppose you have repositories that are related, and want to execute the same <code>git</code> commands in each (for instance, create
+a branch with the same name in all of them).</p>
+<p>.. code-block:: bash</p>
+<pre><code>$ cd my-project
+$ ls 
+repo1 repo2
+$ cd repo1
+$ git fetch &amp;&amp; git checkout -b my-feature origin/master
+...
+$ cd repo2
+$ git fetch &amp;&amp; git checkout -b my-feature origin/master
+...
+</code></pre>
+<p>Besides being tedious, it is easy to forget some of the repositories when you're dealing with several.</p>
+<p>Using <code>mu</code>, you register the repositories you want only once:</p>
+<p>.. code-block:: bash</p>
+<pre><code>cd my-project
+mu register repo1 repo2
+mu fetch &amp;&amp; mu checkout -b my-feature origin/master
+</code></pre>
+<h2 id="installing">INSTALLING</h2>
+<p><strong>Requirements</strong> </p>
+<ul>
+<li>Python 2.5+, 3.2+</li>
+<li>git 1.7.11+ (executable must be in your path. Make sure at least <code>git stash -u</code> works)</li>
+<li>winmerge (optional, for diffing, Windows)</li>
+<li>pywin32_ for lines coloring (Windows).</li>
+</ul>
+<p>.. _PyWin32: http://sourceforge.net/projects/pywin32/files/pywin32</p>
+<p>Then, grab mu-repo from git::</p>
+<pre><code>git clone git://github.com/fabioz/mu-repo.git
+</code></pre>
+<p>add the mu-repo directory to your <code>PATH</code> so that after that, 
+executing <code>mu</code> in the command line should give a proper message.</p>
+<h2 id="using">USING</h2>
+<p>The idea is that you have a structure such as::</p>
+<pre><code>/workspace
+    .mu_repo &lt;- configuration file (created by mu commands)
+    /repo1   &lt;- git repository 
+        /.git
+    /repo2
+        /.git
+    ...
+</code></pre>
+<p>Then go to the root directory containing the repositories 
+(in this case <code>cd /workspace</code>), add the repositories you want 
+to work with and issue commands to all registered repos.</p>
+<p><strong>Tip:</strong> <code>mu register --recursive</code> registers all sub directories that contain
+a <code>.git</code> subdirectory. To register only sub directories within the current
+directory, issue <code>mu register --current</code>.</p>
+<p><strong>Note:</strong> it may also be used as a git replacement on directories 
+containing a <code>.git</code> dir.</p>
+<p>Commands
+~~~~~~~~</p>
+<ul>
+<li>
+<p><code>mu register repo1 repo2</code> 
+    Registers repo1 and repo2 to be tracked. Also accepts a <code>--all</code> or
+    <code>--current</code> parameter, that automatically adds all repositories found in
+    the current directory (but not recursively). To automatically add all
+    repositories recursively, use <code>--recursive</code>.</p>
+</li>
+<li>
+<p><code>mu unregister repo1 repo2</code>
+    Unregisters previously tracked repositories (also accepts <code>--all</code>).</p>
+</li>
+<li>
+<p><code>mu list</code>
+    Lists the currently tracked repositories.</p>
+</li>
+<li>
+<p><code>mu set-var git=d:/bin/git/bin/git.exe</code>
+    Set git location to be used. Only needed if git is not found in your <code>PATH</code>.</p>
+</li>
+<li>
+<p><code>mu set-var serial=0|1</code>
+    Set commands to be executed serially or in parallel_.</p>
+</li>
+<li>
+<p><code>mu get-vars</code>
+    Prints the configuration file.</p>
+</li>
+<li>
+<p><code>mu github-request</code>
+    Gets a request from github.</p>
+</li>
+<li>
+<p><code>mu post-review bug_id group</code>
+    Posts a review with the changes committed.</p>
+</li>
+<li>
+<p><code>mu fix-eol</code>
+    Changes end of lines to <code>'\n'</code> on all changed files.</p>
+</li>
+<li>
+<p><code>mu find-branch [-r] pattern</code>
+    Finds and prints the branches which match a given pattern. 
+    (fnmatch style with auto-surrounded with asterisk)
+    (-r to match remote branches) 
+    Note: a shortcut exists for find-branch: mu fb  [-r] pattern</p>
+</li>
+<li>
+<p><code>mu install</code>
+    Initial configuration git (username, log, etc.)</p>
+</li>
+<li>
+<p><code>mu auto-update</code>
+    Automatically updates mu-repo (using git -- must have been pulled from git as in the instructions).</p>
+</li>
+<li>
+<p><code>mu dd</code>:
+     Creates a directory structure with working dir vs head and opens
+     WinMerge on Windows or meld on Linux with it (doing mu ac will commit exactly 
+     what's compared in this situation).</p>
+<p>Also accepts a parameter to compare with a different commit/branch. I.e.::</p>
+<pre><code> mu dd HEAD^^
+ mu dd 9fd88da
+ mu dd development
+</code></pre>
+</li>
+<li>
+<p><code>mu clone</code>:</p>
+<p>mu-repo allows clones to work in multiple projects at once.</p>
+<p>For this to work, 2 things are needed:</p>
+<ol>
+<li>The base remote hosts have to be configured (through git)</li>
+</ol>
+<p>i.e.:</p>
+<pre><code>Say that someone is working with 2 projects: projectA and projectB and projectB depends on projectA
+and they're all available on https://github.com/myuser
+
+The urls in this case to be checked out would be something as:
+
+ssh://git@github.com:myuser/projectXXX
+https://github.com/myuser/projectXXX
+
+So, the url: https://github.com/myuser or git@github.com:myuser has to be configured as a
+remote host for clones:
+
+`git config --global --add mu-repo.remote-host ssh://git@github.com:myuser`
+
+Note that it's possible to add as many urls as wanted (they'll all be checked later on
+when cloning the project).
+
+To check what are the actual urls that mu-repo will use (and the order in which they'll be
+tried, it's possible to execute):
+
+`git config --get-regexp mu-repo.remote-host`
+</code></pre>
+<ol>
+<li>
+<p>Each directory has to be configured to add the projects of the dependent projects (by committing a .mu_repo file with that information)::</p>
+<p>/libA
+/projectA (depends on libA)</p>
+<blockquote>
+<blockquote>
+<p>cd projectA
+mu register ../libA
+mu add .mu_repo
+mu commit -m "Adding dependency to mu-repo"</p>
+</blockquote>
+</blockquote>
+</li>
+</ol>
+<p>Then, by cloning with <code>mu clone projectA</code>, both projectA and libA will be cloned (and by going
+to projectA and using any mu command there, the commands will be propagated to dependent projects).</p>
+</li>
+<li>
+<p><code>mu group</code>:
+    Grouping can be used so you can have separate sets of projects that may not be related to each
+    other. For instance, suppose you work on project A, which depends on this repositories::</p>
+<pre><code>/libA
+/mylib
+/projectA
+</code></pre>
+<p>And project B, which depends on::</p>
+<pre><code>/libB
+/mylib
+/projectB
+</code></pre>
+<p>Grouping enables you to switch easily between the two projects. To create a group to work on 
+projectA and its dependencies, use "mu group add <name>" to create the new group::</p>
+<pre><code>&gt;&gt; mu group add pA --empty   # not passing --empty means using the current repositories as starting point
+&gt;&gt; mu register libA mylib projectA
+&gt;&gt; mu list
+Tracked repositories:
+
+libA
+mylib
+projectA
+</code></pre>
+<p>The same goes for project B::</p>
+<pre><code>&gt;&gt; mu group add pB  --empty
+&gt;&gt; mu register libB mylib projectB
+&gt;&gt; mu list
+Tracked repositories:
+
+libB
+mylib
+projectB
+</code></pre>
+<p>You can see which group you're on::</p>
+<pre><code>&gt;&gt; mu group
+  pA
+* pB
+</code></pre>
+<p>And switch between the two::</p>
+<pre><code>&gt;&gt; mu group switch pA
+Switched to group "pA".
+</code></pre>
+<p>If you are done with a group, use "mu group rm" to remove it::</p>
+<pre><code>&gt;&gt; mu group rm pA
+Group "pA" removed (no current group).
+</code></pre>
+</li>
+</ul>
+<p>Shortcuts:</p>
+<ul>
+<li>mu st         = Nice status message for all repos (always in parallel)</li>
+<li>mu co branch  = git checkout branch</li>
+<li>mu mu-patch   = git diff --cached --full-index &gt; output to file for each repo</li>
+<li>mu mu-branch  = git rev-parse --abbrev-ref HEAD (print current branch)</li>
+<li>mu up         = git fetch origin curr_branch:refs/remotes/origin/curr_branch</li>
+<li>mu upd | sync = up/diff incoming changes</li>
+<li>mu a          = git add -A</li>
+<li>mu c msg      = git commit -m "Message" (the message must always be passed)</li>
+<li>mu ac msg     = git add -A &amp; git commit -m (the message must always be passed)</li>
+<li>mu acp msg    = same as 'mu ac' + git push origin current branch.</li>
+<li>mu p          = git push origin current branch.</li>
+<li>mu rb         = git rebase origin/current branch.</li>
+<li>mu shell      = On msysgit, call sh --login -i (linux-like env)</li>
+</ul>
+<p>Any other command is passed directly to git for each repository, for example::</p>
+<pre><code>mu pull
+mu fetch
+mu push
+mu checkout release
+</code></pre>
+<h2 id="diffing-multiple-repositories">DIFFING MULTIPLE REPOSITORIES</h2>
+<p>The command <code>mu dd</code> provides the means to diff the multiple repository structures 
+with winmerge (Windows) or meld (Linux) so that the file can be changed 
+while seeing the differences of the working copy with the head in the repository.</p>
+<p>It's similar to what would be achieved in the Eclipse synchronize view (where the 
+file may be edited to change the original file -- as the structure is created with 
+links to the original files, so files edited in winmerge/meld will properly change the 
+original files).</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <center>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</center>
+        </footer>
+
+        <script src="./js/jquery-1.10.2.min.js"></script>
+        <script src="./js/bootstrap-3.0.3.min.js"></script>
+        <script src="./js/highlight.pack.js"></script>
+        <script src="./js/base.js"></script>
+    </body>
+</html>
