@@ -26,7 +26,7 @@ a branch with the same name in all of them).
 
 Besides being tedious, it is easy to forget some of the repositories when you're dealing with several.
 
-Using ``mu``, you register the repositories you want only once and then issue the commands to all of them at once:
+Using ``mu``, you register the repositories you want only once and then issue commands to all of them at once:
 
     cd my-project
     mu register repo1 repo2
@@ -35,7 +35,13 @@ Using ``mu``, you register the repositories you want only once and then issue th
 
 ``mu`` also provides other useful features such as:
 
-* Creating groups of repositories
+* [Creating groups of repositories](grouping.md)
 * Diffing changes for edition with WinMerge or meld
-* Cloning multiple repositories
+* [Cloning multiple repositories](cloning.md)
 * Checking out branches by partial name matching
+
+Proceed to:
+
+* [Install](install.md)
+* [Commands](using.md)
+* [Tips & Tricks](tips_and_tricks.md)

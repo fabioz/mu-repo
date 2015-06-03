@@ -69,15 +69,15 @@
                 
                 
                 
-                    <li >
-                        <a href="../install/">Install</a>
-                    </li>
-                
-                
-                
                     <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../install/">Install</a>
+</li>
+
                         
                             
 <li class="active">
@@ -103,19 +103,28 @@
 </li>
 
                         
+                            
+<li >
+    <a href="../tips_and_tricks/">Tips & Tricks</a>
+</li>
+
+                        
                         </ul>
                     </li>
                 
                 
                 
-                    <li >
-                        <a href="../tips_and_tricks/">Tips & Tricks</a>
-                    </li>
-                
-                
-                
-                    <li >
-                        <a href="../license/">License</a>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../license/">License</a>
+</li>
+
+                        
+                        </ul>
                     </li>
                 
                 
@@ -171,7 +180,7 @@
                 <div class="col-md-9" role="main">
 
 <h2 id="using">USING</h2>
-<p>The idea is that you have a structure such as::</p>
+<p>The idea is that you have a structure such as:</p>
 <pre><code>/workspace
     .mu_repo &lt;- configuration file (created by mu commands)
     /repo1   &lt;- git repository 
@@ -214,7 +223,7 @@ containing a <code>.git</code> dir.</p>
 </li>
 <li>
 <p><code>mu set-var serial=0|1</code>
-    Set commands to be executed serially or in parallel_.</p>
+    Set commands to be executed serially or in parallel.</p>
 </li>
 <li>
 <p><code>mu get-vars</code>
@@ -233,11 +242,12 @@ containing a <code>.git</code> dir.</p>
     Changes end of lines to <code>'\n'</code> on all changed files.</p>
 </li>
 <li>
-<p><code>mu find-branch [-r] pattern</code>
-    Finds and prints the branches which match a given pattern. 
-    (fnmatch style with auto-surrounded with asterisk)
-    (-r to match remote branches) 
-    Note: a shortcut exists for find-branch: mu fb  [-r] pattern</p>
+<p><code>mu find-branch [-r] pattern</code></p>
+<pre><code>Finds and prints the branches which match a given pattern. 
+(fnmatch style auto-surrounded with asterisk)
+(-r to match remote branches)
+</code></pre>
+<p>Note: a shortcut exists for find-branch: <code>mu fb  [-r] pattern</code></p>
 </li>
 <li>
 <p><code>mu install</code>
@@ -245,14 +255,14 @@ containing a <code>.git</code> dir.</p>
 </li>
 <li>
 <p><code>mu auto-update</code>
-    Automatically updates mu-repo (using git -- must have been pulled from git as in the instructions).</p>
+    Automatically updates mu-repo (using git -- only works if it has been pulled from git, if it was installed with pip, use pip to update it).</p>
 </li>
 <li>
 <p><code>mu dd</code>:
      Creates a directory structure with working dir vs head and opens
      WinMerge on Windows or meld on Linux with it (doing mu ac will commit exactly 
      what's compared in this situation).</p>
-<p>Also accepts a parameter to compare with a different commit/branch. I.e.::</p>
+<p>Also accepts a parameter to compare with a different commit/branch. I.e.:</p>
 <pre><code> mu dd HEAD^^
  mu dd 9fd88da
  mu dd development
@@ -260,50 +270,11 @@ containing a <code>.git</code> dir.</p>
 </li>
 <li>
 <p><code>mu clone</code>:</p>
-<p>mu-repo allows clones to work in multiple projects at once.</p>
-<p>For this to work, 2 things are needed:</p>
-<ol>
-<li>The base remote hosts have to be configured (through git)</li>
-</ol>
-<p>i.e.:</p>
-<pre><code>Say that someone is working with 2 projects: projectA and projectB and projectB depends on projectA
-and they're all available on https://github.com/myuser
-
-The urls in this case to be checked out would be something as:
-
-ssh://git@github.com:myuser/projectXXX
-https://github.com/myuser/projectXXX
-
-So, the url: https://github.com/myuser or git@github.com:myuser has to be configured as a
-remote host for clones:
-
-`git config --global --add mu-repo.remote-host ssh://git@github.com:myuser`
-
-Note that it's possible to add as many urls as wanted (they'll all be checked later on
-when cloning the project).
-
-To check what are the actual urls that mu-repo will use (and the order in which they'll be
-tried, it's possible to execute):
-
-`git config --get-regexp mu-repo.remote-host`
-</code></pre>
-<ol>
-<li>
-<p>Each directory has to be configured to add the projects of the dependent projects (by committing a .mu_repo file with that information)::</p>
-<p>/libA
-/projectA (depends on libA)</p>
-<blockquote>
-<blockquote>
-<p>cd projectA
-mu register ../libA
-mu add .mu_repo
-mu commit -m "Adding dependency to mu-repo"</p>
-</blockquote>
-</blockquote>
+<p>Clones repositories with dependencies. See: <a href="../cloning/">Cloning</a> for details.</p>
 </li>
-</ol>
-<p>Then, by cloning with <code>mu clone projectA</code>, both projectA and libA will be cloned (and by going
-to projectA and using any mu command there, the commands will be propagated to dependent projects).</p>
+<li>
+<p><code>mu group</code>:</p>
+<p>Allows grouping repositories. See: <a href="../grouping/">Grouping</a> for details.</p>
 </li>
 </ul></div>
             

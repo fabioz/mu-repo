@@ -2,14 +2,15 @@ site_name: mu-repo
 
 pages:
 - Home: index.md
-- Install: install.md
 - User Guide:
+    - Install: install.md
     - Using: using.md
     - Configuration: config.md
     - Grouping Repositories: grouping.md
     - Cloning Multiple Repositories: cloning.md
-- Tips & Tricks: tips_and_tricks.md
-- License: license.md
+    - Tips & Tricks: tips_and_tricks.md
+- About: 
+    - License: license.md
 
 
 repo_url: https://github.com/fabioz/mu-repo/

@@ -10,14 +10,12 @@
     
 
     
+        
     <url>
      <loc>None/install/</loc>
      <lastmod>2015-06-03</lastmod>
      <changefreq>daily</changefreq>
     </url>
-    
-
-    
         
     <url>
      <loc>None/using/</loc>
@@ -43,22 +41,22 @@
      <changefreq>daily</changefreq>
     </url>
         
-    
-
-    
     <url>
      <loc>None/tips_and_tricks/</loc>
      <lastmod>2015-06-03</lastmod>
      <changefreq>daily</changefreq>
     </url>
+        
     
 
     
+        
     <url>
      <loc>None/license/</loc>
      <lastmod>2015-06-03</lastmod>
      <changefreq>daily</changefreq>
     </url>
+        
     
 
 </urlset>

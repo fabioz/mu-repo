@@ -69,15 +69,15 @@
                 
                 
                 
-                    <li >
-                        <a href="../install/">Install</a>
-                    </li>
-                
-                
-                
                     <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../install/">Install</a>
+</li>
+
                         
                             
 <li >
@@ -103,19 +103,28 @@
 </li>
 
                         
+                            
+<li >
+    <a href="../tips_and_tricks/">Tips & Tricks</a>
+</li>
+
+                        
                         </ul>
                     </li>
                 
                 
                 
-                    <li >
-                        <a href="../tips_and_tricks/">Tips & Tricks</a>
-                    </li>
-                
-                
-                
-                    <li >
-                        <a href="../license/">License</a>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../license/">License</a>
+</li>
+
+                        
+                        </ul>
                     </li>
                 
                 
@@ -160,11 +169,51 @@
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
+        <li class="main active"><a href="#cloning-multiple-repositories">Cloning Multiple Repositories</a></li>
+        
+            <li><a href="#the-remote-base-urls-have-to-be-configured">The remote base url(s) have to be configured.</a></li>
+        
+    
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-</div>
+<h2 id="cloning-multiple-repositories">Cloning Multiple Repositories</h2>
+<p>mu-repo allows clones to work in multiple projects at once, although some prep-work is needed for it to work:</p>
+<h3 id="the-remote-base-urls-have-to-be-configured">The remote base url(s) have to be configured.</h3>
+<p>Say that you're working with 2 projects: <code>projectA</code> and <code>projectB</code> and <code>projectB</code> depends on <code>projectA</code>
+and they're all available on <code>https://github.com/myuser</code></p>
+<p>The urls in this case to be checked out would be something as:</p>
+<ul>
+<li><code>ssh://git@github.com:myuser/projectXXX</code></li>
+<li><code>https://github.com/myuser/projectXXX</code></li>
+</ul>
+<p>So, the url: <code>https://github.com/myuser</code> or <code>git@github.com:myuser</code> has to be configured as a
+remote host for clones by doing:</p>
+<p><code>git config --global --add mu-repo.remote-base-url ssh://git@github.com:myuser</code></p>
+<p>Note that it's possible to add as many urls as wanted.</p>
+<p>To check what are the actual urls that mu-repo will use (and the order in which they'll be
+tried, it's possible to do):</p>
+<p><code>git config --get-regexp mu-repo.remote-base-url</code></p>
+<p>By doing so, it'll be possible to do <code>mu clone projectA</code> without specifying the base-url. This
+is nice on itself, but to go one step further and actually clone multiple projects, we need to
+configure the projects themselves by adding the dependency info (this is done by [grouping by project directories][tips_and_tricks.md]).</p>
+<pre><code># Given a project structure with:
+/libA
+/projectA (depends on libA)
+
+# Go into projectA and make it depend on libA: 
+&gt;&gt; cd projectA
+&gt;&gt; mu register ../libA
+
+# Actually commit the .mu_repo so that the dependency is available when cloning:
+&gt;&gt; mu add .mu_repo
+&gt;&gt; mu commit -m "Adding dependency to mu-repo"
+</code></pre>
+<p>Then, by cloning with <code>mu clone projectA</code>, both <code>projectA</code> and <code>libA</code> will be cloned (and by going
+to <code>projectA</code> and using any <code>mu</code> command there, the commands will be propagated to <code>libA</code>).</p>
+<p><strong>Note:</strong> Dependencies are not recursively calculated, so, if <code>projectC</code> depends on <code>projectB</code>
+which in turn depends on <code>projectA</code>, <code>projectA</code> has to be registered in <code>projectC</code> and in <code>projectB</code>. </p></div>
             
         </div>
 

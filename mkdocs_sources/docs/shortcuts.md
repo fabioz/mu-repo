@@ -15,7 +15,7 @@ Shortcuts:
 * mu shell      = On msysgit, call sh --login -i (linux-like env)
 * mu dd         = Creates a folder structure and diffs it with WinMerge or meld (edited files are synched back)
 
-Any other command is passed directly to git for each repository, for example::
+Any other command is passed directly to git for each repository, for example:
 
     mu pull
     mu fetch

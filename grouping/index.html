@@ -69,15 +69,15 @@
                 
                 
                 
-                    <li >
-                        <a href="../install/">Install</a>
-                    </li>
-                
-                
-                
                     <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../install/">Install</a>
+</li>
+
                         
                             
 <li >
@@ -103,19 +103,28 @@
 </li>
 
                         
+                            
+<li >
+    <a href="../tips_and_tricks/">Tips & Tricks</a>
+</li>
+
+                        
                         </ul>
                     </li>
                 
                 
                 
-                    <li >
-                        <a href="../tips_and_tricks/">Tips & Tricks</a>
-                    </li>
-                
-                
-                
-                    <li >
-                        <a href="../license/">License</a>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../license/">License</a>
+</li>
+
+                        
+                        </ul>
                     </li>
                 
                 
@@ -168,14 +177,11 @@
                 <div class="col-md-9" role="main">
 
 <h2 id="grouping-repositories">Grouping repositories</h2>
-<p>Usually <a href="../tips_and_tricks/">grouping by project directories</a> is enough for most use-cases, but sometimes
-you need even finer grained control over the repositories to issue a command.</p>
-<p>For that, <code>mu-repo</code> allows the creation of groups through <code>mu group</code>.</p>
-<ul>
-<li>
-<p><code>mu group</code>:
-    Grouping can be used so you can have separate sets of projects that may not be related to each
-    other. For instance, suppose you work on project A, which depends on this repositories:</p>
+<p>Note: the recommended approach is <a href="../tips_and_tricks/">grouping by project directories</a> as that way
+<a href="../cloning/">mu clone</a> may be used to clone several repositories at once too (mu-repo <strong>1.1.0</strong> onwards).</p>
+<p>The <code>mu group</code> command is available for when finer grained control over grouping of repositories is needed.</p>
+<p><code>mu group</code> can be used so you can have separate sets of projects that may not be related to each other. 
+For instance, suppose you work on project A, which depends on this repositories:</p>
 <pre><code>/libA
 /mylib
 /projectA
@@ -186,10 +192,12 @@ you need even finer grained control over the repositories to issue a command.</p
 /projectB
 </code></pre>
 <p>Grouping enables you to switch easily between the two projects. To create a group to work on 
-projectA and its dependencies, use "mu group add <name>" to create the new group:</p>
-<pre><code>&gt;&gt; mu group add pA --empty   # not passing --empty means using the current repositories as starting point
+projectA and its dependencies, use <code>mu group add &lt;name&gt;</code> to create the new group:</p>
+<pre><code># Note: not passing --empty means using the current repositories as starting point
+&gt;&gt; mu group add pA --empty 
 &gt;&gt; mu register libA mylib projectA
 &gt;&gt; mu list
+
 Tracked repositories:
 
 libA
@@ -200,6 +208,7 @@ projectA
 <pre><code>&gt;&gt; mu group add pB  --empty
 &gt;&gt; mu register libB mylib projectB
 &gt;&gt; mu list
+
 Tracked repositories:
 
 libB
@@ -215,12 +224,18 @@ projectB
 <pre><code>&gt;&gt; mu group switch pA
 Switched to group "pA".
 </code></pre>
+<p>Or alternatively just use <code>mu group switch</code> without parameters:</p>
+<pre><code>&gt;&gt; mu group switch
+Please choose which group you want to switch to:
+[0]: pA
+[1]: pB
+
+[C]: Cancel
+</code></pre>
 <p>If you are done with a group, use "mu group rm" to remove it:</p>
 <pre><code>&gt;&gt; mu group rm pA
 Group "pA" removed (no current group).
-</code></pre>
-</li>
-</ul></div>
+</code></pre></div>
             
         </div>
 

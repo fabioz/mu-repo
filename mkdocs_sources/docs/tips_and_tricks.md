@@ -4,7 +4,7 @@ Tips & Tricks
 #### Grouping by project directories
 
 To make the most out of `mu-repo`, it's recommended that the projects you work with specify
-their own dependencies by committing the `.mu_repo` file with relative dirs so that it's
+their own dependencies by committing the `.mu_repo` file with relative paths so that it's
 possible to go inside any of those repository dirs and issue commands not only to the repository,
 but all the dependent repositories at once (and this will also enable you to [clone](cloning.md) the all
 the needed repositories at once).

@@ -1,7 +1,7 @@
 USING
 -----
 
-The idea is that you have a structure such as::
+The idea is that you have a structure such as:
 
     /workspace
         .mu_repo <- configuration file (created by mu commands)
@@ -47,7 +47,7 @@ Available commands
     Set git location to be used. Only needed if git is not found in your ``PATH``.
 
 * ``mu set-var serial=0|1``
-    Set commands to be executed serially or in parallel_.
+    Set commands to be executed serially or in parallel.
 
 * ``mu get-vars``
     Prints the configuration file.
@@ -62,23 +62,25 @@ Available commands
     Changes end of lines to ``'\n'`` on all changed files.
 
 * ``mu find-branch [-r] pattern``
-    Finds and prints the branches which match a given pattern. 
-    (fnmatch style with auto-surrounded with asterisk)
-    (-r to match remote branches) 
-    Note: a shortcut exists for find-branch: mu fb  [-r] pattern
+
+        Finds and prints the branches which match a given pattern. 
+        (fnmatch style auto-surrounded with asterisk)
+        (-r to match remote branches) 
+        
+    Note: a shortcut exists for find-branch: `mu fb  [-r] pattern`
 
 * ``mu install``
     Initial configuration git (username, log, etc.)
 
 * ``mu auto-update``
-    Automatically updates mu-repo (using git -- must have been pulled from git as in the instructions).
+    Automatically updates mu-repo (using git -- only works if it has been pulled from git, if it was installed with pip, use pip to update it).
 
 * ``mu dd``:
      Creates a directory structure with working dir vs head and opens
      WinMerge on Windows or meld on Linux with it (doing mu ac will commit exactly 
      what's compared in this situation).
 
-     Also accepts a parameter to compare with a different commit/branch. I.e.::
+     Also accepts a parameter to compare with a different commit/branch. I.e.:
 
          mu dd HEAD^^
          mu dd 9fd88da
@@ -86,45 +88,9 @@ Available commands
      
 * ``mu clone``:
 
-    mu-repo allows clones to work in multiple projects at once.
+    Clones repositories with dependencies. See: [Cloning](cloning.md) for details.
     
-    For this to work, 2 things are needed:
-    
-    1. The base remote hosts have to be configured (through git)
-    
-    i.e.:
+* ``mu group``:
 
-        Say that someone is working with 2 projects: projectA and projectB and projectB depends on projectA
-        and they're all available on https://github.com/myuser
+    Allows grouping repositories. See: [Grouping](grouping.md) for details.
     
-        The urls in this case to be checked out would be something as:
-    
-        ssh://git@github.com:myuser/projectXXX
-        https://github.com/myuser/projectXXX
-    
-        So, the url: https://github.com/myuser or git@github.com:myuser has to be configured as a
-        remote host for clones:
-    
-        `git config --global --add mu-repo.remote-host ssh://git@github.com:myuser`
-    
-        Note that it's possible to add as many urls as wanted (they'll all be checked later on
-        when cloning the project).
-    
-        To check what are the actual urls that mu-repo will use (and the order in which they'll be
-        tried, it's possible to execute):
-    
-        `git config --get-regexp mu-repo.remote-host`
-    
-    
-    2. Each directory has to be configured to add the projects of the dependent projects (by committing a .mu_repo file with that information)::
-    
-        /libA
-        /projectA (depends on libA)
-        
-        >> cd projectA
-        >> mu register ../libA
-        >> mu add .mu_repo
-        >> mu commit -m "Adding dependency to mu-repo"
-        
-    Then, by cloning with ``mu clone projectA``, both projectA and libA will be cloned (and by going
-    to projectA and using any mu command there, the commands will be propagated to dependent projects).

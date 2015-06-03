@@ -1,61 +1,71 @@
 Grouping repositories
 ----------------------
 
-Usually [grouping by project directories](tips_and_tricks.md) is enough for most use-cases, but sometimes
-you need even finer grained control over the repositories to issue a command.
+Note: the recommended approach is [grouping by project directories](tips_and_tricks.md) as that way
+[mu clone](cloning.md) may be used to clone several repositories at once too (mu-repo **1.1.0** onwards).
 
-For that, `mu-repo` allows the creation of groups through `mu group`.
+The `mu group` command is available for when finer grained control over grouping of repositories is needed.
 
+`mu group` can be used so you can have separate sets of projects that may not be related to each other. 
+For instance, suppose you work on project A, which depends on this repositories:
+ 
+    /libA
+    /mylib
+    /projectA
 
-* ``mu group``:
-    Grouping can be used so you can have separate sets of projects that may not be related to each
-    other. For instance, suppose you work on project A, which depends on this repositories:
+And project B, which depends on:
+
+    /libB
+    /mylib
+    /projectB
+
+Grouping enables you to switch easily between the two projects. To create a group to work on 
+projectA and its dependencies, use `mu group add <name>` to create the new group:
+
+    # Note: not passing --empty means using the current repositories as starting point
+    >> mu group add pA --empty 
+    >> mu register libA mylib projectA
+    >> mu list
     
-        /libA
-        /mylib
-        /projectA
+    Tracked repositories:
     
-    And project B, which depends on:
+    libA
+    mylib
+    projectA
+
+The same goes for project B:
+
+    >> mu group add pB  --empty
+    >> mu register libB mylib projectB
+    >> mu list
     
-        /libB
-        /mylib
-        /projectB
+    Tracked repositories:
     
-    Grouping enables you to switch easily between the two projects. To create a group to work on 
-    projectA and its dependencies, use "mu group add <name>" to create the new group:
+    libB
+    mylib
+    projectB
+
+You can see which group you're on:
+
+    >> mu group
+      pA
+    * pB
     
-        >> mu group add pA --empty   # not passing --empty means using the current repositories as starting point
-        >> mu register libA mylib projectA
-        >> mu list
-        Tracked repositories:
-        
-        libA
-        mylib
-        projectA
-   
-    The same goes for project B:
+And switch between the two:
+
+    >> mu group switch pA
+    Switched to group "pA".
+
+Or alternatively just use `mu group switch` without parameters:
+
+    >> mu group switch
+    Please choose which group you want to switch to:
+    [0]: pA
+    [1]: pB
     
-        >> mu group add pB  --empty
-        >> mu register libB mylib projectB
-        >> mu list
-        Tracked repositories:
-        
-        libB
-        mylib
-        projectB
+    [C]: Cancel
+
+If you are done with a group, use "mu group rm" to remove it:
     
-    You can see which group you're on:
-    
-        >> mu group
-          pA
-        * pB
-        
-    And switch between the two:
-    
-        >> mu group switch pA
-        Switched to group "pA".
-    
-    If you are done with a group, use "mu group rm" to remove it:
-        
-        >> mu group rm pA
-        Group "pA" removed (no current group).
+    >> mu group rm pA
+    Group "pA" removed (no current group).
