@@ -3,7 +3,7 @@ Cloning Multiple Repositories
 
 mu-repo allows clones to work in multiple projects at once, although some prep-work is needed for it to work:
 
-### The remote base url(s) have to be configured.
+The first step is configuring the remote base url(s).
 
 Say that you're working with 2 projects: `projectA` and `projectB` and `projectB` depends on `projectA`
 and they're all available on `https://github.com/myuser`
