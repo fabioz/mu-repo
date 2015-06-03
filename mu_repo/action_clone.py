@@ -29,14 +29,14 @@ def Run(params):
     mu-repo in this case will work with git to provide that configuration, so, one should first
     add that remote for mu-repo to work with:
 
-    git config --global --add mu-repo.remote-host ssh://git@github.com:myuser
+    git config --global --add mu-repo.remote-base-url ssh://git@github.com:myuser
 
     Note that it's possible to add as many urls as wanted.
 
     To check what are the actual urls that mu-repo will use (and the order in which they'll be
     tried, it's possible to do):
 
-    git config --get-regexp mu-repo.remote-host
+    git config --get-regexp mu-repo.remote-base-url
     '''
 
     args = params.args
@@ -62,12 +62,18 @@ def Run(params):
 
     if not remote_hosts:
         Print(
-            'No mu-repo.remote-host specified for mu to work with.\n'
+            'No mu-repo.remote-base-url specified for mu to work with.\n'
             'Please specify the remote hosts for cloning with mu. i.e.:\n'
             '\n'
-            'git config --global --add mu-repo.remote-host ssh://git@github.com:myuser'
+            'git config --global --add mu-repo.remote-base-url ssh://git@github.com:myuser'
         )
         return
+
+    Print('Working with remote hosts:')
+    for host in remote_hosts:
+        Print('    %s' % host)
+    Print('')
+
 
     # If we got here we have a name which we should be able to concatenate with one of our base
     # remotes
@@ -91,7 +97,7 @@ def Run(params):
                             continue
 
                         if not new_repo.startswith('../') and not new_repo.startswith('..\\'):
-                            Print('Cannot clone: %s (currently only works with relative repositories matching: ../name or ..\\name)' % (new_repo,))
+                            Print('Cannot clone: ${START_COLOR}%s${RESET_COLOR} (currently only works with relative repositories matching: ../name or ..\\name)' % (new_repo,))
                         else:
                             # I.e.: can only clone repositories that would appear alongside
                             # the repository just cloned.
@@ -110,7 +116,7 @@ def Run(params):
                                         # Ok, worked for this repo
                                         break
                             else:
-                                Print('Cannot clone: %s (currently only works with relative repositories matching: ../name or ..\\name)' % (new_repo,))
+                                Print('Cannot clone: ${START_COLOR}%s${RESET_COLOR} (currently only works with relative repositories matching: ../name or ..\\name)' % (new_repo,))
 
                 # Ok, we did the work for this repo (go on to the next)
                 break
@@ -120,6 +126,7 @@ def _Clone(remote, repo, params, other_cmd_line_args):
     created_dir = os.path.join('.', repo)
     if os.path.exists(os.path.join(created_dir, '.git')):
         # If it already exists, bail out!
+        Print('Skipping clone of: ${START_COLOR}%s${RESET_COLOR} because it already exists.' % (repo,))
         return True
 
     remote_path = remote

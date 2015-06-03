@@ -54,7 +54,7 @@ Specifying a repository for a single command (repo: argument):
   In mu it's possible to clone multiple repositories at once. To do that, configure
   your remote hosts for mu-repo through git:
 
-  ${START_COLOR}git config --global --add mu-repo.remote-host ssh://git@github.com:myuser${RESET_COLOR}
+  ${START_COLOR}git config --global --add mu-repo.remote-base-url ssh://git@github.com:myuser${RESET_COLOR}
 
   and then you can clone just by passing the project name (i.e.: ${START_COLOR}mu clone myproject${RESET_COLOR}).
 

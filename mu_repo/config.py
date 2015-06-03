@@ -67,12 +67,12 @@ class Config(object):
             git = self.git
             from mu_repo.execute_command import ExecuteCommand
             output = ExecuteCommand(
-                [git] + 'config --get-regexp mu-repo.remote-host'.split(), '.', return_stdout=True)
+                [git] + 'config --get-regexp mu-repo.remote-base-url'.split(), '.', return_stdout=True)
 
             remotes_hosts = []
             for line in output.splitlines():
-                if line.startswith('mu-repo.remote-host '):
-                    line = line[len('mu-repo.remote-host '):]
+                if line.startswith('mu-repo.remote-base-url '):
+                    line = line[len('mu-repo.remote-base-url '):]
                     remotes_hosts.append(line)
             self._remote_hosts = remotes_hosts
 
