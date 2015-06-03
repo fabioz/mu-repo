@@ -2,7 +2,6 @@ Shortcuts:
 
 * mu st         = Nice status message for all repos (always in parallel)
 * mu co branch  = git checkout branch
-* mu mu-patch   = git diff --cached --full-index > output to file for each repo
 * mu mu-branch  = git rev-parse --abbrev-ref HEAD (print current branch)
 * mu up         = git fetch origin curr_branch:refs/remotes/origin/curr_branch
 * mu upd | sync = up/diff incoming changes

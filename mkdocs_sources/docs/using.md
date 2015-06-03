@@ -52,12 +52,6 @@ Available commands
 * ``mu get-vars``
     Prints the configuration file.
 
-* ``mu github-request``
-    Gets a request from github.
-
-* ``mu post-review bug_id group``
-    Posts a review with the changes committed.
-
 * ``mu fix-eol``
     Changes end of lines to ``'\n'`` on all changed files.
 
@@ -69,7 +63,7 @@ Available commands
         
     Note: a shortcut exists for find-branch: `mu fb  [-r] pattern`
 
-* ``mu install``
+* ``mu git-init-config``
     Initial configuration git (username, log, etc.)
 
 * ``mu auto-update``
