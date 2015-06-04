@@ -1,5 +1,5 @@
 from __future__ import with_statement
-from mu_repo import Status
+from mu_repo import Status, backwards
 from mu_repo.print_ import Print
 from mu_repo.backwards import raw_input
 
@@ -63,10 +63,38 @@ def Run(params):
                 Print(header_msg)
                 groups = set()
                 i_to_group = {}
-                for i, group in enumerate(sorted(config.groups)):
-                    Print('[${START_COLOR}%s${RESET_COLOR}]: %s' % (i, group))
+                lines = []
+                for i, (group, group_contents) in enumerate(sorted(backwards.iteritems(config.groups))):
+                    groups_desc = ', '.join(group_contents)
+                    lines.append(('[${START_COLOR}%s${RESET_COLOR}]: %s' % (i, group), groups_desc))
+                    
                     i_to_group[str(i)] = group
                     groups.add(group)
+                    
+                discount_len = len('${START_COLOR}') + len('${RESET_COLOR}')
+                
+                max_part_0 = 0
+                for line in lines:
+                    max_part_0 = max(max_part_0, len(line[0])-discount_len) 
+                max_part_0+= 1
+                    
+                    
+                max_cols = 80
+                remainder = max_cols - max_part_0
+                if remainder < 20:
+                    remainder = 20
+                
+                part0_size = max_cols - remainder
+                    
+                for part0, part1 in lines:
+                    if (len(part0) - discount_len) < part0_size:
+                        part0 += ' ' * (part0_size - (len(part0) - discount_len))  
+                        
+                    if len(part1) > remainder:
+                        part1 = part1[:remainder-3] + '...'
+                    
+                    Print(part0+part1)
+                    
 
                 Print('\n[${START_COLOR}C${RESET_COLOR}]: Cancel')
 
