@@ -38,7 +38,7 @@ to create a group to identify a subset of the repositories (See the [Grouping Re
 
 ### .mu_repo
 
-The `.mu_repo` file has a simple format (each line must be something as name=var or name=var1, var2), so, it's straightforward
+The `.mu_repo` file has a simple format (each line must be something as `name=var` or `name=var1, var2`), so, it's straightforward
 to edit it with your favorite editor.
 
 
@@ -56,3 +56,19 @@ to specify any executable for it to work on (by assiging it to the `git` variabl
     mu set-var git=c:\bin\myexecutable.exe
 
  
+### Previewing incoming changes
+
+It's usually nice to know what you'll get when you update your repository. For that `mu-repo` includes a nice
+command: `mu upd`. It fetches changes for the current branch and compares the current branch with the fetched changes (using WinMerge or meld).
+
+If changes are Ok, you can then use `mu rb` to update your current version (it stashes your current changes, performs a rebase so that your current 
+committed changes are put on top of incoming changes and then unstashes what has been stashed). Note: be careful as it'll do rebase, so, if 
+your changes are already pushed in another branch don't use this command and do a manual merge instead.
+
+### Previewing and editing changes in the working directory
+
+For comparing what would be committed in `mu ac`, it's possible to use `mu dd`. It'll create a directory structure with working dir vs head (for the multiple repositores) and opens
+WinMerge on Windows or Meld on Linux with it (doing mu ac will commit exactly what's compared in this situation), allowing those changes to be edited.
+
+See: [mu dd on Commands](commands.md) for more details.
+

@@ -186,6 +186,10 @@
         
             <li><a href="#calling-a-different-executable">Calling a different executable</a></li>
         
+            <li><a href="#previewing-incoming-changes">Previewing incoming changes</a></li>
+        
+            <li><a href="#previewing-and-editing-changes-in-the-working-directory">Previewing and editing changes in the working directory</a></li>
+        
     
     </ul>
 </div></div>
@@ -229,7 +233,7 @@ to <code>projectB</code> and <code>projectA</code> and by going into <code>proje
 <p><strong>Tip:</strong> If you have several projects and need even finer grained control over where to execute a command, it's possible
 to create a group to identify a subset of the repositories (See the <a href="../grouping/">Grouping Repositories</a> for further details). </p>
 <h3 id="mu_repo">.mu_repo</h3>
-<p>The <code>.mu_repo</code> file has a simple format (each line must be something as name=var or name=var1, var2), so, it's straightforward
+<p>The <code>.mu_repo</code> file has a simple format (each line must be something as <code>name=var</code> or <code>name=var1, var2</code>), so, it's straightforward
 to edit it with your favorite editor.</p>
 <h3 id="mu-acp">mu acp</h3>
 <p>mu provides some <a href="../shortcuts/">shortcuts</a> which extend a bit on git and the <code>mu acp &lt;commit message&gt;</code> (which stands for <code>add -A</code>, <code>commit -m &lt;commit message&gt;</code>, <code>push</code>) is
@@ -240,6 +244,16 @@ command, use <code>mu acp</code> (also, just <code>mu a</code> or <code>mu ac &l
 to specify any executable for it to work on (by assiging it to the <code>git</code> variable): </p>
 <pre><code>mu set-var git=c:\bin\myexecutable.exe
 </code></pre>
+<h3 id="previewing-incoming-changes">Previewing incoming changes</h3>
+<p>It's usually nice to know what you'll get when you update your repository. For that <code>mu-repo</code> includes a nice
+command: <code>mu upd</code>. It fetches changes for the current branch and compares the current branch with the fetched changes (using WinMerge or meld).</p>
+<p>If changes are Ok, you can then use <code>mu rb</code> to update your current version (it stashes your current changes, performs a rebase so that your current 
+committed changes are put on top of incoming changes and then unstashes what has been stashed). Note: be careful as it'll do rebase, so, if 
+your changes are already pushed in another branch don't use this command and do a manual merge instead.</p>
+<h3 id="previewing-and-editing-changes-in-the-working-directory">Previewing and editing changes in the working directory</h3>
+<p>For comparing what would be committed in <code>mu ac</code>, it's possible to use <code>mu dd</code>. It'll create a directory structure with working dir vs head (for the multiple repositores) and opens
+WinMerge on Windows or Meld on Linux with it (doing mu ac will commit exactly what's compared in this situation), allowing those changes to be edited.</p>
+<p>See: <a href="../commands/">mu dd on Commands</a> for more details.</p>
 <br/>
 <br/>
 <div>

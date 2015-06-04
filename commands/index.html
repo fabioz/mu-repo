@@ -269,10 +269,15 @@ containing a <code>.git</code> dir.</p>
     Automatically updates mu-repo (using git -- only works if it has been pulled from git, if it was installed with pip, use pip to update it).</p>
 </li>
 <li>
-<p><code>mu upd</code> = fetches changes for the current branch and compares the current branch with the fetched changes (using WinMerge or meld) -- useful to preview incoming changes.</p>
+<p><code>mu upd</code> Fetches changes for the current branch and compares the current branch with the fetched changes (using WinMerge or meld) -- useful to preview incoming changes.</p>
 </li>
 <li>
-<p><code>mu dd</code>:
+<p><code>mu rb</code> 
+    Stashes your current changes, performs a rebase so that your current committed changes are put on top of incoming changes and then unstashes what has been stashed.
+    Note: be careful as it'll do rebase, so, if your changes are already pushed in another branch don't use this command and do a manual merge instead. </p>
+</li>
+<li>
+<p><code>mu dd</code>
     Creates a directory structure with working dir vs head (for the multiple repositores) and opens
     WinMerge on Windows or Meld on Linux with it (doing mu ac will commit exactly 
     what's compared in this situation).</p>
@@ -286,11 +291,11 @@ mu dd development
 </code></pre>
 </li>
 <li>
-<p><code>mu clone</code>:</p>
+<p><code>mu clone</code></p>
 <p>Clones repositories with dependencies. See: <a href="../cloning/">Cloning</a> for details.</p>
 </li>
 <li>
-<p><code>mu group</code>:</p>
+<p><code>mu group</code></p>
 <p>Allows grouping repositories. See: <a href="../grouping/">Grouping</a> for details.</p>
 </li>
 </ul>

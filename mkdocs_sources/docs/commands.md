@@ -69,9 +69,13 @@ Custom commands
 * ``mu auto-update``
     Automatically updates mu-repo (using git -- only works if it has been pulled from git, if it was installed with pip, use pip to update it).
 
-* `mu upd` = fetches changes for the current branch and compares the current branch with the fetched changes (using WinMerge or meld) -- useful to preview incoming changes.
+* `mu upd` Fetches changes for the current branch and compares the current branch with the fetched changes (using WinMerge or meld) -- useful to preview incoming changes.
 
-* ``mu dd``:
+* `mu rb` 
+    Stashes your current changes, performs a rebase so that your current committed changes are put on top of incoming changes and then unstashes what has been stashed.
+    Note: be careful as it'll do rebase, so, if your changes are already pushed in another branch don't use this command and do a manual merge instead. 
+
+* ``mu dd``
     Creates a directory structure with working dir vs head (for the multiple repositores) and opens
     WinMerge on Windows or Meld on Linux with it (doing mu ac will commit exactly 
     what's compared in this situation).
@@ -87,11 +91,11 @@ Custom commands
         mu dd 9fd88da
         mu dd development
      
-* ``mu clone``:
+* ``mu clone``
 
     Clones repositories with dependencies. See: [Cloning](cloning.md) for details.
     
-* ``mu group``:
+* ``mu group``
 
     Allows grouping repositories. See: [Grouping](grouping.md) for details.
     
