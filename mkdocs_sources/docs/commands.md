@@ -28,8 +28,8 @@ containing a ``.git`` dir.
 
 
 
-Available commands
--------------------
+Custom commands
+----------------
 
 * ``mu register repo1 repo2`` 
     Registers repo1 and repo2 to be tracked. Also accepts a ``--all`` or
@@ -69,16 +69,23 @@ Available commands
 * ``mu auto-update``
     Automatically updates mu-repo (using git -- only works if it has been pulled from git, if it was installed with pip, use pip to update it).
 
+* `mu upd` = fetches changes for the current branch and compares the current branch with the fetched changes (using WinMerge or meld) -- useful to preview incoming changes.
+
 * ``mu dd``:
-     Creates a directory structure with working dir vs head and opens
-     WinMerge on Windows or meld on Linux with it (doing mu ac will commit exactly 
-     what's compared in this situation).
+    Creates a directory structure with working dir vs head (for the multiple repositores) and opens
+    WinMerge on Windows or Meld on Linux with it (doing mu ac will commit exactly 
+    what's compared in this situation).
 
-     Also accepts a parameter to compare with a different commit/branch. I.e.:
+    Note that the structure is created with links to the original files (or automatically synchronized 
+    if links are not supported), so files edited in WinMerg/Meld will properly change the 
+    original files).
 
-         mu dd HEAD^^
-         mu dd 9fd88da
-         mu dd development
+
+    Also accepts a parameter to compare with a different commit/branch. I.e.:
+
+        mu dd HEAD^^
+        mu dd 9fd88da
+        mu dd development
      
 * ``mu clone``:
 
@@ -88,3 +95,8 @@ Available commands
 
     Allows grouping repositories. See: [Grouping](grouping.md) for details.
     
+    
+Also see:
+
+* [Shortcuts](shortcuts.md)
+* [Tips & Tricks](tips_and_tricks.md)

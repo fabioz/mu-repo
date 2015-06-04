@@ -35,13 +35,20 @@ Using ``mu``, you register the repositories you want only once and then issue co
 
 ``mu`` also provides other useful features such as:
 
-* [Creating groups of repositories](grouping.md)
-* Diffing changes for edition with WinMerge or meld
 * [Cloning multiple repositories](cloning.md)
-* Checking out branches by partial name matching
+* [Creating groups of repositories](grouping.md)
+* Diffing changes for edition with WinMerge or meld (see [mu dd on Commands](commands.md))
+* Checking out branches by partial name matching (`mu co v1.2` would checkout branch `prog_v1.2`) 
+* Preview incoming changes on current branch (see [mu upd on Commands](commands.md))
+* [Shortcuts](shortcuts.md) for common git operations.
 
 Proceed to:
 
 * [Install](install.md)
-* [Commands](using.md)
+* [Configuration](config.md)
+* [Commands](commands.md)
+* [Shortcuts](shortcuts.md)
+* [Grouping Repositories](grouping.md)
+* [Cloning Multiple Repositories](cloning.md)
 * [Tips & Tricks](tips_and_tricks.md)
+

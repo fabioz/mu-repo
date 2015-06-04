@@ -4,8 +4,9 @@ pages:
 - Home: index.md
 - User Guide:
     - Install: install.md
-    - Using: using.md
     - Configuration: config.md
+    - Commands: commands.md
+    - Shortcuts: shortcuts.md
     - Grouping Repositories: grouping.md
     - Cloning Multiple Repositories: cloning.md
     - Tips & Tricks: tips_and_tricks.md
@@ -20,5 +21,7 @@ google_analytics: ['UA-153541-11', 'fabioz.github.io/mu-repo']
 site_dir: ../site
 
 theme_dir: custom_dir
+
+site_favicon: favicon.ico
 
 # theme: readthedocs
