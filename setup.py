@@ -5,7 +5,7 @@ except ImportError:
 
 setup(
     name='mu_repo',
-    version='1.1.0',
+    version='1.1.1',
     description = 'Tool to work with multiple git repositories',
     author='Fabio Zadrozny',
     url='http://fabioz.github.io/mu-repo',
@@ -14,7 +14,7 @@ setup(
     
     entry_points = {
         'console_scripts': [
-            'mu = mu_repo:main',                  
+            'mu = mu_repo:main_entry_point',                  
         ],
     },
 )

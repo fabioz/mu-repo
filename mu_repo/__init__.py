@@ -249,4 +249,7 @@ if '--timeit' in sys.argv:
     main = PrintTime(main)
 
 
-
+def main_entry_point():
+    # Entry point for executing without any return 
+    # (to avoid printing anything in the end).
+    main()
