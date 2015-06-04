@@ -33,7 +33,7 @@ Also, this will enable the command `mu clone projectC` to clone `projectB` and `
 
 
 **Tip:** If you have several projects and need even finer grained control over where to execute a command, it's possible
-to create a group identify a subset of the repositories (See the [Grouping Repositories](grouping.md) for further details). 
+to create a group to identify a subset of the repositories (See the [Grouping Repositories](grouping.md) for further details). 
 
 #### .mu_repo
 
