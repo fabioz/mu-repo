@@ -18,11 +18,16 @@ import subprocess
 import sys
 
 
-subprocess.call([
-    os.path.join(os.path.dirname(sys.executable), 'Scripts', 'mkdocs.exe'),
-    'build'],
-    cwd=os.path.dirname(__file__),
-)
+cur_dir = os.path.dirname(__file__)
+
+mkdocs_exe = os.path.join(os.path.dirname(sys.executable), 'Scripts', 'mkdocs.exe')
+
+try:
+    args = [mkdocs_exe, 'build']
+    subprocess.call(args, cwd=cur_dir)
+except:
+    sys.stderr.write('Error calling: %s\n' % (args,))
+    raise
 
 target_dir = os.path.dirname(os.path.dirname(__file__))
 site_dir = os.path.join(target_dir, 'site')
