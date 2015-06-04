@@ -27,7 +27,7 @@ tried, it's possible to do):
 
 By doing so, it'll be possible to do `mu clone projectA` without specifying the base-url. This
 is nice on itself, but to go one step further and actually clone multiple projects, we need to
-configure the projects themselves by adding the dependency info (this is done by [grouping by project directories][tips_and_tricks.md]).
+configure the projects themselves by adding the dependency info (this is done by [grouping by project directories](tips_and_tricks.md)).
 
 
     # Given a project structure with:
