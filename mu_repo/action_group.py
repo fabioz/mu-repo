@@ -7,6 +7,9 @@ from mu_repo.backwards import raw_input
 # Run
 #===================================================================================================
 def Run(params):
+    '''
+    Actions for mu group.
+    '''
     args = params.args
     config_file = params.config_file
     config = params.config
