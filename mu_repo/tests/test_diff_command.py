@@ -14,7 +14,7 @@ import os.path
 import subprocess
 import time
 import unittest
-
+from .utils import configure_git_user
 
 #===================================================================================================
 # Test
@@ -83,7 +83,9 @@ class Test(unittest.TestCase):
         self.git = git
 
         # Test diffing with new folder structure
-        subprocess.call([git] + 'init test_diff_command_git_repo_dir'.split(), cwd='.')
+        subprocess.call([git, 'init', temp_dir], cwd='.')
+        configure_git_user(cwd=temp_dir)
+
         os.mkdir(os.path.join(temp_dir, 'folder1'))
         with open(os.path.join(temp_dir, 'folder1', 'out.txt'), 'w') as f:
             f.write('out')
@@ -95,7 +97,7 @@ class Test(unittest.TestCase):
         self.assertEqual([merge_command], called)
 
 
-        # Test diffing with previous version of HEAD without changes        
+        # Test diffing with previous version of HEAD without changes
         subprocess.call([git] + 'add -A'.split(), cwd=temp_dir)
         subprocess.call([git] + 'commit -m "Second'.split(), cwd=temp_dir)
         called = self.CallDiff()
