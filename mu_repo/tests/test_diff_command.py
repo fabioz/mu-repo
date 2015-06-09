@@ -3,7 +3,8 @@ Created on May 23, 2012
 
 @author: Fabio Zadrozny
 '''
-from __future__ import with_statement 
+from __future__ import with_statement
+import sys
 from mu_repo import action_diff, Params
 from mu_repo.action_diff import NotifyErrorListeners
 from mu_repo.config import Config
@@ -87,8 +88,11 @@ class Test(unittest.TestCase):
         with open(os.path.join(temp_dir, 'folder1', 'out.txt'), 'w') as f:
             f.write('out')
         called = self.CallDiff()
-
-        self.assertEqual(['winmergeu.exe'], called)
+        if sys.platform.startswith('win'):
+            merge_command = 'winmergeu.exe'
+        else:
+            merge_command = 'meld'
+        self.assertEqual([merge_command], called)
 
 
         # Test diffing with previous version of HEAD without changes        
@@ -112,7 +116,7 @@ class Test(unittest.TestCase):
         subprocess.call([git] + 'add -A'.split(), cwd=temp_dir)
         subprocess.call([git] + 'commit -m "Second'.split(), cwd=temp_dir)
         called = self.CallDiff('HEAD^', check_structure=CheckStructure)
-        self.assertEqual(['winmergeu.exe'], called)
+        self.assertEqual([merge_command], called)
 
 
 
@@ -124,7 +128,7 @@ class Test(unittest.TestCase):
             f.write('folder1 is now file.')
 
         called = self.CallDiff()
-        self.assertEqual(['winmergeu.exe'], called)
+        self.assertEqual([merge_command], called)
 
         # Do mu st/mu up just to check if it works.
         from mu_repo.action_default import Run
