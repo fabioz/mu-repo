@@ -7,7 +7,7 @@ import mu_repo
 import os.path
 import subprocess
 import unittest
-
+from .utils import configure_git_user
 
 #===================================================================================================
 # Test
@@ -67,9 +67,11 @@ class Test(unittest.TestCase):
 
         # Commit the changes
         with self.push_dir(remote_base + '/projectB'):
+            configure_git_user()
             mu_repo.main(config_file=None, args=['ac', 'Initial commit'])
 
         with self.push_dir(remote_base + '/projectC'):
+            configure_git_user()
             mu_repo.main(config_file=None, args=['ac', 'Initial commit'])
 
         makedirs('./test_temp_dir/local')
