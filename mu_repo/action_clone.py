@@ -43,21 +43,23 @@ def Run(params):
     assert args[0] == 'clone'
     args = args[1:]
     
+    repos = []
+    other_cmd_line_args = []
+    
     if len(args) == 1 and args[0] == '--help':
         import webbrowser
         webbrowser.open("http://fabioz.github.io/mu-repo/cloning/")
         Print('Opening http://fabioz.github.io/mu-repo/cloning/ for help on cloning...')
-        return
-
-    repos = []
-    other_cmd_line_args = []
-
-    for arg in args:
-        if not arg.startswith('-') and not '@' in arg and not ':' in arg and not '/' in arg:
-            repos.append(arg)
-        else:
-            other_cmd_line_args.append(arg)
-
+        return        
+    elif len(args) == 1 and args[0] == '--all':
+        Print("cloning all registered repos...")
+        repos = params.config.repos
+    else:
+        for arg in args:
+            if not arg.startswith('-') and not '@' in arg and not ':' in arg and not '/' in arg:
+                repos.append(arg)
+            else:
+                other_cmd_line_args.append(arg)
 
     remote_hosts = params.config.remote_hosts
 
