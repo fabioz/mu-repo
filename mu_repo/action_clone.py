@@ -59,7 +59,7 @@ def Run(params):
         Print('Opening http://fabioz.github.io/mu-repo/cloning/ for help on cloning...')
         return        
     elif len(args) == 1 and args[0] == '--all':
-        Print("cloning all registered repos...")
+        Print("Cloning all registered repos...")
         repos = params.config.repos
     else:
         for arg in args:
