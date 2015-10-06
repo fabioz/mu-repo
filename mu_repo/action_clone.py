@@ -7,6 +7,13 @@ import os
 #===================================================================================================
 def Run(params):
     '''
+    Usage: 
+      Cloning one or multiple registered repositories
+      $mu clone repo-name [repo-name] ...
+      
+      Cloning all registered repositories
+      $mu clone --all
+    
     mu-repo can deal with cloning a repository and other referenced repositories recursively.
 
     To work this way, users are expected to commit the .mu_repo files they rely on and set
@@ -43,21 +50,23 @@ def Run(params):
     assert args[0] == 'clone'
     args = args[1:]
     
+    repos = []
+    other_cmd_line_args = []
+    
     if len(args) == 1 and args[0] == '--help':
         import webbrowser
         webbrowser.open("http://fabioz.github.io/mu-repo/cloning/")
         Print('Opening http://fabioz.github.io/mu-repo/cloning/ for help on cloning...')
-        return
-
-    repos = []
-    other_cmd_line_args = []
-
-    for arg in args:
-        if not arg.startswith('-') and not '@' in arg and not ':' in arg and not '/' in arg:
-            repos.append(arg)
-        else:
-            other_cmd_line_args.append(arg)
-
+        return        
+    elif len(args) == 1 and args[0] == '--all':
+        Print("Cloning all registered repos...")
+        repos = params.config.repos
+    else:
+        for arg in args:
+            if not arg.startswith('-') and not '@' in arg and not ':' in arg and not '/' in arg:
+                repos.append(arg)
+            else:
+                other_cmd_line_args.append(arg)
 
     remote_hosts = params.config.remote_hosts
 
