@@ -7,6 +7,13 @@ import os
 #===================================================================================================
 def Run(params):
     '''
+    Usage: 
+      Cloning one or multiple registered repositories
+      $mu clone repo-name [repo-name] ...
+      
+      Cloning all registered repositories
+      $mu clone --all
+    
     mu-repo can deal with cloning a repository and other referenced repositories recursively.
 
     To work this way, users are expected to commit the .mu_repo files they rely on and set
