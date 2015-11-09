@@ -14,14 +14,15 @@ RESET_COLOR = '${RESET_COLOR}'
 try:
     def _InitWin32():
 
+        from mu_repo import _color_console
+        _color_console
+
         #===========================================================================================
         # Console
         #===========================================================================================
         class _Console(object):
 
             def __init__(self):
-                import win32console
-
                 colors = dict(
                     BLACK=[],
                     BLUE=['BLUE'],
@@ -37,24 +38,22 @@ try:
                 self._foreground_map = color_map = { '' : 0 }
                 for color_name, color_components in iteritems(colors):
                     if color_components:
-                        value = getattr(win32console, 'FOREGROUND_INTENSITY')
+                        value = _color_console.FOREGROUND_INTENSITY
                     else:
                         value = 0
                     for component in color_components:
-                        value |= getattr(win32console, 'FOREGROUND_' + component)
+                        value |= getattr(_color_console, 'FOREGROUND_' + component)
                     color_map[color_name] = value
 
                 #Some of the calls below could raise exceptions, in which case we should
                 #fallback to another approach!
-                self._output_handle = win32console.GetStdHandle(win32console.STD_OUTPUT_HANDLE)
-                self._reset = self._output_handle.GetConsoleScreenBufferInfo()['Attributes']
-                self._console = win32console.PyConsoleScreenBufferType(self._output_handle)
+                self._reset = _color_console.get_text_attr()
 
             def SetColor(self, foreground_color):
-                self._console.SetConsoleTextAttribute(self._foreground_map[foreground_color])
+                _color_console.set_text_attr(self._foreground_map[foreground_color])
 
             def Reset(self):
-                self._console.SetConsoleTextAttribute(self._reset)
+                _color_console.set_text_attr(self._reset)
 
         return _Console()
 
