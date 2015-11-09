@@ -1,4 +1,4 @@
-from mu_repo.print_ import START_COLOR, RESET_COLOR, Print, PrintError
+from mu_repo.print_ import Print, PrintError, RESET_COLOR, START_COLOR
 import subprocess
 
 #===================================================================================================
@@ -28,9 +28,9 @@ def ExecuteCommand(cmd, repo, return_stdout=False, verbose=True):
         Print(msg)
     try:
         if return_stdout:
-            p = subprocess.Popen(cmd, cwd=repo, stdout=subprocess.PIPE)
+            p = subprocess.Popen(cmd, cwd=repo, stdout=subprocess.PIPE, shell=True)
         else:
-            p = subprocess.Popen(cmd, cwd=repo)
+            p = subprocess.Popen(cmd, cwd=repo, shell=True)
     except:
         PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
         raise

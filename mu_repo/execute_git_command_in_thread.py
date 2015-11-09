@@ -1,8 +1,8 @@
-import threading
-import subprocess
-from mu_repo.print_ import Print, PrintError
-from .print_ import START_COLOR, RESET_COLOR
+from .print_ import RESET_COLOR, START_COLOR
 from mu_repo.backwards import AsStr
+from mu_repo.print_ import Print, PrintError
+import subprocess
+import threading
 
 #===================================================================================================
 # Indent
@@ -90,7 +90,7 @@ class ExecuteGitCommandThread(threading.Thread):
             Print(msg)
             p = None
             try:
-                p = subprocess.Popen(cmd, cwd=repo)
+                p = subprocess.Popen(cmd, cwd=repo, shell=True)
             except:
                 PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
             if p is not None:
@@ -102,7 +102,8 @@ class ExecuteGitCommandThread(threading.Thread):
                     cmd,
                     cwd=repo,
                     stderr=subprocess.PIPE,
-                    stdout=subprocess.PIPE,                    
+                    stdout=subprocess.PIPE,
+                    shell=True
                 )
             except:
                 PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
