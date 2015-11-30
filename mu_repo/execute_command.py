@@ -1,3 +1,4 @@
+from mu_repo.config import UseShellOnSubprocess
 from mu_repo.print_ import Print, PrintError, RESET_COLOR, START_COLOR
 import subprocess
 
@@ -27,10 +28,11 @@ def ExecuteCommand(cmd, repo, return_stdout=False, verbose=True):
         msg = ' '.join([START_COLOR, '\n', repo, ':'] + cmd + [RESET_COLOR])
         Print(msg)
     try:
+        shell = UseShellOnSubprocess()
         if return_stdout:
-            p = subprocess.Popen(cmd, cwd=repo, stdout=subprocess.PIPE, shell=True)
+            p = subprocess.Popen(cmd, cwd=repo, stdout=subprocess.PIPE, shell=shell)
         else:
-            p = subprocess.Popen(cmd, cwd=repo, shell=True)
+            p = subprocess.Popen(cmd, cwd=repo, shell=shell)
     except:
         PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
         raise

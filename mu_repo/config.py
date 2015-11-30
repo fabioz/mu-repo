@@ -4,6 +4,7 @@ Created on 17/05/2012
 @author: Fabio Zadrozny
 '''
 from mu_repo.backwards import iteritems
+import sys
 
 #===================================================================================================
 # IsFalse
@@ -177,3 +178,6 @@ class Config(object):
     def __repr__(self):
         attrs = ['%s=%r' % (k, v) for (k, v) in self.items()]
         return 'Config(%s)' % ', '.join(attrs)
+
+def UseShellOnSubprocess():
+    return sys.platform == 'win32'

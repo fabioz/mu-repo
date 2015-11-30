@@ -1,5 +1,6 @@
 from .print_ import RESET_COLOR, START_COLOR
 from mu_repo.backwards import AsStr
+from mu_repo.config import UseShellOnSubprocess
 from mu_repo.print_ import Print, PrintError
 import subprocess
 import threading
@@ -85,12 +86,13 @@ class ExecuteGitCommandThread(threading.Thread):
         cmd = self.cmd
         msg = ' '.join([START_COLOR, '\n', repo, ':'] + cmd + [RESET_COLOR])
 
+        shell = UseShellOnSubprocess()
         if serial:
             #Print directly to stdout/stderr without buffering.
             Print(msg)
             p = None
             try:
-                p = subprocess.Popen(cmd, cwd=repo, shell=True)
+                p = subprocess.Popen(cmd, cwd=repo, shell=shell)
             except:
                 PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
             if p is not None:
@@ -103,7 +105,7 @@ class ExecuteGitCommandThread(threading.Thread):
                     cwd=repo,
                     stderr=subprocess.PIPE,
                     stdout=subprocess.PIPE,
-                    shell=True
+                    shell=shell
                 )
             except:
                 PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
