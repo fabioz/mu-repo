@@ -50,6 +50,24 @@ def PrintTime(func):
         return ret
     return Exec
 
+#===================================================================================================
+# CreateConfig
+#===================================================================================================
+def CreateConfig(config_file='.mu_repo'):
+    if config_file is None:  # Mostly for testing.
+        contents = ''
+    else:
+        exists = os.path.exists(config_file)
+        if not exists:
+            contents = ''
+        else:
+            with open(config_file, 'r') as f:
+                contents = f.read()
+
+    return Config.Create(contents)
+
+def CreateParams(args, config_file='.mu_repo'):
+    return Params(CreateConfig(config_file), args, config_file)
 
 #===================================================================================================
 # main
@@ -69,18 +87,8 @@ def main(config_file='.mu_repo', args=None, config=None):
         Print(msg)
         return Status(msg, False)
 
-    if config_file is None: #Mostly for testing.
-        contents = ''
-    else:
-        exists = os.path.exists(config_file)
-        if not exists:
-            contents = ''
-        else:
-            with open(config_file, 'r') as f:
-                contents = f.read()
-
     if config is None:
-        config = Config.Create(contents)
+        config = CreateConfig(config_file)
 
     for arg in args:
         if arg.startswith('repo:'):
@@ -227,6 +235,10 @@ def main(config_file='.mu_repo', args=None, config=None):
             import traceback;traceback.print_exc()
         return
 
+    elif arg0 == 'stop-server':
+        from mu_repo.stat_server import server
+        server.stop_server()
+        return
 
     # default action -------------------------------------------------------------------------------
     if Run is None:
