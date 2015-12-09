@@ -5,16 +5,12 @@ Created on 28/05/2012
 '''
 
 
-def ExecuteStCommand(params, repos, git, Print_=None):
+def ExecuteStCommand(params, repos, git):
     from mu_repo.backwards import iteritems
     from mu_repo.execute_git_command_in_thread import Indent
     from mu_repo.execute_parallel_command import ExecuteInParallel, ParallelCmd
     from mu_repo.get_repos_and_curr_branch import GetReposAndCurrBranch
     from mu_repo.print_ import CreateJoinedReposMsg, Print, RESET_COLOR, START_COLOR
-    
-    if Print_ is None:
-        def Print_(msg, repos):
-            Print(msg)
         
 
     # Do the commands as usual in this process and start the process in a subprocess right afterwards.
@@ -42,7 +38,7 @@ def ExecuteStCommand(params, repos, git, Print_=None):
                 Indent(output.stdout),
                 '\n',
             ]
-            Print(''.join(status), (output.repo,))
+            Print(''.join(status))
 
     ExecuteInParallel(commands, on_output=OnOutput)
 
@@ -53,7 +49,7 @@ def ExecuteStCommand(params, repos, git, Print_=None):
 
         for branch, repos in iteritems(branch_to_repos):
             Print("${START_COLOR}Unchanged:${RESET_COLOR} %s\nat branch: ${START_COLOR}%s${RESET_COLOR}\n" % (
-                CreateJoinedReposMsg('', repos), branch), repos)
+                CreateJoinedReposMsg('', repos), branch))
 
 
 #===================================================================================================
@@ -66,6 +62,12 @@ def Run(params):
     git = params.config.git
     repos = params.config.repos
 
+    _DEBUG = True
+
+    if _DEBUG:
+        import time
+        start_time = time.time()
+
     import sys
     if sys.platform == 'win32':
         from mu_repo.system_mutex import SystemMutex
@@ -73,17 +75,40 @@ def Run(params):
         system_mutex = SystemMutex('.mu_repo_stat_server_port')
         if not system_mutex.get_mutex_aquired():
             with open(system_mutex.filename, 'r') as stream:
-                port = stream.read().strip()
+                port = int(stream.read().strip())
 
             # Ok, we have a running server, go on and connect to it!
-            import xmlrpclib
-            s = xmlrpclib.ServerProxy('http://127.0.0.1:%s' % (port,))
-            s.stat(git, repos)
+            from mu_repo.umsgpack_s_conn import ConnectionHandler, UMsgPacker, Client
+            import threading
+
+            event = threading.Event()
+
+            class ClientHandler(ConnectionHandler, UMsgPacker):
+
+                def _handle_decoded(self, msgs):
+                    if not isinstance(msgs, (tuple, list)):
+                        msgs = [msgs]
+                    from mu_repo.print_ import Print
+                    for msg in msgs:
+                        Print(msg)
+
+                    if _DEBUG:
+                        print('Total time: %.2fs' % (time.time() - start_time))
+                    event.set()
+
+            client = Client('127.0.0.1', port, ClientHandler)
+
+            client.send(('stat', git, repos))
+            event.wait(5)
             return
 
     ExecuteStCommand(params, repos, git)
+    if _DEBUG:
+        print('Total time: %.2fs' % (time.time() - start_time))
 
-    if sys.platform == 'win32':
-        system_mutex.release_mutex()
-        from mu_repo.stat_server import server
-        server.start_in_subprocess()
+    # After it's properly tested, we should start the server automatically!
+    # if sys.platform == 'win32':
+    #     if system_mutex.get_mutex_aquired():
+    #         system_mutex.release_mutex()
+    #         from mu_repo.stat_server import server
+    #         server.start_server_in_subprocess()

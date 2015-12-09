@@ -350,3 +350,11 @@ def read_events(handle, recursive):
     buf, nbytes = read_directory_changes(handle, recursive)
     events = _parse_event_buffer(buf, nbytes)
     return [WinAPINativeEvent(action, path) for action, path in events]
+
+if __name__ == '__main__':
+    # A little sample on how it works...
+    handle = get_directory_handle('c:\\temp')
+    while True:
+        print('Waiting...')
+        for ev in read_events(handle, recursive=True):
+            print(ev)

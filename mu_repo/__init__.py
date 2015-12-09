@@ -240,6 +240,11 @@ def main(config_file='.mu_repo', args=None, config=None):
         server.stop_server()
         return
 
+    elif arg0 == 'start-server':
+        from mu_repo.stat_server import server  # @Reimport
+        server.start_server_in_subprocess()
+        return
+
     # default action -------------------------------------------------------------------------------
     if Run is None:
         if arg0 == 'stash' and len(args) == 1:
