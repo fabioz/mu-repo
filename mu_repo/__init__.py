@@ -46,7 +46,7 @@ def PrintTime(func):
         curr_time = time.time()
         ret = func(*args, **kwargs)
         diff = time.time() - curr_time
-        Print('Total time: %.2f' % (diff,))
+        Print('Total time: %.2fs' % (diff,))
         return ret
     return Exec
 

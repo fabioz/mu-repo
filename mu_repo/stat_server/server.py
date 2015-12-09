@@ -1,46 +1,6 @@
 
 _DEBUG = False
 
-def CollectStCacheOnRepos(params, repos, git):
-    '''
-    Based on ExecuteStCommand.
-    '''
-    from mu_repo.execute_git_command_in_thread import Indent
-    from mu_repo.execute_parallel_command import ExecuteInParallel, ParallelCmd
-    from mu_repo.get_repos_and_curr_branch import GetReposAndCurrBranch
-    from mu_repo.print_ import RESET_COLOR, START_COLOR
-
-
-    # Do the commands as usual in this process and start the process in a subprocess right afterwards.
-    commands = []
-    for repo in repos:
-        commands.append(ParallelCmd(repo, [git] + ['status', '-s']))
-
-    repos_and_curr_branch = GetReposAndCurrBranch(params, verbose=False)
-    as_dict = dict(repos_and_curr_branch)
-
-    repos_to_branch_and_messages = {}
-    def OnOutput(output):
-        branch_name = as_dict.get(output.repo, 'UNKNOWN_BRANCH')
-        if not output.stdout:
-            repos_to_branch_and_messages[output.repo] = (branch_name, '')
-        else:
-            status = [
-                START_COLOR,
-                output.repo,
-                ' ',
-                branch_name,
-                ':',
-                RESET_COLOR,
-                '\n',
-                Indent(output.stdout),
-                '\n',
-            ]
-            repos_to_branch_and_messages[output.repo] = (branch_name, ''.join(status))
-
-    ExecuteInParallel(commands, on_output=OnOutput)
-    return repos_to_branch_and_messages
-
 
 class _MutexHolder:
     system_mutex = None
@@ -81,8 +41,6 @@ class ServerAPI(object):
             print('debug: stat', git, repos)
 
         from mu_repo import CreateParams
-        from mu_repo.backwards import iteritems
-        from mu_repo.print_ import CreateJoinedReposMsg
 
         base_repos_to_branch_and_messages = {}
         missing_repos = []
@@ -101,6 +59,7 @@ class ServerAPI(object):
         if not params.config.repos:
             params.config.repos = ['.']
 
+        from mu_repo.action_st import CollectStCacheOnRepos, CreateMessagesFromReposToBranchAndMessages
         if missing_repos:
             new_repos_to_branch_and_messages = CollectStCacheOnRepos(params, missing_repos, git)
             self._repos_to_branch_and_messages.update(new_repos_to_branch_and_messages)
@@ -108,25 +67,7 @@ class ServerAPI(object):
             for repo in repos:
                 self._listen_dir_to_invalidate_cache(repo)
 
-        messages = []
-        empty_repos_and_branches = []
-        for repo in repos:
-            branch, message = base_repos_to_branch_and_messages.get(
-                repo, ('ERROR: Unable to get cache state', 'ERROR: Unable to get cache state'))
-            if message:
-                messages.append(message)
-            else:
-                empty_repos_and_branches.append((repo, branch))
-
-        if empty_repos_and_branches:
-            branch_to_repos = {}
-            for repo, branch in empty_repos_and_branches:
-                branch_to_repos.setdefault(branch, []).append(repo)
-
-            for branch, repos in iteritems(branch_to_repos):
-                messages.append(
-                    "${START_COLOR}Unchanged:${RESET_COLOR} %s\nat branch: ${START_COLOR}%s${RESET_COLOR}\n" % (
-                    CreateJoinedReposMsg('', repos), branch))
+        messages = CreateMessagesFromReposToBranchAndMessages(repos, base_repos_to_branch_and_messages)
         return messages
     
     def shutdown(self):
