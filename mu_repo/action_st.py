@@ -29,6 +29,9 @@ def CollectStCacheOnRepos(params, repos, git):
             std_output = ''
         if branch_name.startswith('##'):
             branch_name = branch_name[2:].strip()
+
+        if '...' in branch_name:
+            branch_name = branch_name[:branch_name.index('...')]
         if not std_output:
             repos_to_branch_and_messages[output.repo] = (branch_name, '')
         else:
@@ -96,9 +99,9 @@ def Run(params):
 
     import sys
     if sys.platform == 'win32':
-        from mu_repo.system_mutex import SystemMutex
+        from mu_repo.system_mutex import create_system_mutex_for_current_dir
         # On mu st, we first check if we have a running server
-        system_mutex = SystemMutex('.mu_repo_stat_server_port')
+        system_mutex = create_system_mutex_for_current_dir()
         if not system_mutex.get_mutex_aquired():
             with open(system_mutex.filename, 'r') as stream:
                 port = int(stream.read().strip())

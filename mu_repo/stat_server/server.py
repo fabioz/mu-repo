@@ -78,9 +78,9 @@ class ServerAPI(object):
     
 
 def start_server():
-    from mu_repo.system_mutex import SystemMutex
+    from mu_repo.system_mutex import create_system_mutex_for_current_dir
 
-    system_mutex = SystemMutex('.mu_repo_stat_server_port')
+    system_mutex = create_system_mutex_for_current_dir()
     if system_mutex.get_mutex_aquired():
         # Make sure it's not garbage collected so that we hold the mutex
         _MutexHolder.system_mutex = system_mutex
@@ -149,8 +149,8 @@ def start_server():
             print('debug: Server previously started at port: %s' % (port,))
 
 def stop_server():
-    from mu_repo.system_mutex import SystemMutex
-    system_mutex = SystemMutex('.mu_repo_stat_server_port')
+    from mu_repo.system_mutex import create_system_mutex_for_current_dir
+    system_mutex = create_system_mutex_for_current_dir()
     if not system_mutex.get_mutex_aquired():
         with open(system_mutex.filename, 'r') as stream:
             port = int(stream.read().strip())
