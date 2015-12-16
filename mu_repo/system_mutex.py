@@ -17,6 +17,7 @@ else:
 from mu_repo.null import NULL
 import re
 import sys
+import tempfile
 import traceback
 import weakref
 
@@ -38,7 +39,7 @@ if sys.platform == 'win32':
 
         def __init__(self, mutex_name):
             check_valid_mutex_name(mutex_name)
-            filename = self.filename = os.path.join('.', mutex_name)
+            filename = self.filename = os.path.join(tempfile.gettempdir(), mutex_name)
             try:
                 os.unlink(filename)
             except:
@@ -88,7 +89,7 @@ else:  # Linux
 
         def __init__(self, mutex_name):
             check_valid_mutex_name(mutex_name)
-            filename = self.filename = os.path.join('.', mutex_name)
+            filename = self.filename = os.path.join(tempfile.gettempdir(), mutex_name)
             try:
                 handle = open(filename, 'w')
                 fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -134,3 +135,9 @@ else:  # Linux
 
         def release_mutex(self):
             self._release_mutex()
+
+def create_system_mutex_for_current_dir():
+    import hashlib
+    s = hashlib.sha1()
+    s.update(os.path.normcase(os.path.normpath(os.path.abspath(os.curdir))))
+    return SystemMutex(s.hexdigest() + '.mu_repo_mutex')

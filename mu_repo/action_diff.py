@@ -195,6 +195,8 @@ class DoDiffOnRepoThread(ExecuteGitCommandThread):
 
     def _HandleOutput(self, msg, stdout, stderr):
         temp_working, temp_repo, repo = self.temp_working, self.temp_repo, self.repo
+        while repo.startswith('..'):
+            repo = repo[1:]
         for entry in ParsePorcelain(stdout, only_split=self.branch != ''):
             self.entry_count += 1
             original, link, original_repo, target_repo = entry.MakeDirs(
@@ -259,43 +261,21 @@ def Run(params):
     os.mkdir(temp_working)
     os.mkdir(temp_repo)
 
-    #===============================================================================================
-    # Define symlink utility
-    #===============================================================================================
-    keep_files_synched = None
-    try:
-        if not hasattr(os, 'symlink'):
-            import win32file
-            #Note: not all users can do it...
-            #http://stackoverflow.com/questions/2094663/determine-if-windows-process-has-privilege-to-create-symbolic-link
-            #see: http://bugs.python.org/issue1578269
-            #see: http://technet.microsoft.com/en-us/library/cc766301%28WS.10%29.aspx
-            def symlink(src, target):
-                win32file.CreateSymbolicLink(src, target, 1)
+    from mu_repo import keep_files_synched
+    def symlink(src, target):
+        if os.path.isdir(src):
+            if os.path.exists(target):
+                os.rmdir(target)
+            shutil.copytree(src, target)
+            keep_files_synched.KeepInSync(src, target)
         else:
-            raise AssertionError(
-                'The base symlink is not working for comparisons on Linux, so, ' 
-                'disabling it and going to the fallback implementation.')
-            #symlink = os.symlink
-
-        #Just check if it does indeed work... if it doesn't redefine and use our polling strategy.
-        symlink(temp_working, join(temp_dir_name, 'lnk_test'))
-    except:
-        from mu_repo import keep_files_synched
-        def symlink(src, target):
-            if os.path.isdir(src):
-                if os.path.exists(target):
-                    os.rmdir(target)
-                shutil.copytree(src, target)
-                keep_files_synched.KeepInSync(src, target)
-            else:
-                if os.path.exists(target):
-                    if os.path.isdir(target):
-                        RmTree(target)
-                    else:
-                        os.remove(target)
-                shutil.copyfile(src, target)
-                keep_files_synched.KeepInSync(src, target)
+            if os.path.exists(target):
+                if os.path.isdir(target):
+                    RmTree(target)
+                else:
+                    os.remove(target)
+            shutil.copyfile(src, target)
+            keep_files_synched.KeepInSync(src, target)
 
     try:
         #Note: we could use diff status --porcelain instead if we wanted to check untracked files.
