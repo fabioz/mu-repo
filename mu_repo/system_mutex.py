@@ -139,5 +139,5 @@ else:  # Linux
 def create_system_mutex_for_current_dir():
     import hashlib
     s = hashlib.sha1()
-    s.update(os.path.normcase(os.path.normpath(os.path.abspath(os.curdir))))
+    s.update(os.path.normcase(os.path.normpath(os.path.abspath(os.curdir))).encode('utf-8'))
     return SystemMutex(s.hexdigest() + '.mu_repo_mutex')
