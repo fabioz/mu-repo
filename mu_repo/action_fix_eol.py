@@ -8,6 +8,10 @@ from mu_repo.print_ import Print
 #===================================================================================================
 def Fix(root, filename):
     path = os.path.join(root, filename)
+    if not os.path.exists(path):
+        Print('Skip removed file:', path)
+        return
+    
     contents = open(path, 'rb').read()
     if '\r' in contents:
         Print('Fixing:', path)
