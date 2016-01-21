@@ -2,6 +2,7 @@ from mu_repo.action_diff import ParsePorcelain
 import os.path
 from mu_repo.execute_command import ExecuteGettingStdOutput
 from mu_repo.print_ import Print
+import sys
 
 #===================================================================================================
 # Fix
@@ -13,9 +14,9 @@ def Fix(root, filename):
         return
     
     contents = open(path, 'rb').read()
-    if '\r' in contents:
+    if b'\r' in contents:
         Print('Fixing:', path)
-        contents = contents.replace('\r\n', '\n').replace('\r', '\n')
+        contents = contents.replace(b'\r\n', b'\n').replace(b'\r', b'\n')
         open(path, 'wb').write(contents)
 
 
@@ -28,5 +29,7 @@ def Run(params):
         stdout = ExecuteGettingStdOutput(
             [config.git or 'git'] + 'status --porcelain -z'.split(), repo)
 
+        if sys.version_info[0] >= 3:
+            stdout = stdout.decode(sys.getfilesystemencoding())
         for entry in ParsePorcelain(stdout):
             Fix(repo, entry.filename)
