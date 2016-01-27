@@ -9,7 +9,7 @@ Now, for building it's a bit more tricky because it doesn't accept building at t
 so, this script should be executed to make the build as it'll create it and relocate to the
 appropriate location.
 
-Note: to install mkdocs: pip install mkdocs --version=0.13.2
+Note: to install mkdocs: pip install mkdocs==0.13.2
 '''
 
 import os
