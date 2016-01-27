@@ -28,8 +28,8 @@ containing a ``.git`` dir.
 
 
 
-Available commands
--------------------
+Custom commands
+----------------
 
 * ``mu register repo1 repo2`` 
     Registers repo1 and repo2 to be tracked. Also accepts a ``--all`` or
@@ -52,12 +52,6 @@ Available commands
 * ``mu get-vars``
     Prints the configuration file.
 
-* ``mu github-request``
-    Gets a request from github.
-
-* ``mu post-review bug_id group``
-    Posts a review with the changes committed.
-
 * ``mu fix-eol``
     Changes end of lines to ``'\n'`` on all changed files.
 
@@ -69,28 +63,44 @@ Available commands
         
     Note: a shortcut exists for find-branch: `mu fb  [-r] pattern`
 
-* ``mu install``
+* ``mu git-init-config``
     Initial configuration git (username, log, etc.)
 
 * ``mu auto-update``
     Automatically updates mu-repo (using git -- only works if it has been pulled from git, if it was installed with pip, use pip to update it).
 
-* ``mu dd``:
-     Creates a directory structure with working dir vs head and opens
-     WinMerge on Windows or meld on Linux with it (doing mu ac will commit exactly 
-     what's compared in this situation).
+* `mu upd` Fetches changes for the current branch and compares the current branch with the fetched changes (using WinMerge or meld) -- useful to preview incoming changes.
 
-     Also accepts a parameter to compare with a different commit/branch. I.e.:
+* `mu rb` 
+    Stashes your current changes, performs a rebase so that your current committed changes are put on top of incoming changes and then unstashes what has been stashed.
+    Note: be careful as it'll do rebase, so, if your changes are already pushed in another branch don't use this command and do a manual merge instead. 
 
-         mu dd HEAD^^
-         mu dd 9fd88da
-         mu dd development
+* ``mu dd``
+    Creates a directory structure with working dir vs head (for the multiple repositores) and opens
+    WinMerge on Windows or Meld on Linux with it (doing mu ac will commit exactly 
+    what's compared in this situation).
+
+    Note that the structure is created with links to the original files (or automatically synchronized 
+    if links are not supported), so files edited in WinMerg/Meld will properly change the 
+    original files).
+
+
+    Also accepts a parameter to compare with a different commit/branch. I.e.:
+
+        mu dd HEAD^^
+        mu dd 9fd88da
+        mu dd development
      
-* ``mu clone``:
+* ``mu clone``
 
     Clones repositories with dependencies. See: [Cloning](cloning.md) for details.
     
-* ``mu group``:
+* ``mu group``
 
     Allows grouping repositories. See: [Grouping](grouping.md) for details.
     
+    
+Also see:
+
+* [Shortcuts](shortcuts.md)
+* [Tips & Tricks](tips_and_tricks.md)

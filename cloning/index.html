@@ -81,13 +81,19 @@
                         
                             
 <li >
-    <a href="../using/">Using</a>
+    <a href="../config/">Configuration</a>
 </li>
 
                         
                             
 <li >
-    <a href="../config/">Configuration</a>
+    <a href="../commands/">Commands</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../shortcuts/">Shortcuts</a>
 </li>
 
                         
@@ -176,6 +182,18 @@
 </div></div>
                 <div class="col-md-9" role="main">
 
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- mu-repo horizontal -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-9116695766406448"
+     data-ad-slot="9828685478"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
 <h2 id="cloning-multiple-repositories">Cloning Multiple Repositories</h2>
 <p>mu-repo allows clones to work in multiple projects at once, although some prep-work is needed for it to work:</p>
 <p>The first step is configuring the remote base url(s).</p>
@@ -195,7 +213,7 @@ tried, it's possible to do):</p>
 <p><code>git config --get-regexp mu-repo.remote-base-url</code></p>
 <p>By doing so, it'll be possible to do <code>mu clone projectA</code> without specifying the base-url. This
 is nice on itself, but to go one step further and actually clone multiple projects, we need to
-configure the projects themselves by adding the dependency info (this is done by [grouping by project directories][tips_and_tricks.md]).</p>
+configure the projects themselves by adding the dependency info (this is done by <a href="../tips_and_tricks/">grouping by project directories</a>).</p>
 <pre><code># Given a project structure with:
 /libA
 /projectA (depends on libA)
@@ -211,7 +229,20 @@ configure the projects themselves by adding the dependency info (this is done by
 <p>Then, by cloning with <code>mu clone projectA</code>, both <code>projectA</code> and <code>libA</code> will be cloned (and by going
 to <code>projectA</code> and using any <code>mu</code> command there, the commands will be propagated to <code>libA</code>).</p>
 <p><strong>Note:</strong> Dependencies are not recursively calculated, so, if <code>projectC</code> depends on <code>projectB</code>
-which in turn depends on <code>projectA</code>, <code>projectA</code> has to be registered in <code>projectC</code> and in <code>projectB</code>. </p></div>
+which in turn depends on <code>projectA</code>, <code>projectA</code> has to be registered in <code>projectC</code> and in <code>projectB</code>. </p>
+<br/>
+<br/>
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- mu-repo horizontal -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-9116695766406448"
+     data-ad-slot="9828685478"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div></div>
             
         </div>
 
