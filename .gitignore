@@ -3,3 +3,4 @@
 .mu_repo
 .settings
 .mu_repo_stat_server_port
+__pycache__
