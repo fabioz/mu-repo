@@ -69,6 +69,28 @@ def CreateConfig(config_file='.mu_repo'):
 def CreateParams(args, config_file='.mu_repo'):
     return Params(CreateConfig(config_file), args, config_file)
 
+
+def SearchConfigFile(start_dir, recurse_limit=20):
+    """Search upwards in the file system starting in start_dir for a ".mu_repo" file, until the maximum limit or
+    the root of the file-system is reached.
+    """
+    start_dir = os.path.normpath(os.path.abspath(start_dir))
+    while True:
+        filename = os.path.join(start_dir, '.mu_repo')
+        if os.path.isfile(filename):
+            return filename
+
+        recurse_limit -= 1
+        if recurse_limit == 0:
+            return None
+
+        parent_dir = os.path.abspath(os.path.join(start_dir, '..'))
+        if parent_dir == start_dir:
+            return None
+
+        start_dir = parent_dir
+
+
 #===================================================================================================
 # main
 #===================================================================================================
@@ -86,6 +108,11 @@ def main(config_file='.mu_repo', args=None, config=None):
         msg = __docs__.__doc__ #@UndefinedVariable
         Print(msg)
         return Status(msg, False)
+
+    if config_file == '.mu_repo' and not os.path.isfile(config_file):
+        config_file = SearchConfigFile(os.getcwd())
+        if config_file:
+            os.chdir(os.path.dirname(config_file))
 
     if config is None:
         config = CreateConfig(config_file)

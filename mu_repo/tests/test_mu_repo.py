@@ -184,7 +184,30 @@ class Test(unittest.TestCase):
         status = mu_repo.main(config_file='.bar_file', args=['list'])
         self.assertEquals(status.config.repos, ['pydev', 'studio3'])
         self.assertEqual(status.config.current_group, None)
-        
+
+
+    def testSearchConfigFile(self):
+        import tempfile
+        import shutil
+
+        workdir = tempfile.mkdtemp()
+        self.addCleanup(lambda: shutil.rmtree(workdir))
+
+        c_dir = os.path.join(workdir, 'a', 'b', 'c')
+        os.makedirs(c_dir)
+
+        filename = os.path.join(workdir, 'a', '.mu_repo')
+        with open(filename, 'w'):
+            pass
+
+        self.assertEqual(mu_repo.SearchConfigFile(os.path.join(workdir, 'a', 'b', 'c')), filename)
+        self.assertEqual(mu_repo.SearchConfigFile(os.path.join(workdir, 'a', 'b')), filename)
+        self.assertEqual(mu_repo.SearchConfigFile(os.path.join(workdir, 'a')), filename)
+        self.assertIsNone(mu_repo.SearchConfigFile(workdir))
+
+        self.assertIsNone(mu_repo.SearchConfigFile(os.path.join(workdir, 'a', 'b', 'c'), recurse_limit=1))
+        self.assertEqual(mu_repo.SearchConfigFile(os.path.join(workdir, 'a'), recurse_limit=0), filename)
+
 
 #===================================================================================================
 # main
