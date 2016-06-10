@@ -186,13 +186,31 @@ class Test(unittest.TestCase):
         self.assertEqual(status.config.current_group, None)
 
 
-    def testSearchConfigFile(self):
+    def GetWorkDir(self):
         import tempfile
         import shutil
 
         workdir = tempfile.mkdtemp()
         self.addCleanup(lambda: shutil.rmtree(workdir))
+        return workdir
 
+
+    def testSearchConfigFileNormalCase(self):
+        """Test .mu_repo search works for the usual case up where the file is at the root of the repository."""
+        workdir = self.GetWorkDir()
+        root = os.path.join(workdir, 'project')
+        os.makedirs(os.path.join(root, '.git'))
+
+        filename = os.path.join(root, '.mu_repo')
+        with open(filename, 'w'):
+            pass
+
+        self.assertEqual(mu_repo.SearchConfigFile(root), filename)
+
+
+    def testSearchConfigFileSubDirectories(self):
+        """Test .mu_repo search finds .mu_repo file in sub-directories."""
+        workdir = self.GetWorkDir()
         c_dir = os.path.join(workdir, 'a', 'b', 'c')
         os.makedirs(c_dir)
 
@@ -207,6 +225,10 @@ class Test(unittest.TestCase):
 
         self.assertIsNone(mu_repo.SearchConfigFile(os.path.join(workdir, 'a', 'b', 'c'), recurse_limit=1))
         self.assertEqual(mu_repo.SearchConfigFile(os.path.join(workdir, 'a'), recurse_limit=0), filename)
+
+        # stop looking for a .mu_repo file if a .git repository is found
+        os.makedirs(os.path.join(workdir, 'a', 'b', '.git'))
+        self.assertIsNone(mu_repo.SearchConfigFile(os.path.join(workdir, 'a', 'b', 'c')))
 
 
 #===================================================================================================
