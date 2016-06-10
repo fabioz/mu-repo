@@ -6,14 +6,20 @@ class _MutexHolder:
     system_mutex = None
 
 def listen_changes_on_dir(directory, on_change_found):
-    # A little sample on how it works...
-    from mu_repo.stat_server.winapi import read_events, get_directory_handle
-    handle = get_directory_handle(directory)
-    while True:
-        for _ev in read_events(handle, recursive=True):
-            if _ev.src_path not in ('.git\\index.lock', '.git'):
-                # Ignore changes in the index.lock (it's used even for status).
-                on_change_found()
+    try:
+        # A little sample on how it works...
+        from mu_repo.stat_server.winapi import read_events, get_directory_handle
+        try:
+            handle = get_directory_handle(directory)
+            while True:
+                for _ev in read_events(handle, recursive=True):
+                    if _ev.src_path not in ('.git\\index.lock', '.git'):
+                        # Ignore changes in the index.lock (it's used even for status).
+                        on_change_found()
+        except WindowsError:
+            pass  # Directory not there
+    except ImportError:
+        pass  # ctypes.wintypes not there
 
 
 class ServerAPI(object):

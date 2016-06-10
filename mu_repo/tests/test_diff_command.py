@@ -98,13 +98,13 @@ class Test(unittest.TestCase):
 
 
         # Test diffing with previous version of HEAD without changes
-        subprocess.call([git] + 'add -A'.split(), cwd=temp_dir)
-        subprocess.call([git] + 'commit -m "Second'.split(), cwd=temp_dir)
+        subprocess.check_call([git] + 'add -A'.split(), cwd=temp_dir)
+        subprocess.check_call([git] + 'commit -m "Second'.split(), cwd=temp_dir)
         called = self.CallDiff()
         self.assertEqual([], called) #Not called as we don't have any changes.
 
 
-        # Test diffing with previous version of HEAD^
+        # Test diffing with previous version of HEAD~1
         def CheckStructure():
             prev = os.path.join('.mu.diff.git.tmp', 'REPO', 'test_diff_command_git_repo_dir', 'folder1', 'out.txt')
             curr = os.path.join('.mu.diff.git.tmp', 'WORKING', 'test_diff_command_git_repo_dir', 'folder1', 'out.txt')
@@ -115,16 +115,16 @@ class Test(unittest.TestCase):
 
         with open(os.path.join(temp_dir, 'folder1', 'out.txt'), 'w') as f:
             f.write('new out')
-        subprocess.call([git] + 'add -A'.split(), cwd=temp_dir)
-        subprocess.call([git] + 'commit -m "Second'.split(), cwd=temp_dir)
-        called = self.CallDiff('HEAD^', check_structure=CheckStructure)
+        subprocess.check_call([git] + 'add -A'.split(), cwd=temp_dir)
+        subprocess.check_call([git] + 'commit -m "Second'.split(), cwd=temp_dir)
+        called = self.CallDiff('HEAD~1', check_structure=CheckStructure)
         self.assertEqual([merge_command], called)
 
 
 
         # Test diffing dir structure in git changed for file in working dir
-        subprocess.call([git] + 'add -A'.split(), cwd=temp_dir)
-        subprocess.call([git] + 'commit -m "Third'.split(), cwd=temp_dir)
+        subprocess.check_call([git] + 'add -A'.split(), cwd=temp_dir)
+        subprocess.check_call([git] + 'commit -m "Third'.split(), cwd=temp_dir)
         RmTree(os.path.join(temp_dir, 'folder1'))
         with open(os.path.join(temp_dir, 'folder1'), 'w') as f:
             f.write('folder1 is now file.')
