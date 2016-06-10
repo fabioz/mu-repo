@@ -71,7 +71,7 @@ def CreateParams(args, config_file='.mu_repo'):
     return Params(CreateConfig(config_file), args, config_file)
 
 
-def SearchConfigFile(start_dir, name='.mu_repo', recurse_limit=20):
+def SearchConfigDir(start_dir, name='.mu_repo', recurse_limit=20):
     """Search upwards in the file system starting in start_dir for a ".mu_repo" file, until the maximum limit or
     the root of the file-system is reached.
     """
@@ -79,11 +79,11 @@ def SearchConfigFile(start_dir, name='.mu_repo', recurse_limit=20):
     while recurse_limit >= 0:
         filename = os.path.join(start_dir, name)
         if os.path.isfile(filename):
-            return filename
+            return start_dir
 
-        # give up searching if we are in a .git repository
+        # a .git repository also counts as a config directory so the user can execute plain git commands
         if os.path.isdir(os.path.join(start_dir, '.git')):
-            return None
+            return start_dir
 
         parent_dir = os.path.dirname(start_dir)
         if parent_dir == start_dir:
@@ -113,9 +113,12 @@ def main(config_file=None, args=None, config=None):
         return Status(msg, False)
 
     if config_file is None:
-        config_file = SearchConfigFile(os.getcwd())
-        if config_file:
-            os.chdir(os.path.dirname(config_file))
+        name = '.mu_repo'
+        config_dir = SearchConfigDir(os.getcwd(), name=name)
+        if config_dir:
+            os.chdir(config_dir)
+            if os.path.isfile(os.path.join(config_dir, name)):
+                config_file = os.path.join(config_dir, name)
 
     if config is None:
         config = CreateConfig(config_file)

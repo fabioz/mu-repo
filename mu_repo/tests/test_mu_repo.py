@@ -196,7 +196,7 @@ class Test(unittest.TestCase):
 
 
     def testSearchConfigFileNormalCase(self):
-        """Test .mu_repo search works for the usual case up where the file is at the root of the repository."""
+        """Test config search search works for the usual case up where the file is at the root of the repository."""
         workdir = self.GetWorkDir()
         root = os.path.join(workdir, 'project')
         os.makedirs(os.path.join(root, '.git'))
@@ -205,11 +205,11 @@ class Test(unittest.TestCase):
         with open(filename, 'w'):
             pass
 
-        self.assertEqual(mu_repo.SearchConfigFile(root), filename)
+        self.assertEqual(mu_repo.SearchConfigDir(root), root)
 
 
     def testSearchConfigFileSubDirectories(self):
-        """Test .mu_repo search finds .mu_repo file in sub-directories."""
+        """Test config dir search finds .mu_repo file in sub-directories."""
         workdir = self.GetWorkDir()
         c_dir = os.path.join(workdir, 'a', 'b', 'c')
         os.makedirs(c_dir)
@@ -218,17 +218,17 @@ class Test(unittest.TestCase):
         with open(filename, 'w'):
             pass
 
-        self.assertEqual(mu_repo.SearchConfigFile(os.path.join(workdir, 'a', 'b', 'c')), filename)
-        self.assertEqual(mu_repo.SearchConfigFile(os.path.join(workdir, 'a', 'b')), filename)
-        self.assertEqual(mu_repo.SearchConfigFile(os.path.join(workdir, 'a')), filename)
-        self.assertIsNone(mu_repo.SearchConfigFile(workdir))
+        self.assertEqual(mu_repo.SearchConfigDir(os.path.join(workdir, 'a', 'b', 'c')), os.path.dirname(filename))
+        self.assertEqual(mu_repo.SearchConfigDir(os.path.join(workdir, 'a', 'b')), os.path.dirname(filename))
+        self.assertEqual(mu_repo.SearchConfigDir(os.path.join(workdir, 'a')), os.path.dirname(filename))
+        self.assertIsNone(mu_repo.SearchConfigDir(workdir))
 
-        self.assertIsNone(mu_repo.SearchConfigFile(os.path.join(workdir, 'a', 'b', 'c'), recurse_limit=1))
-        self.assertEqual(mu_repo.SearchConfigFile(os.path.join(workdir, 'a'), recurse_limit=0), filename)
+        self.assertIsNone(mu_repo.SearchConfigDir(os.path.join(workdir, 'a', 'b', 'c'), recurse_limit=1))
+        self.assertEqual(mu_repo.SearchConfigDir(os.path.join(workdir, 'a'), recurse_limit=0), os.path.dirname(filename))
 
-        # stop looking for a .mu_repo file if a .git repository is found
+        # a .git repository counts as a config directory
         os.makedirs(os.path.join(workdir, 'a', 'b', '.git'))
-        self.assertIsNone(mu_repo.SearchConfigFile(os.path.join(workdir, 'a', 'b', 'c')))
+        self.assertEqual(mu_repo.SearchConfigDir(os.path.join(workdir, 'a', 'b', 'c')), os.path.join(workdir, 'a', 'b'))
 
 
 #===================================================================================================
