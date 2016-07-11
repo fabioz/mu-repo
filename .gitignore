@@ -4,3 +4,8 @@
 .settings
 .mu_repo_stat_server_port
 __pycache__
+.cache/
+.idea/
+.tox/
+*.egg-info/
+test_temp_dir/
