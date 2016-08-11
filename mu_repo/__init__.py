@@ -66,13 +66,39 @@ def CreateConfig(config_file='.mu_repo'):
 
     return Config.Create(contents)
 
+
 def CreateParams(args, config_file='.mu_repo'):
     return Params(CreateConfig(config_file), args, config_file)
+
+
+def SearchConfigDir(start_dir, name='.mu_repo', recurse_limit=20):
+    """Search upwards in the file system starting in start_dir for a ".mu_repo" file, until the maximum limit or
+    the root of the file-system is reached.
+    """
+    start_dir = os.path.abspath(start_dir)
+    while recurse_limit >= 0:
+        filename = os.path.join(start_dir, name)
+        if os.path.isfile(filename):
+            return start_dir
+
+        # a .git repository also counts as a config directory so the user can execute plain git commands
+        if os.path.isdir(os.path.join(start_dir, '.git')):
+            return start_dir
+
+        parent_dir = os.path.dirname(start_dir)
+        if parent_dir == start_dir:
+            return None
+
+        start_dir = parent_dir
+        recurse_limit -= 1
+
+    return None
+
 
 #===================================================================================================
 # main
 #===================================================================================================
-def main(config_file='.mu_repo', args=None, config=None):
+def main(config_file=None, args=None, config=None):
     '''
     Entry point.
     '''
@@ -81,11 +107,18 @@ def main(config_file='.mu_repo', args=None, config=None):
         args = sys.argv[1:]
 
     if len(args) == 0 or (len(args) == 1 and args[0] in ('help', '--help')):
-        from string import Template
         from . import __docs__
         msg = __docs__.__doc__ #@UndefinedVariable
         Print(msg)
         return Status(msg, False)
+
+    if config_file is None:
+        name = '.mu_repo'
+        config_dir = SearchConfigDir(os.getcwd(), name=name)
+        if config_dir:
+            os.chdir(config_dir)
+            if os.path.isfile(os.path.join(config_dir, name)):
+                config_file = os.path.join(config_dir, name)
 
     if config is None:
         config = CreateConfig(config_file)

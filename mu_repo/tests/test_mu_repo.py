@@ -184,7 +184,52 @@ class Test(unittest.TestCase):
         status = mu_repo.main(config_file='.bar_file', args=['list'])
         self.assertEquals(status.config.repos, ['pydev', 'studio3'])
         self.assertEqual(status.config.current_group, None)
-        
+
+
+    def GetWorkDir(self):
+        import tempfile
+        import shutil
+
+        workdir = tempfile.mkdtemp()
+        self.addCleanup(lambda: shutil.rmtree(workdir))
+        return workdir
+
+
+    def testSearchConfigFileNormalCase(self):
+        """Test config search search works for the usual case up where the file is at the root of the repository."""
+        workdir = self.GetWorkDir()
+        root = os.path.join(workdir, 'project')
+        os.makedirs(os.path.join(root, '.git'))
+
+        filename = os.path.join(root, '.mu_repo')
+        with open(filename, 'w'):
+            pass
+
+        self.assertEqual(mu_repo.SearchConfigDir(root), root)
+
+
+    def testSearchConfigFileSubDirectories(self):
+        """Test config dir search finds .mu_repo file in sub-directories."""
+        workdir = self.GetWorkDir()
+        c_dir = os.path.join(workdir, 'a', 'b', 'c')
+        os.makedirs(c_dir)
+
+        filename = os.path.join(workdir, 'a', '.mu_repo')
+        with open(filename, 'w'):
+            pass
+
+        self.assertEqual(mu_repo.SearchConfigDir(os.path.join(workdir, 'a', 'b', 'c')), os.path.dirname(filename))
+        self.assertEqual(mu_repo.SearchConfigDir(os.path.join(workdir, 'a', 'b')), os.path.dirname(filename))
+        self.assertEqual(mu_repo.SearchConfigDir(os.path.join(workdir, 'a')), os.path.dirname(filename))
+        self.assertIsNone(mu_repo.SearchConfigDir(workdir))
+
+        self.assertIsNone(mu_repo.SearchConfigDir(os.path.join(workdir, 'a', 'b', 'c'), recurse_limit=1))
+        self.assertEqual(mu_repo.SearchConfigDir(os.path.join(workdir, 'a'), recurse_limit=0), os.path.dirname(filename))
+
+        # a .git repository counts as a config directory
+        os.makedirs(os.path.join(workdir, 'a', 'b', '.git'))
+        self.assertEqual(mu_repo.SearchConfigDir(os.path.join(workdir, 'a', 'b', 'c')), os.path.join(workdir, 'a', 'b'))
+
 
 #===================================================================================================
 # main
