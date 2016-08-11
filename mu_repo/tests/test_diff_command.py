@@ -4,7 +4,7 @@ Created on May 23, 2012
 @author: Fabio Zadrozny
 '''
 from __future__ import with_statement
-import sys
+from .utils import configure_git_user
 from mu_repo import action_diff, Params
 from mu_repo.action_diff import NotifyErrorListeners
 from mu_repo.config import Config
@@ -12,9 +12,9 @@ from mu_repo.print_ import PushIgnorePrint, PopIgnorePrint, Print
 from mu_repo.rmtree import RmTree
 import os.path
 import subprocess
+import sys
 import time
 import unittest
-from .utils import configure_git_user
 
 #===================================================================================================
 # Test
@@ -123,8 +123,10 @@ class Test(unittest.TestCase):
 
 
         # Test diffing dir structure in git changed for file in working dir
-        subprocess.check_call([git] + 'add -A'.split(), cwd=temp_dir)
-        subprocess.check_call([git] + 'commit -m "Third'.split(), cwd=temp_dir)
+        # Nothing changed at this point: newest git now gives a non-zero value in
+        # such a case if we try to commit.
+        # subprocess.check_call([git] + 'add -A'.split(), cwd=temp_dir)
+        # subprocess.check_call([git] + 'commit -m "Third'.split(), cwd=temp_dir)
         RmTree(os.path.join(temp_dir, 'folder1'))
         with open(os.path.join(temp_dir, 'folder1'), 'w') as f:
             f.write('folder1 is now file.')

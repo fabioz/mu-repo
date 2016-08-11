@@ -6,6 +6,9 @@ class _MutexHolder:
     system_mutex = None
 
 def listen_changes_on_dir(directory, on_change_found):
+    import sys
+    if sys.platform != 'win32':
+        return  # This feature is windows only (although it's currently unsuported /undocumented for now).
     try:
         # A little sample on how it works...
         from mu_repo.stat_server.winapi import read_events, get_directory_handle

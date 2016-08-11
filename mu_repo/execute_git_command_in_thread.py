@@ -108,7 +108,8 @@ class ExecuteGitCommandThread(threading.Thread):
                     shell=shell
                 )
             except:
-                PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
+                import os
+                PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo + ' cwd: ' + os.path.abspath('.'))
                 self.output_queue.put(Output(repo, 'Error executing: %s on repo: %s' % (cmd, repo), '', ''))
                 return
 

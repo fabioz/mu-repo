@@ -1,4 +1,5 @@
 from __future__ import with_statement
+from .utils import configure_git_user
 from contextlib import contextmanager
 from mu_repo.print_ import PopIgnorePrint, PushIgnorePrint
 from mu_repo.rmtree import RmTree
@@ -7,7 +8,6 @@ import mu_repo
 import os.path
 import subprocess
 import unittest
-from .utils import configure_git_user
 
 #===================================================================================================
 # Test
@@ -40,9 +40,11 @@ class Test(unittest.TestCase):
     @contextmanager
     def push_dir(self, directory):
         old = os.path.realpath(os.path.abspath(os.getcwd()))
-        os.chdir(directory)
-        yield
-        os.chdir(old)
+        os.chdir(os.path.abspath(directory))
+        try:
+            yield
+        finally:
+            os.chdir(old)
 
     def test_clone_with_deps(self):
         git = 'git'
