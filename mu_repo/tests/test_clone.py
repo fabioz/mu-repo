@@ -40,7 +40,9 @@ class Test(unittest.TestCase):
     @contextmanager
     def push_dir(self, directory):
         old = os.path.realpath(os.path.abspath(os.getcwd()))
-        os.chdir(os.path.abspath(directory))
+        new_dir = os.path.realpath(os.path.abspath(directory))
+        assert os.path.exists(new_dir)
+        os.chdir(new_dir)
         try:
             yield
         finally:
@@ -52,9 +54,9 @@ class Test(unittest.TestCase):
         print(os.path.abspath('.'))
 
         # Test diffing with new folder structure
-        subprocess.call([git] + 'init test_temp_dir/remote/projectA'.split(), cwd='.')
-        subprocess.call([git] + 'init test_temp_dir/remote/projectB'.split(), cwd='.')
-        subprocess.call([git] + 'init test_temp_dir/remote/projectC'.split(), cwd='.')
+        subprocess.check_call([git] + 'init test_temp_dir/remote/projectA'.split(), cwd='.')
+        subprocess.check_call([git] + 'init test_temp_dir/remote/projectB'.split(), cwd='.')
+        subprocess.check_call([git] + 'init test_temp_dir/remote/projectC'.split(), cwd='.')
 
         # C depends on B and A
         with open('./test_temp_dir/remote/projectC/.mu_repo', 'w') as stream:
@@ -102,19 +104,19 @@ class Test(unittest.TestCase):
         remote_dir = 'test_temp_dir/remote_clone_all';
 
         # Test diffing with new folder structure
-        subprocess.call([git] + ('init %s/meta_project' % (remote_dir)).split(), cwd='.')
-        subprocess.call([git] + ('init %s/projectD' % (remote_dir)).split(), cwd='.')
-        subprocess.call([git] + ('init %s/projectE' % (remote_dir)).split(), cwd='.')
-        subprocess.call([git] + ('init %s/projectF' % (remote_dir)).split(), cwd='.')
+        subprocess.check_call([git] + ('init %s/meta_project' % (remote_dir)).split(), cwd='.')
+        subprocess.check_call([git] + ('init %s/projectD' % (remote_dir)).split(), cwd='.')
+        subprocess.check_call([git] + ('init %s/projectE' % (remote_dir)).split(), cwd='.')
+        subprocess.check_call([git] + ('init %s/projectF' % (remote_dir)).split(), cwd='.')
 
         remote_base = os.path.realpath(os.path.abspath(remote_dir))
         
         # Register meta project repos
         with open('%s/meta_project/.mu_repo' % (remote_dir), 'w') as stream:
-            stream.write('repo=projectD\nrepo=projectE\nrepo=projectF\n')
+            stream.write('repo=.\nrepo=../projectD\nrepo=../projectE\nrepo=../projectF\n')
             stream.write('remote_host=%s' % (remote_base))
         
-        with self.push_dir(remote_base + '/meta_project'):            
+        with self.push_dir(os.path.join(remote_base, 'meta_project')):
             configure_git_user()
             mu_repo.main(config_file=None, args=['ac', 'Added projects'])
             
@@ -141,9 +143,10 @@ class Test(unittest.TestCase):
             configure_git_user()
             mu_repo.main(config_file=None, args=['ac', 'Initial commit'])
 
-        makedirs('./test_temp_dir/local_clone_all')
+        local_clone_all = os.path.realpath(os.path.abspath('./test_temp_dir/local_clone_all'))
+        makedirs(local_clone_all)
         
-        with self.push_dir('./test_temp_dir/local_clone_all'):
+        with self.push_dir(local_clone_all):
             config = mu_repo.Config()
             config.serial = True
             config.remote_hosts = [remote_base]
@@ -152,14 +155,15 @@ class Test(unittest.TestCase):
             with self.push_dir('./meta_project'):
                 mu_repo.main(args=['clone', '--all'])
                 
-                assert os.path.exists('projectD/.git')
-                assert os.path.exists('projectD/D.txt')
+                assert os.path.exists(os.path.join(local_clone_all, 'projectD', '.git'))
+                assert os.path.exists(os.path.join(local_clone_all, 'projectD', 'D.txt'))
 
-                assert os.path.exists('projectE/.git')
-                assert os.path.exists('projectE/E.txt')
+                assert os.path.exists(os.path.join(local_clone_all, 'projectE', '.git'))
+                assert os.path.exists(os.path.join(local_clone_all, 'projectE', 'E.txt'))
 
-                assert os.path.exists('projectF/.git')
-                assert os.path.exists('projectF/F.txt')
+                assert os.path.exists(os.path.join(local_clone_all, 'projectF', '.git'))
+                assert os.path.exists(os.path.join(local_clone_all, 'projectF', 'F.txt'))
+
              
              
 #===================================================================================================

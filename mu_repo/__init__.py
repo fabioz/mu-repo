@@ -113,12 +113,19 @@ def main(config_file=None, args=None, config=None):
         return Status(msg, False)
 
     if config_file is None:
-        name = '.mu_repo'
-        config_dir = SearchConfigDir(os.getcwd(), name=name)
-        if config_dir:
-            os.chdir(config_dir)
-            if os.path.isfile(os.path.join(config_dir, name)):
-                config_file = os.path.join(config_dir, name)
+        for arg in args:
+            if arg == 'clone':
+                # On clone, we don't want to search for a .mu_repo, just use things
+                # from the current directory.
+                config_file = '.mu_repo'
+                break
+        else:
+            name = '.mu_repo'
+            config_dir = SearchConfigDir(os.getcwd(), name=name)
+            if config_dir:
+                os.chdir(config_dir)
+                if os.path.isfile(os.path.join(config_dir, name)):
+                    config_file = os.path.join(config_dir, name)
 
     if config is None:
         config = CreateConfig(config_file)
