@@ -42,7 +42,17 @@ Using ``mu``, you register the repositories you want only once and then issue co
 * Preview incoming changes on current branch (see [mu upd on Commands](commands.md))
 * [Shortcuts](shortcuts.md) for common git operations.
 
-Proceed to:
+### New on 1.2.0
+
+This version allows you to clone multiple repositories at once. See:
+[Cloning multiple repositories](cloning.md)
+
+### New on 1.3.0
+
+This version allows you to call mu in subdirectories (it'll search directories upwards for the first
+directory containing a .mu_repo file or a .git directory).
+
+### Proceed to:
 
 * [Install](install.md)
 * [Configuration](config.md)
