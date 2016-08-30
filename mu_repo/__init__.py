@@ -5,7 +5,8 @@ from mu_repo.config import Config
 import os.path
 import sys
 
-#Just making sure we're in the PYTHONPATH!
+
+# Just making sure we're in the PYTHONPATH!
 sys.path.append(os.path.dirname(__file__))
 
 #===================================================================================================
@@ -25,9 +26,9 @@ class Status(object):
 #===================================================================================================
 class Params(object):
 
-    #args = params.args
-    #config_file = params.config_file
-    #config = params.config
+    # args = params.args
+    # config_file = params.config_file
+    # config = params.config
 
     __slots__ = ['config', 'args', 'config_file']
 
@@ -108,7 +109,7 @@ def main(config_file=None, args=None, config=None):
 
     if len(args) == 0 or (len(args) == 1 and args[0] in ('help', '--help')):
         from . import __docs__
-        msg = __docs__.__doc__ #@UndefinedVariable
+        msg = __docs__.__doc__  # @UndefinedVariable
         Print(msg)
         return Status(msg, False)
 
@@ -126,6 +127,10 @@ def main(config_file=None, args=None, config=None):
                 os.chdir(config_dir)
                 if os.path.isfile(os.path.join(config_dir, name)):
                     config_file = os.path.join(config_dir, name)
+                    
+    if config_file is None:
+        # This is the case for new mu-repo installations.
+        config_file = '.mu_repo'
 
     if config is None:
         config = CreateConfig(config_file)
@@ -146,7 +151,7 @@ def main(config_file=None, args=None, config=None):
                 return
 
         elif arg == '--help':
-            #On a help command, don't execute in multiple repos.
+            # On a help command, don't execute in multiple repos.
             config.repos = ['.']
             break
 
@@ -156,7 +161,7 @@ def main(config_file=None, args=None, config=None):
                 del args[0]
                 config.repos.append('.')
             elif os.path.exists('.git'):
-                #Allow it to be used on single git repos too.
+                # Allow it to be used on single git repos too.
                 config.repos.append('.')
 
 
@@ -169,30 +174,30 @@ def main(config_file=None, args=None, config=None):
     # actions related to repos or mu itself --------------------------------------------------------
     # This should be executed first, because some of them expect to see config as it was loaded
     if arg0 == 'set-var':
-        from .action_set_var import Run #@Reimport
+        from .action_set_var import Run  # @Reimport
         change_to_serial_if_possible = False
         update_repos_from_groups = False
 
     elif arg0 == 'get-vars':
-        from .action_get_vars import Run #@Reimport
+        from .action_get_vars import Run  # @Reimport
         change_to_serial_if_possible = False
 
     elif arg0 == 'auto-update':
-        from .action_auto_update import Run #@Reimport
+        from .action_auto_update import Run  # @Reimport
 
     elif arg0 == 'list':
-        from .action_list import Run #@Reimport
+        from .action_list import Run  # @Reimport
 
     elif arg0 == 'register':
-        from .action_register import Run #@Reimport
+        from .action_register import Run  # @Reimport
         update_repos_from_groups = False
         
     elif arg0 == 'unregister':
-        from .action_unregister import Run #@Reimport
+        from .action_unregister import Run  # @Reimport
         update_repos_from_groups = False
         
     elif arg0 == 'group':
-        from .action_group import Run #@Reimport
+        from .action_group import Run  # @Reimport
         update_repos_from_groups = False
 
     # change global repos list to the current group, if any
@@ -202,29 +207,29 @@ def main(config_file=None, args=None, config=None):
             config.repos = group_repos
 
     # acp variants ---------------------------------------------------------------------------------
-    if arg0 == 'acp': #Add, commit, push
+    if arg0 == 'acp':  # Add, commit, push
         def Run(params):
-            from .action_add_commit_push import Run #@Reimport
+            from .action_add_commit_push import Run  # @Reimport
             Run(params, add=True, commit=True, push=True)
 
-    elif arg0 == 'ac': #Add, commit
+    elif arg0 == 'ac':  # Add, commit
         def Run(params):
-            from .action_add_commit_push import Run #@Reimport
+            from .action_add_commit_push import Run  # @Reimport
             Run(params, add=True, commit=True, push=False)
 
-    elif arg0 == 'a': #Add
+    elif arg0 == 'a':  # Add
         def Run(params):
-            from .action_add_commit_push import Run #@Reimport
+            from .action_add_commit_push import Run  # @Reimport
             Run(params, add=True, commit=False, push=False)
 
-    elif arg0 == 'c': #Commit
+    elif arg0 == 'c':  # Commit
         def Run(params):
-            from .action_add_commit_push import Run #@Reimport
+            from .action_add_commit_push import Run  # @Reimport
             Run(params, add=False, commit=True, push=False)
 
-    elif arg0 == 'p': #Push
+    elif arg0 == 'p':  # Push
         def Run(params):
-            from .action_add_commit_push import Run #@Reimport
+            from .action_add_commit_push import Run  # @Reimport
             Run(params, add=False, commit=False, push=True)
 
 
@@ -232,19 +237,19 @@ def main(config_file=None, args=None, config=None):
 
     # related to git actions -----------------------------------------------------------------------
     elif arg0 == 'dd':
-        from .action_diff import Run #@Reimport
+        from .action_diff import Run  # @Reimport
 
     elif arg0 == 'up':
-        from .action_up import Run #@Reimport
+        from .action_up import Run  # @Reimport
 
     elif arg0 in ('sync', 'upd'):
-        from .action_sync import Run #@Reimport
+        from .action_sync import Run  # @Reimport
 
-    elif arg0 == 'st': #Concise status message (branch, changes)
-        from .action_st import Run #@Reimport
+    elif arg0 == 'st':  # Concise status message (branch, changes)
+        from .action_st import Run  # @Reimport
 
-    elif arg0 == 'rb': #Rebase current_branch origin/current_branch
-        from .action_rebase import Run #@Reimport
+    elif arg0 == 'rb':  # Rebase current_branch origin/current_branch
+        from .action_rebase import Run  # @Reimport
 
 
     # assorted -------------------------------------------------------------------------------------
@@ -252,10 +257,10 @@ def main(config_file=None, args=None, config=None):
         from .action_clone import Run  # @Reimport
 
     elif arg0 == 'git-init-config':
-        from .action_install import Run #@Reimport
+        from .action_install import Run  # @Reimport
 
     elif arg0 == 'fix-eol':
-        from .action_fix_eol import Run #@Reimport
+        from .action_fix_eol import Run  # @Reimport
 
     elif arg0 in ('find-branch', 'fb'):
         from .action_find_branch import Run  # @Reimport
@@ -271,7 +276,7 @@ def main(config_file=None, args=None, config=None):
         try:
             subprocess.call(['sh', '--login', '-i'])
         except:
-            #Ignore any error here (if the user pressed Ctrl+C before exit, we'd have an exception).
+            # Ignore any error here (if the user pressed Ctrl+C before exit, we'd have an exception).
             import traceback;traceback.print_exc()
         return
 
@@ -288,11 +293,11 @@ def main(config_file=None, args=None, config=None):
     # default action -------------------------------------------------------------------------------
     if Run is None:
         if arg0 == 'stash' and len(args) == 1:
-            #Fixing stash: if git stash is provided without arguments, append a '-u' so that it
-            #also stashes untracked files.
+            # Fixing stash: if git stash is provided without arguments, append a '-u' so that it
+            # also stashes untracked files.
             args.append('-u')
 
-        from .action_default import Run #@Reimport
+        from .action_default import Run  # @Reimport
 
     if change_to_serial_if_possible:
         if len(config.repos) == 1:
