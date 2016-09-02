@@ -12,8 +12,39 @@ def Run(params, add, commit, push):
 
     args = params.args[1:]
     if commit and not args:
-        Print('Message for commit is required for git add -A & git commit -m command.')
-        return
+        git = params.config.git
+        from mu_repo.execute_command import ExecuteCommand
+        output = ExecuteCommand(
+            [git] + 'config --get-regexp editor'.split(), '.', return_stdout=True)
+
+        editors = []
+        for line in output.splitlines():
+            if line.startswith('core.editor '):
+                line = line[len('core.editor '):]
+                editors.append(line)
+
+        if not editors:
+            Print('Message for commit is required for git add -A & git commit -m command (or git core.editor must be configured).')
+            return
+        else:
+            import tempfile
+            import subprocess
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.txt') as f:
+                f.write('\n\n')
+                f.write('# Please enter the commit message for your changes. Lines starting\n')
+                f.write('# with "#" will be ignored, and an empty message aborts the commit.\n')
+            subprocess.call(editors[0] + ' ' + f.name)
+            with open(f.name, 'r') as stream:
+                lines = [x for x in stream.read().strip().splitlines() if not x.startswith('#')]
+
+            contents = '\n'.join(lines)
+            import os
+            os.remove(f.name)
+            if not contents:
+                Print('Commit message not provided. Commit aborted.')
+                return
+            else:
+                args = [contents]
 
     from .execute_parallel_command import ParallelCmd, ExecuteInParallelStackingMessages
 
