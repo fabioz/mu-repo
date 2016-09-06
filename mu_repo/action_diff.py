@@ -105,7 +105,7 @@ class StatusEntry(object):
 
     __repr__ = __str__
 
-    def MakeDirs(self, temp_working, temp_repo, repo):
+    def MakeDirs(self, temp_working, temp_repo, repo, initial_repo):
         dirname = os.path.dirname
         join = os.path.join
         basename = os.path.basename
@@ -124,7 +124,7 @@ class StatusEntry(object):
             makedirs(fdir)
 
         #Current working dir original file and created link
-        original = join(repo, filename)
+        original = join(initial_repo, filename)
 
         if filename != self.filename_from:
             filename += '  was  ' + basename(self.filename_from)
@@ -135,7 +135,7 @@ class StatusEntry(object):
         original_repo = self.filename_from
         target_repo = join(temp_repo, repo, filename)
 
-        return original, link, original_repo, target_repo
+        return original, link, original_repo, target_repo, filename
 
 
 #===================================================================================================
@@ -195,12 +195,13 @@ class DoDiffOnRepoThread(ExecuteGitCommandThread):
 
     def _HandleOutput(self, msg, stdout, stderr):
         temp_working, temp_repo, repo = self.temp_working, self.temp_repo, self.repo
+        initial_repo = repo
         while repo.startswith('..'):
             repo = repo[1:]
         for entry in ParsePorcelain(stdout, only_split=self.branch != ''):
             self.entry_count += 1
-            original, link, original_repo, target_repo = entry.MakeDirs(
-                temp_working, temp_repo, repo)
+            original, link, original_repo, target_repo, filename = entry.MakeDirs(
+                temp_working, temp_repo, repo, initial_repo)
 
             if not self.branch:
                 #Dealing with working copy
@@ -221,7 +222,7 @@ class DoDiffOnRepoThread(ExecuteGitCommandThread):
                 original = '/'.join(original.replace('\\', '/').split('/')[1:])
                 thread_pool.AddTask(
                     CreateFromGit(
-                        self.config.git or 'git', self.repo, original, target_repo, self.branch)
+                        self.config.git or 'git', self.repo, filename, target_repo, self.branch)
                 )
 
                 thread_pool.AddTask(
