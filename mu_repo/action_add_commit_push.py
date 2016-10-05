@@ -19,8 +19,8 @@ def Run(params, add, commit, push):
 
         editors = []
         for line in output.splitlines():
-            if line.startswith('core.editor '):
-                line = line[len('core.editor '):]
+            if line.startswith(b'core.editor '):
+                line = line[len(b'core.editor '):]
                 editors.append(line)
 
         if not editors:
@@ -30,10 +30,15 @@ def Run(params, add, commit, push):
             import tempfile
             import subprocess
             with tempfile.NamedTemporaryFile(delete=False, suffix='.txt') as f:
-                f.write('\n\n')
-                f.write('# Please enter the commit message for your changes. Lines starting\n')
-                f.write('# with "#" will be ignored, and an empty message aborts the commit.\n')
-            subprocess.call(editors[0] + ' ' + f.name)
+                f.write(b'\n\n')
+                f.write(b'# Please enter the commit message for your changes. Lines starting\n')
+                f.write(b'# with "#" will be ignored, and an empty message aborts the commit.\n')
+            import sys
+            args = editors[0].decode(sys.getfilesystemencoding()) + ' ' + f.name
+            if hasattr(subprocess, 'run'):
+                subprocess.run(args)
+            else:
+                subprocess.call(args)
             with open(f.name, 'r') as stream:
                 lines = [x for x in stream.read().strip().splitlines() if not x.startswith('#')]
 
