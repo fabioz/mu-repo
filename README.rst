@@ -13,6 +13,6 @@ Tool to help working with multiple git repositories
 .. |ci| image:: http://img.shields.io/travis/fabioz/mu-repo.png
   :target: https://travis-ci.org/fabioz/mu-repo
 
-|ci| |version| |downloads|
+|ci| |version|
 
 See: http://fabioz.github.io/mu-repo/ for more details
