@@ -42,6 +42,12 @@ Using ``mu``, you register the repositories you want only once and then issue co
 * Preview incoming changes on current branch (see [mu upd on Commands](commands.md))
 * [Shortcuts](shortcuts.md) for common git operations.
 
+### New on 1.4.0
+
+Fix for issue on mu-repo not working if .mu_repo file was still not created.
+
+If a commit message is not given on `mu ac`, open the git-configured editor and ask for it.
+
 ### New on 1.3.0
 
 This version allows you to call mu in subdirectories (it'll search directories upwards for the first

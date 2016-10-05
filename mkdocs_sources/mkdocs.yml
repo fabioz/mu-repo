@@ -16,7 +16,7 @@ pages:
 
 repo_url: https://github.com/fabioz/mu-repo/
 
-google_analytics: ['UA-153541-11', 'fabioz.github.io/mu-repo']
+google_analytics: ['UA-153541-11', 'auto']
 
 site_dir: ../site
 
