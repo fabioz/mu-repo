@@ -271,6 +271,10 @@ def main(config_file=None, args=None, config=None):
         if len(args) == 2 and not args[1].startswith('-') and not args[1].startswith('@'):
             from .action_checkout import Run  # @Reimport
 
+    elif arg0 in ('open-url'):
+        from .action_open_url import Run  # @Reimport
+
+
     elif arg0 == 'shell':
         import subprocess
         try:
