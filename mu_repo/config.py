@@ -72,8 +72,10 @@ class Config(object):
 
             remotes_hosts = []
             for line in output.splitlines():
-                if line.startswith('mu-repo.remote-base-url '):
-                    line = line[len('mu-repo.remote-base-url '):]
+                if line.startswith(b'mu-repo.remote-base-url '):
+                    line = line[len(b'mu-repo.remote-base-url '):]
+                    if type(b'') is not type(''):
+                        line = line.decode('utf-8')
                     remotes_hosts.append(line)
             self._remote_hosts = remotes_hosts
 
