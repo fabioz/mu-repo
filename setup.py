@@ -5,7 +5,7 @@ except ImportError:
 
 setup(
     name='mu_repo',
-    version='1.4.0',
+    version='1.5.0',
     description = 'Tool to work with multiple git repositories',
     author='Fabio Zadrozny',
     url='http://fabioz.github.io/mu-repo',
