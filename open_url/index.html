@@ -7,14 +7,14 @@
         
         
         
-        <link rel="shortcut icon" href="/img/favicon.ico">
+        <link rel="shortcut icon" href="../img/favicon.ico">
 
-	<title>mu-repo</title>
+	<title>Creating pull reviews - mu-repo</title>
 
-        <link href="/css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="/css/font-awesome-4.0.3.css" rel="stylesheet">
-        <link href="/css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="/css/highlight.css">
+        <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/highlight.css">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -53,7 +53,7 @@
             
 
             <!-- Main title -->
-            <a class="navbar-brand" href="/">mu-repo</a>
+            <a class="navbar-brand" href="..">mu-repo</a>
         </div>
 
         <!-- Expanded navigation -->
@@ -64,60 +64,60 @@
                 
                 
                     <li >
-                        <a href="/">Home</a>
+                        <a href="..">Home</a>
                     </li>
                 
                 
                 
-                    <li class="dropdown">
+                    <li class="dropdown active">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">User Guide <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                         
                             
 <li >
-    <a href="/install/">Install</a>
+    <a href="../install/">Install</a>
 </li>
 
                         
                             
 <li >
-    <a href="/config/">Configuration</a>
+    <a href="../config/">Configuration</a>
 </li>
 
                         
                             
 <li >
-    <a href="/commands/">Commands</a>
+    <a href="../commands/">Commands</a>
 </li>
 
                         
                             
 <li >
-    <a href="/shortcuts/">Shortcuts</a>
+    <a href="../shortcuts/">Shortcuts</a>
 </li>
 
                         
                             
 <li >
-    <a href="/grouping/">Grouping Repositories</a>
+    <a href="../grouping/">Grouping Repositories</a>
 </li>
 
                         
                             
 <li >
-    <a href="/cloning/">Cloning Multiple Repositories</a>
+    <a href="../cloning/">Cloning Multiple Repositories</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Creating pull reviews</a>
 </li>
 
                         
                             
 <li >
-    <a href="/open_url/">Creating pull reviews</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="/tips_and_tricks/">Tips & Tricks</a>
+    <a href="../tips_and_tricks/">Tips & Tricks</a>
 </li>
 
                         
@@ -132,7 +132,7 @@
                         
                             
 <li >
-    <a href="/license/">License</a>
+    <a href="../license/">License</a>
 </li>
 
                         
@@ -150,13 +150,13 @@
                     </a>
                 </li>
                 
-                    <li class="disabled">
-                        <a rel="next" >
+                    <li >
+                        <a rel="next" href="../cloning/">
                             <i class="fa fa-arrow-left"></i> Previous
                         </a>
                     </li>
-                    <li class="disabled">
-                        <a rel="prev" >
+                    <li >
+                        <a rel="prev" href="../tips_and_tricks/">
                             Next <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
@@ -178,15 +178,71 @@
 
         <div class="container">
             
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#to-use">To use:</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
 
-    <div class="row-fluid">
-      <div id="main-content" class="span12">
-        <h1 id="404-page-not-found" style="text-align: center">404</h1>
-        <p style="text-align: center"><strong>Page not found</strong></p>
-      </div>
-    </div>
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- mu-repo horizontal -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-9116695766406448"
+     data-ad-slot="9828685478"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
 
-
+<p>The <code>mu open-url</code> action may be used to open the web-browser to open urls for the modified repositories compared to some <strong>dest</strong> branch
+(commonly used to create pull requests in multiple repositories).</p>
+<h1 id="to-use">To use:</h1>
+<p><code>mu open-url main-pattern --dest=dest_branch</code></p>
+<p>The main-pattern may use the following keywords:</p>
+<ul>
+<li>
+<p><code>repo</code>: the repository name</p>
+</li>
+<li>
+<p><code>source</code>: the source branch</p>
+</li>
+<li>
+<p><code>dest</code>: the repository destination name</p>
+</li>
+</ul>
+<p>So, given the following situations, it may be used to create pull requests by using:</p>
+<p>Github pattern: <code>https://github.com/user/project/compare/old_development...master</code></p>
+<pre><code>mu open-url https://github.com/user/{repo}/compare/{source}...{dest} --dest=master
+</code></pre>
+<p>Bitbucket pattern: <code>https://bitbucket.org/user/project/branch/source_branch?dest=master</code></p>
+<pre><code>mu open-url https://bitbucket.org/user/{repo}/branch/{source}?dest={dest} --dest=master
+</code></pre>
+<p>Stash pattern: <code>https://custom.domain.com/stash/projects/container/repos/repo_name/compare/commits?sourceBranch=sourceBranch&amp;targetBranch=master</code></p>
+<pre><code>mu open-url "https://custom.domain.com/stash/projects/container/repos/{repo}/compare/commits?sourceBranch={source}&amp;targetBranch={dest}" --dest=master
+</code></pre>
+<p>Note that currently the base url/pattern must be the same for all the repos (it's not possible
+to have one repository hosted in one place and another in another place for the current code
+to work -- for this we'd need to store the url per repository).</p>
+<br/>
+<br/>
+<div>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- mu-repo horizontal -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-9116695766406448"
+     data-ad-slot="9828685478"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div></div>
+            
         </div>
 
         <footer class="col-md-12">
@@ -195,12 +251,12 @@
             <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
 
-        <script src="/js/jquery-1.10.2.min.js"></script>
-        <script src="/js/bootstrap-3.0.3.min.js"></script>
-        <script src="/js/highlight.pack.js"></script>
-        <script>var base_url = '';</script>
-        <script data-main="/mkdocs/js/search.js" src="/mkdocs/js/require.js"></script>
-        <script src="/js/base.js"></script>
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../js/highlight.pack.js"></script>
+        <script>var base_url = '..';</script>
+        <script data-main="../mkdocs/js/search.js" src="../mkdocs/js/require.js"></script>
+        <script src="../js/base.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
             <div class="modal-dialog">

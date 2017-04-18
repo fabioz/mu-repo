@@ -1,5 +1,5 @@
 The `mu open-url` action may be used to open the web-browser to open urls for the modified repositories compared to some **dest** branch
-(commonly used to create pull reviews in multiple repositories).
+(commonly used to create pull requests in multiple repositories).
 
 To use:
 ========

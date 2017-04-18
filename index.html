@@ -111,6 +111,12 @@
                         
                             
 <li >
+    <a href="open_url/">Creating pull reviews</a>
+</li>
+
+                        
+                            
+<li >
     <a href="tips_and_tricks/">Tips & Tricks</a>
 </li>
 
@@ -227,12 +233,18 @@ mu fetch &amp;&amp; mu checkout -b my-feature origin/master
 <li>Checking out branches by partial name matching (<code>mu co v1.2</code> would checkout branch <code>prog_v1.2</code>) </li>
 <li>Preview incoming changes on current branch (see <a href="commands/">mu upd on Commands</a>)</li>
 <li><a href="shortcuts/">Shortcuts</a> for common git operations.</li>
+<li><a href="open_url/">Open Url</a> for opening the browser to create pull requests over multiple repositories.</li>
 </ul>
+<h3 id="new-on-150">New on 1.5.0</h3>
+<p>Fixed issue where the colors were not being properly shown on Python 3.</p>
+<p>Fixed issue on <code>mu clone</code> on Python 3.</p>
+<p>Created <code>mu open-url</code> action to help on creating pull requests on multiple repositories at once. See <a href="open_url/">Open Url</a>.</p>
 <h3 id="new-on-140">New on 1.4.0</h3>
-<p>Fix for issue on mu-repo not working if .mu_repo file was still not created.</p>
+<p>Fix for issue on mu-repo not working if <code>.mu_repo</code> file was still not created.</p>
 <p>If a commit message is not given on <code>mu ac</code>, open the git-configured editor and ask for it.</p>
+<p>Fixed issue on <strong>mu dd</strong> when executed with a repository referencing ano ther repository in the same level (i.e.: ./A references ../B).</p>
 <h3 id="new-on-130">New on 1.3.0</h3>
-<p>This version allows you to call mu in subdirectories (it'll search directories upwards for the first
+<p>This version allows you to call <code>mu</code> in subdirectories (it'll search directories upwards for the first
 directory containing a .mu_repo file or a .git directory).</p>
 <h3 id="new-on-120">New on 1.2.0</h3>
 <p>This version allows you to clone multiple repositories at once. See:
@@ -246,6 +258,7 @@ directory containing a .mu_repo file or a .git directory).</p>
 <li><a href="grouping/">Grouping Repositories</a></li>
 <li><a href="cloning/">Cloning Multiple Repositories</a></li>
 <li><a href="tips_and_tricks/">Tips &amp; Tricks</a></li>
+<li><a href="open_url/">Open Url</a>.</li>
 </ul>
 <br/>
 <br/>
@@ -305,6 +318,6 @@ directory containing a .mu_repo file or a .git directory).</p>
 </html>
 
 <!--
-MkDocs version : 0.13.2
-Build Date UTC : 2016-10-05 17:13:22.981000
+MkDocs version : 0.16.3
+Build Date UTC : 2017-04-18 17:12:36
 -->

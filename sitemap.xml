@@ -3,8 +3,8 @@
 
     
     <url>
-     <loc>None/</loc>
-     <lastmod>2016-10-05</lastmod>
+     <loc>/</loc>
+     <lastmod>2017-04-18</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -12,44 +12,50 @@
     
         
     <url>
-     <loc>None/install/</loc>
-     <lastmod>2016-10-05</lastmod>
+     <loc>/install/</loc>
+     <lastmod>2017-04-18</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>None/config/</loc>
-     <lastmod>2016-10-05</lastmod>
+     <loc>/config/</loc>
+     <lastmod>2017-04-18</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>None/commands/</loc>
-     <lastmod>2016-10-05</lastmod>
+     <loc>/commands/</loc>
+     <lastmod>2017-04-18</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>None/shortcuts/</loc>
-     <lastmod>2016-10-05</lastmod>
+     <loc>/shortcuts/</loc>
+     <lastmod>2017-04-18</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>None/grouping/</loc>
-     <lastmod>2016-10-05</lastmod>
+     <loc>/grouping/</loc>
+     <lastmod>2017-04-18</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>None/cloning/</loc>
-     <lastmod>2016-10-05</lastmod>
+     <loc>/cloning/</loc>
+     <lastmod>2017-04-18</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>None/tips_and_tricks/</loc>
-     <lastmod>2016-10-05</lastmod>
+     <loc>/open_url/</loc>
+     <lastmod>2017-04-18</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/tips_and_tricks/</loc>
+     <lastmod>2017-04-18</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -58,8 +64,8 @@
     
         
     <url>
-     <loc>None/license/</loc>
-     <lastmod>2016-10-05</lastmod>
+     <loc>/license/</loc>
+     <lastmod>2017-04-18</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
