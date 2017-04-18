@@ -9,6 +9,7 @@ pages:
     - Shortcuts: shortcuts.md
     - Grouping Repositories: grouping.md
     - Cloning Multiple Repositories: cloning.md
+    - Creating pull reviews: open_url.md
     - Tips & Tricks: tips_and_tricks.md
 - About: 
     - License: license.md

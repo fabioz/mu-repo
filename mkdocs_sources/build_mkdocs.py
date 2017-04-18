@@ -22,6 +22,9 @@ cur_dir = os.path.dirname(__file__)
 
 mkdocs_exe = os.path.join(os.path.dirname(sys.executable), 'Scripts', 'mkdocs.exe')
 
+if not os.path.exists(mkdocs_exe):
+    raise AssertionError('Expected %s to exist.' % (mkdocs_exe,))
+
 try:
     args = [mkdocs_exe, 'build']
     subprocess.call(args, cwd=cur_dir)

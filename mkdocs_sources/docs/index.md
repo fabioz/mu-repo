@@ -41,6 +41,21 @@ Using ``mu``, you register the repositories you want only once and then issue co
 * Checking out branches by partial name matching (`mu co v1.2` would checkout branch `prog_v1.2`) 
 * Preview incoming changes on current branch (see [mu upd on Commands](commands.md))
 * [Shortcuts](shortcuts.md) for common git operations.
+* [Open Url](open_url.md) for opening the browser to create pull requests over multiple repositories.
+
+### New on 1.5.0
+
+Fixed issue where the colors were not being properly shown on Python 3.
+
+Fixed issue on `mu clone` on Python 3.
+
+Created `mu open-url` action to help on creating pull requests on multiple repositories at once. See [Open Url](open_url.md).
+
+### New on 1.4.0
+
+Fixed for issue on new mu-repo installations (mu actions not working if `.mu_repo` file still not created).
+
+Fixed issue on **mu dd** when executed with a repository referencing ano ther repository in the same level (i.e.: ./A references ../B).
 
 ### New on 1.4.0
 
@@ -50,7 +65,7 @@ If a commit message is not given on `mu ac`, open the git-configured editor and 
 
 ### New on 1.3.0
 
-This version allows you to call mu in subdirectories (it'll search directories upwards for the first
+This version allows you to call `mu` in subdirectories (it'll search directories upwards for the first
 directory containing a .mu_repo file or a .git directory).
 
 ### New on 1.2.0
@@ -67,4 +82,5 @@ This version allows you to clone multiple repositories at once. See:
 * [Grouping Repositories](grouping.md)
 * [Cloning Multiple Repositories](cloning.md)
 * [Tips & Tricks](tips_and_tricks.md)
+* [Open Url](open_url.md).
 
