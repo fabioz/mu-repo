@@ -11,6 +11,7 @@ $Id: color_console.py 534 2009-05-10 04:00:59Z andre $
 """
 
 from ctypes import Structure, byref, c_short, c_ushort, windll
+import sys
 
 SHORT = c_short
 WORD = c_ushort
@@ -79,4 +80,7 @@ def set_text_attr(color):
     """Sets the character attributes (colors) of the console screen
     buffer. Color is a combination of foreground and background color,
     foreground and background intensity."""
+
+    sys.stdout.flush()  # Flush is needed on Python 3
     SetConsoleTextAttribute(stdout_handle, color)
+    sys.stdout.flush()  # Flush is needed on Python 3
