@@ -24,4 +24,17 @@ setup(
 # git tag -a mu_repo_1_5_0
 # git push --tags
 # python setup.py sdist
-# python setup.py sdist register upload
+# python setup.py sdist upload
+
+#
+# Note: Upload may fail if ~/.pypirc is not present with username (see: https://github.com/pypa/setuptools/issues/941)
+# Contents of ~/.pypirc:
+#
+# [distutils]
+# index-servers =
+#     pypi
+#
+# [pypi]
+# repository: https://upload.pypi.org/legacy/
+# username: <username>
+
