@@ -53,15 +53,11 @@ Created `mu open-url` action to help on creating pull requests on multiple repos
 
 ### New on 1.4.0
 
-Fixed for issue on new mu-repo installations (mu actions not working if `.mu_repo` file still not created).
-
-Fixed issue on **mu dd** when executed with a repository referencing ano ther repository in the same level (i.e.: ./A references ../B).
-
-### New on 1.4.0
-
-Fix for issue on mu-repo not working if .mu_repo file was still not created.
+Fix for issue on mu-repo not working if `.mu_repo` file was still not created.
 
 If a commit message is not given on `mu ac`, open the git-configured editor and ask for it.
+
+Fixed issue on **mu dd** when executed with a repository referencing ano ther repository in the same level (i.e.: ./A references ../B).
 
 ### New on 1.3.0
 
