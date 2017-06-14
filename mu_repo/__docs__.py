@@ -13,7 +13,7 @@
 * ${START_COLOR}mu find-branch [-r] *pat*:${RESET_COLOR}
     Finds all branches matching a given pattern (or simply mu fb).
 * ${START_COLOR}mu git-init-config:${RESET_COLOR} Initial git configuration (username, log, etc.)
-* ${START_COLOR}mu --version:${RESET_COLOR} Get its version
+* ${START_COLOR}mu --version:${RESET_COLOR} Prints its version
 * ${START_COLOR}mu auto-update:${RESET_COLOR} Automatically updates mu-repo
   (using git -- if it was installed from the repo as in the instructions).
 
@@ -26,6 +26,10 @@
      mu dd HEAD^^
      mu dd 9fd88da
      mu dd development
+
+* ${START_COLOR}mu sh <command line>${RESET_COLOR}
+   Allows calling any command line in the registered repositories
+   e.g.: ${START_COLOR}mu sh ls -la${RESET_COLOR} will call ${START_COLOR}ls -la${RESET_COLOR} on all registered repositories.
 
 * ${START_COLOR}mu clone:${RESET_COLOR} Cloning multiple repos from a base url.
   Use mu clone --help to open browser with more details.

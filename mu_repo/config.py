@@ -3,8 +3,10 @@ Created on 17/05/2012
 
 @author: Fabio Zadrozny
 '''
-from mu_repo.backwards import iteritems
 import sys
+
+from mu_repo.backwards import iteritems
+
 
 #===================================================================================================
 # IsFalse
@@ -32,6 +34,7 @@ class Config(object):
         '_git',
         'current_group',
         'groups',
+        'is_sh_command',
         '_remote_hosts'
     ]
 
@@ -39,6 +42,7 @@ class Config(object):
         self.repos = []
         self.serial = False #Default is now in parallel.
         self._git = None
+        self.is_sh_command = False
 
         # contains the current group; if None, all repos will be used
         self.current_group = None

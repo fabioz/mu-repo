@@ -303,6 +303,25 @@ def main(config_file=None, args=None, config=None):
         print('mu-repo version %s' % (__version__,))
         return
 
+    elif arg0 == 'sh':
+        # mu sh command to execute
+        # i.e.:
+        #     mu sh dir
+        #     mu sh mvn build
+        #     mu sh python setup.py install
+        if len(args) < 2:
+            Print('Error: ${START_COLOR}mu sh${RESET_COLOR} requires the command line to be called on other repositories.')
+            return
+        print(args)
+        args = args[1:]  # Remove sh
+
+        # Little hack: make git be the executable and leave the remaining args
+        config.git = args[0]
+        config.is_sh_command = True
+        args = args[1:]
+        from .action_default import Run  # @Reimport
+
+
     # default action -------------------------------------------------------------------------------
     if Run is None:
         if arg0 == 'stash' and len(args) == 1:
