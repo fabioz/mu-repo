@@ -312,7 +312,6 @@ def main(config_file=None, args=None, config=None):
         if len(args) < 2:
             Print('Error: ${START_COLOR}mu sh${RESET_COLOR} requires the command line to be called on other repositories.')
             return
-        print(args)
         args = args[1:]  # Remove sh
 
         # Little hack: make git be the executable and leave the remaining args
