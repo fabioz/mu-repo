@@ -79,6 +79,11 @@ def Run(params):
     for repo, branch in repos_and_curr_branch:
         keywords['source'] = branch
         if repo in repos_with_changes:
+            import os.path
+            if repo == '.':
+                repo = os.path.basename(os.path.realpath('.'))
+            else:
+                repo = repo.replace('.', '').replace('/', '').replace('\\', '')
             keywords['repo'] = repo
             url = pattern.format(**keywords)
             webbrowser.open_new_tab(url)

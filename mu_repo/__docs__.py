@@ -13,8 +13,9 @@
 * ${START_COLOR}mu find-branch [-r] *pat*:${RESET_COLOR}
     Finds all branches matching a given pattern (or simply mu fb).
 * ${START_COLOR}mu git-init-config:${RESET_COLOR} Initial git configuration (username, log, etc.)
+* ${START_COLOR}mu --version:${RESET_COLOR} Get its version
 * ${START_COLOR}mu auto-update:${RESET_COLOR} Automatically updates mu-repo
-  (using git -- must have been pulled from git as in the instructions).
+  (using git -- if it was installed from the repo as in the instructions).
 
 * ${START_COLOR}mu dd:${RESET_COLOR}
      Creates a directory structure with working dir vs head and opens

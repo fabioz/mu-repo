@@ -1,10 +1,15 @@
 from __future__ import with_statement
-from . import backwards
-from .print_ import Print
-from mu_repo.config import Config
+
 import os.path
 import sys
 
+from mu_repo.config import Config
+
+from . import backwards
+from .print_ import Print
+
+# Note: update here and in setup
+__version__ = '1.6.0'
 
 # Just making sure we're in the PYTHONPATH!
 sys.path.append(os.path.dirname(__file__))
@@ -292,6 +297,10 @@ def main(config_file=None, args=None, config=None):
     elif arg0 == 'start-server':
         from mu_repo.stat_server import server  # @Reimport
         server.start_server_in_subprocess()
+        return
+
+    elif arg0 == '--version':
+        print('mu-repo version %s' % (__version__,))
         return
 
     # default action -------------------------------------------------------------------------------
