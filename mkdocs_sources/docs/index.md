@@ -42,6 +42,13 @@ Using ``mu``, you register the repositories you want only once and then issue co
 * Preview incoming changes on current branch (see [mu upd on Commands](commands.md))
 * [Shortcuts](shortcuts.md) for common git operations.
 * [Open Url](open_url.md) for opening the browser to create pull requests over multiple repositories.
+* Run arbitrary commands on registered repositories (through `mu sh <command to execute>`).
+
+### New on 1.6.0
+
+Created `mu sh` action to execute non git commands (i.e.: `mu sh make` or `mu sh python setup.py install` or `mu mvn install`).
+
+Fixed issue in `mu open-url` action when dealing with relative repositories. See [Open Url](open_url.md).
 
 ### New on 1.5.0
 
