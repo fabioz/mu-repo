@@ -224,6 +224,9 @@ to register relative paths in a project repository to handle dependencies
 (see <a href="../tips_and_tricks/">Grouping by project directories at Tips &amp; Tricks</a> for more details).</p>
 <p><strong>Tip:</strong> it may also be used as a git replacement on directories 
 containing a <code>.git</code> dir.</p>
+<p><strong>Tip:</strong> the <code>.mu_repo</code> file is used to store the state used by <code>mu</code>, and its format
+is pretty simple, so, at times it may be easier to edit it directly instead of issuing
+commands. </p>
 <h2 id="custom-commands">Custom commands</h2>
 <ul>
 <li>
@@ -302,6 +305,11 @@ mu dd development
 <li>
 <p><code>mu group</code></p>
 <p>Allows grouping repositories. See: <a href="../grouping/">Grouping</a> for details.</p>
+</li>
+<li>
+<p><code>mu sh &lt;command line&gt;</code></p>
+<p>Allows calling any command line in the registered repositories</p>
+<p>i.e.: <code>mu sh ls -la</code> will call <code>ls -la</code> on all registered repositories.</p>
 </li>
 </ul>
 <p>Also see:</p>

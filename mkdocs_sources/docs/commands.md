@@ -26,6 +26,9 @@ to register relative paths in a project repository to handle dependencies
 **Tip:** it may also be used as a git replacement on directories 
 containing a ``.git`` dir.
 
+**Tip:** the `.mu_repo` file is used to store the state used by `mu`, and its format
+is pretty simple, so, at times it may be easier to edit it directly instead of issuing
+commands. 
 
 
 Custom commands
@@ -98,8 +101,13 @@ Custom commands
 * ``mu group``
 
     Allows grouping repositories. See: [Grouping](grouping.md) for details.
+
+* ``mu sh <command line>``
+
+    Allows calling any command line in the registered repositories
     
-    
+    i.e.: `mu sh ls -la` will call `ls -la` on all registered repositories.
+   
 Also see:
 
 * [Shortcuts](shortcuts.md)
