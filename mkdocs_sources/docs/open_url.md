@@ -17,17 +17,37 @@ The main-pattern may use the following keywords:
 
 So, given the following situations, it may be used to create pull requests by using:
 
-Github pattern: `https://github.com/user/project/compare/old_development...master`
+### Github
 
-    mu open-url https://github.com/user/{repo}/compare/{source}...{dest} --dest=master
+##### Pattern: `https://github.com/user/project/compare/old_development...master`
 
-Bitbucket pattern: `https://bitbucket.org/user/project/branch/source_branch?dest=master`
+Example to create pull request from current branch to the master branch:
 
-    mu open-url https://bitbucket.org/user/{repo}/branch/{source}?dest={dest} --dest=master
+ * `mu open-url "https://github.com/user/{repo}/compare/{source}...{dest}" --dest=master`
 
-Stash pattern: `https://custom.domain.com/stash/projects/container/repos/repo_name/compare/commits?sourceBranch=sourceBranch&targetBranch=master`
+### Bitbucket
 
-    mu open-url "https://custom.domain.com/stash/projects/container/repos/{repo}/compare/commits?sourceBranch={source}&targetBranch={dest}" --dest=master
+##### Pattern: `https://bitbucket.org/user/project/branch/source_branch?dest=master`
+
+Example to create pull request from current branch to the master branch:
+
+ * `mu open-url "https://bitbucket.org/user/{repo}/branch/{source}?dest={dest}" --dest=master`
+
+### GitLab
+
+##### Pattern: `https://gitlab.com/user/repo/merge_requests/new?merge_request[source_branch]=my-feature-branch&merge_request[target_branch]=master`
+
+Example to create pull request from current branch to the master branch:
+
+ * `mu open-url "https://gitlab.com/user/{repo}/merge_requests/new?merge_request[source_branch]={source}&merge_request[target_branch]={dest}" --dest=master`
+
+### Stash
+
+Example to create pull request from current branch to the master branch:
+
+##### Pattern: `https://custom.domain.com/stash/projects/container/repos/repo_name/compare/commits?sourceBranch=sourceBranch&targetBranch=master`
+
+ * `mu open-url "https://custom.domain.com/stash/projects/container/repos/{repo}/compare/commits?sourceBranch={source}&targetBranch={dest}" --dest=master`
 
 Note that currently the base url/pattern must be the same for all the repos (it's not possible
 to have one repository hosted in one place and another in another place for the current code

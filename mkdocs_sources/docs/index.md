@@ -78,5 +78,5 @@ This version allows you to clone multiple repositories at once. See:
 * [Grouping Repositories](grouping.md)
 * [Cloning Multiple Repositories](cloning.md)
 * [Tips & Tricks](tips_and_tricks.md)
-* [Open Url](open_url.md).
+* [Open Url (Create pull requests)](open_url.md)
 
