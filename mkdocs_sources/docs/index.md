@@ -50,6 +50,8 @@ Created `mu sh` action to execute non git commands (i.e.: `mu sh make` or `mu sh
 
 Fixed issue in `mu open-url` action when dealing with relative repositories. See [Open Url](open_url.md).
 
+`mu --version` can be used to get the current mu repo version.
+
 ### New on 1.5.0
 
 Fixed issue where the colors were not being properly shown on Python 3.
