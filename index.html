@@ -234,7 +234,11 @@ mu fetch &amp;&amp; mu checkout -b my-feature origin/master
 <li>Preview incoming changes on current branch (see <a href="commands/">mu upd on Commands</a>)</li>
 <li><a href="shortcuts/">Shortcuts</a> for common git operations.</li>
 <li><a href="open_url/">Open Url</a> for opening the browser to create pull requests over multiple repositories.</li>
+<li>Run <strong>arbitrary commands</strong> on registered repositories (through <code>mu sh &lt;command to execute&gt;</code>).</li>
 </ul>
+<h3 id="new-on-160">New on 1.6.0</h3>
+<p>Created <code>mu sh</code> action to execute non git commands (i.e.: <code>mu sh make</code> or <code>mu sh python setup.py install</code> or <code>mu mvn install</code>).</p>
+<p>Fixed issue in <code>mu open-url</code> action when dealing with relative repositories. See <a href="open_url/">Open Url</a>.</p>
 <h3 id="new-on-150">New on 1.5.0</h3>
 <p>Fixed issue where the colors were not being properly shown on Python 3.</p>
 <p>Fixed issue on <code>mu clone</code> on Python 3.</p>
@@ -258,7 +262,7 @@ directory containing a .mu_repo file or a .git directory).</p>
 <li><a href="grouping/">Grouping Repositories</a></li>
 <li><a href="cloning/">Cloning Multiple Repositories</a></li>
 <li><a href="tips_and_tricks/">Tips &amp; Tricks</a></li>
-<li><a href="open_url/">Open Url</a>.</li>
+<li><a href="open_url/">Open Url (Create pull requests)</a></li>
 </ul>
 <br/>
 <br/>
@@ -319,5 +323,5 @@ directory containing a .mu_repo file or a .git directory).</p>
 
 <!--
 MkDocs version : 0.16.3
-Build Date UTC : 2017-04-18 17:12:36
+Build Date UTC : 2017-06-21 13:50:33
 -->

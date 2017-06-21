@@ -9,7 +9,13 @@ Now, for building it's a bit more tricky because it doesn't accept building at t
 so, this script should be executed to make the build as it'll create it and relocate to the
 appropriate location.
 
-Note: to install mkdocs: pip install mkdocs==0.13.2
+Note: to install mkdocs: pip install mkdocs==0.16.3
+
+To execute must do:
+
+python mkdocs_sources\build_mkdocs.py
+
+(i.e.: must be in the root of the project).
 '''
 
 import os
@@ -26,7 +32,7 @@ if not os.path.exists(mkdocs_exe):
     raise AssertionError('Expected %s to exist.' % (mkdocs_exe,))
 
 try:
-    args = [mkdocs_exe, 'build']
+    args = [mkdocs_exe, 'build', '--clean']
     subprocess.call(args, cwd=cur_dir)
 except:
     sys.stderr.write('Error calling: %s\n' % (args,))

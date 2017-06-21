@@ -2,7 +2,7 @@
     "docs": [
         {
             "location": "/", 
-            "text": "mu-repo\n\n\nTool to help working with multiple git repositories\n(short for \nMultiple Repositories\n).\n\n\nOverview\n\n\nmu\n is a command line tool that helps you execute the same commands in multiple \ngit\n repositories.\n\n\nSuppose you have repositories that are related, and want to execute the same \ngit\n commands in each (for instance, create\na branch with the same name in all of them).\n\n\n$ cd my-project\n$ ls \nrepo1 repo2\n$ cd repo1\n$ git fetch \n git checkout -b my-feature origin/master\n...\n$ cd repo2\n$ git fetch \n git checkout -b my-feature origin/master\n...\n\n\n\nBesides being tedious, it is easy to forget some of the repositories when you're dealing with several.\n\n\nUsing \nmu\n, you register the repositories you want only once and then issue commands to all of them at once:\n\n\ncd my-project\nmu register repo1 repo2\nmu fetch \n mu checkout -b my-feature origin/master\n\n\n\nmu\n also provides other useful features such as:\n\n\n\n\nCloning multiple repositories\n\n\nCreating groups of repositories\n\n\nDiffing changes for edition with WinMerge or meld (see \nmu dd on Commands\n)\n\n\nChecking out branches by partial name matching (\nmu co v1.2\n would checkout branch \nprog_v1.2\n) \n\n\nPreview incoming changes on current branch (see \nmu upd on Commands\n)\n\n\nShortcuts\n for common git operations.\n\n\nOpen Url\n for opening the browser to create pull requests over multiple repositories.\n\n\n\n\nNew on 1.5.0\n\n\nFixed issue where the colors were not being properly shown on Python 3.\n\n\nFixed issue on \nmu clone\n on Python 3.\n\n\nCreated \nmu open-url\n action to help on creating pull requests on multiple repositories at once. See \nOpen Url\n.\n\n\nNew on 1.4.0\n\n\nFix for issue on mu-repo not working if \n.mu_repo\n file was still not created.\n\n\nIf a commit message is not given on \nmu ac\n, open the git-configured editor and ask for it.\n\n\nFixed issue on \nmu dd\n when executed with a repository referencing ano ther repository in the same level (i.e.: ./A references ../B).\n\n\nNew on 1.3.0\n\n\nThis version allows you to call \nmu\n in subdirectories (it'll search directories upwards for the first\ndirectory containing a .mu_repo file or a .git directory).\n\n\nNew on 1.2.0\n\n\nThis version allows you to clone multiple repositories at once. See:\n\nCloning multiple repositories\n\n\nProceed to:\n\n\n\n\nInstall\n\n\nConfiguration\n\n\nCommands\n\n\nShortcuts\n\n\nGrouping Repositories\n\n\nCloning Multiple Repositories\n\n\nTips \n Tricks\n\n\nOpen Url\n.", 
+            "text": "mu-repo\n\n\nTool to help working with multiple git repositories\n(short for \nMultiple Repositories\n).\n\n\nOverview\n\n\nmu\n is a command line tool that helps you execute the same commands in multiple \ngit\n repositories.\n\n\nSuppose you have repositories that are related, and want to execute the same \ngit\n commands in each (for instance, create\na branch with the same name in all of them).\n\n\n$ cd my-project\n$ ls \nrepo1 repo2\n$ cd repo1\n$ git fetch \n git checkout -b my-feature origin/master\n...\n$ cd repo2\n$ git fetch \n git checkout -b my-feature origin/master\n...\n\n\n\nBesides being tedious, it is easy to forget some of the repositories when you're dealing with several.\n\n\nUsing \nmu\n, you register the repositories you want only once and then issue commands to all of them at once:\n\n\ncd my-project\nmu register repo1 repo2\nmu fetch \n mu checkout -b my-feature origin/master\n\n\n\nmu\n also provides other useful features such as:\n\n\n\n\nCloning multiple repositories\n\n\nCreating groups of repositories\n\n\nDiffing changes for edition with WinMerge or meld (see \nmu dd on Commands\n)\n\n\nChecking out branches by partial name matching (\nmu co v1.2\n would checkout branch \nprog_v1.2\n) \n\n\nPreview incoming changes on current branch (see \nmu upd on Commands\n)\n\n\nShortcuts\n for common git operations.\n\n\nOpen Url\n for opening the browser to create pull requests over multiple repositories.\n\n\nRun \narbitrary commands\n on registered repositories (through \nmu sh \ncommand to execute\n).\n\n\n\n\nNew on 1.6.0\n\n\nCreated \nmu sh\n action to execute non git commands (i.e.: \nmu sh make\n or \nmu sh python setup.py install\n or \nmu mvn install\n).\n\n\nFixed issue in \nmu open-url\n action when dealing with relative repositories. See \nOpen Url\n.\n\n\nNew on 1.5.0\n\n\nFixed issue where the colors were not being properly shown on Python 3.\n\n\nFixed issue on \nmu clone\n on Python 3.\n\n\nCreated \nmu open-url\n action to help on creating pull requests on multiple repositories at once. See \nOpen Url\n.\n\n\nNew on 1.4.0\n\n\nFix for issue on mu-repo not working if \n.mu_repo\n file was still not created.\n\n\nIf a commit message is not given on \nmu ac\n, open the git-configured editor and ask for it.\n\n\nFixed issue on \nmu dd\n when executed with a repository referencing ano ther repository in the same level (i.e.: ./A references ../B).\n\n\nNew on 1.3.0\n\n\nThis version allows you to call \nmu\n in subdirectories (it'll search directories upwards for the first\ndirectory containing a .mu_repo file or a .git directory).\n\n\nNew on 1.2.0\n\n\nThis version allows you to clone multiple repositories at once. See:\n\nCloning multiple repositories\n\n\nProceed to:\n\n\n\n\nInstall\n\n\nConfiguration\n\n\nCommands\n\n\nShortcuts\n\n\nGrouping Repositories\n\n\nCloning Multiple Repositories\n\n\nTips \n Tricks\n\n\nOpen Url (Create pull requests)", 
             "title": "Home"
         }, 
         {
@@ -12,8 +12,13 @@
         }, 
         {
             "location": "/#overview", 
-            "text": "mu  is a command line tool that helps you execute the same commands in multiple  git  repositories.  Suppose you have repositories that are related, and want to execute the same  git  commands in each (for instance, create\na branch with the same name in all of them).  $ cd my-project\n$ ls \nrepo1 repo2\n$ cd repo1\n$ git fetch   git checkout -b my-feature origin/master\n...\n$ cd repo2\n$ git fetch   git checkout -b my-feature origin/master\n...  Besides being tedious, it is easy to forget some of the repositories when you're dealing with several.  Using  mu , you register the repositories you want only once and then issue commands to all of them at once:  cd my-project\nmu register repo1 repo2\nmu fetch   mu checkout -b my-feature origin/master  mu  also provides other useful features such as:   Cloning multiple repositories  Creating groups of repositories  Diffing changes for edition with WinMerge or meld (see  mu dd on Commands )  Checking out branches by partial name matching ( mu co v1.2  would checkout branch  prog_v1.2 )   Preview incoming changes on current branch (see  mu upd on Commands )  Shortcuts  for common git operations.  Open Url  for opening the browser to create pull requests over multiple repositories.", 
+            "text": "mu  is a command line tool that helps you execute the same commands in multiple  git  repositories.  Suppose you have repositories that are related, and want to execute the same  git  commands in each (for instance, create\na branch with the same name in all of them).  $ cd my-project\n$ ls \nrepo1 repo2\n$ cd repo1\n$ git fetch   git checkout -b my-feature origin/master\n...\n$ cd repo2\n$ git fetch   git checkout -b my-feature origin/master\n...  Besides being tedious, it is easy to forget some of the repositories when you're dealing with several.  Using  mu , you register the repositories you want only once and then issue commands to all of them at once:  cd my-project\nmu register repo1 repo2\nmu fetch   mu checkout -b my-feature origin/master  mu  also provides other useful features such as:   Cloning multiple repositories  Creating groups of repositories  Diffing changes for edition with WinMerge or meld (see  mu dd on Commands )  Checking out branches by partial name matching ( mu co v1.2  would checkout branch  prog_v1.2 )   Preview incoming changes on current branch (see  mu upd on Commands )  Shortcuts  for common git operations.  Open Url  for opening the browser to create pull requests over multiple repositories.  Run  arbitrary commands  on registered repositories (through  mu sh  command to execute ).", 
             "title": "Overview"
+        }, 
+        {
+            "location": "/#new-on-160", 
+            "text": "Created  mu sh  action to execute non git commands (i.e.:  mu sh make  or  mu sh python setup.py install  or  mu mvn install ).  Fixed issue in  mu open-url  action when dealing with relative repositories. See  Open Url .", 
+            "title": "New on 1.6.0"
         }, 
         {
             "location": "/#new-on-150", 
@@ -37,7 +42,7 @@
         }, 
         {
             "location": "/#proceed-to", 
-            "text": "Install  Configuration  Commands  Shortcuts  Grouping Repositories  Cloning Multiple Repositories  Tips   Tricks  Open Url .", 
+            "text": "Install  Configuration  Commands  Shortcuts  Grouping Repositories  Cloning Multiple Repositories  Tips   Tricks  Open Url (Create pull requests)", 
             "title": "Proceed to:"
         }, 
         {
@@ -127,13 +132,53 @@
         }, 
         {
             "location": "/open_url/", 
-            "text": "The \nmu open-url\n action may be used to open the web-browser to open urls for the modified repositories compared to some \ndest\n branch\n(commonly used to create pull requests in multiple repositories).\n\n\nTo use:\n\n\nmu open-url main-pattern --dest=dest_branch\n\n\nThe main-pattern may use the following keywords:\n\n\n\n\n\n\nrepo\n: the repository name\n\n\n\n\n\n\nsource\n: the source branch\n\n\n\n\n\n\ndest\n: the repository destination name\n\n\n\n\n\n\nSo, given the following situations, it may be used to create pull requests by using:\n\n\nGithub pattern: \nhttps://github.com/user/project/compare/old_development...master\n\n\nmu open-url https://github.com/user/{repo}/compare/{source}...{dest} --dest=master\n\n\n\nBitbucket pattern: \nhttps://bitbucket.org/user/project/branch/source_branch?dest=master\n\n\nmu open-url https://bitbucket.org/user/{repo}/branch/{source}?dest={dest} --dest=master\n\n\n\nStash pattern: \nhttps://custom.domain.com/stash/projects/container/repos/repo_name/compare/commits?sourceBranch=sourceBranch\ntargetBranch=master\n\n\nmu open-url \"https://custom.domain.com/stash/projects/container/repos/{repo}/compare/commits?sourceBranch={source}\ntargetBranch={dest}\" --dest=master\n\n\n\nNote that currently the base url/pattern must be the same for all the repos (it's not possible\nto have one repository hosted in one place and another in another place for the current code\nto work -- for this we'd need to store the url per repository).", 
+            "text": "The \nmu open-url\n action may be used to open the web-browser to open urls for the modified repositories compared to some \ndest\n branch\n(commonly used to create pull requests in multiple repositories).\n\n\nTo use:\n\n\nmu open-url main-pattern --dest=dest_branch\n\n\nThe main-pattern may use the following keywords:\n\n\n\n\n\n\nrepo\n: the repository name\n\n\n\n\n\n\nsource\n: the source branch\n\n\n\n\n\n\ndest\n: the repository destination name\n\n\n\n\n\n\nSo, given the following situations, it may be used to create pull requests by using:\n\n\nGithub\n\n\nPattern: \nhttps://github.com/user/project/compare/old_development...master\n\n\nExample to create pull request from current branch to the master branch:\n\n\n\n\nmu open-url \"https://github.com/user/{repo}/compare/{source}...{dest}\" --dest=master\n\n\n\n\nBitbucket\n\n\nPattern: \nhttps://bitbucket.org/user/project/branch/source_branch?dest=master\n\n\nExample to create pull request from current branch to the master branch:\n\n\n\n\nmu open-url \"https://bitbucket.org/user/{repo}/branch/{source}?dest={dest}\" --dest=master\n\n\n\n\nGitLab\n\n\nPattern: \nhttps://gitlab.com/user/repo/merge_requests/new?merge_request[source_branch]=my-feature-branch\nmerge_request[target_branch]=master\n\n\nExample to create pull request from current branch to the master branch:\n\n\n\n\nmu open-url \"https://gitlab.com/user/{repo}/merge_requests/new?merge_request[source_branch]={source}\nmerge_request[target_branch]={dest}\" --dest=master\n\n\n\n\nStash\n\n\nExample to create pull request from current branch to the master branch:\n\n\nPattern: \nhttps://custom.domain.com/stash/projects/container/repos/repo_name/compare/commits?sourceBranch=sourceBranch\ntargetBranch=master\n\n\n\n\nmu open-url \"https://custom.domain.com/stash/projects/container/repos/{repo}/compare/commits?sourceBranch={source}\ntargetBranch={dest}\" --dest=master\n\n\n\n\nNote that currently the base url/pattern must be the same for all the repos (it's not possible\nto have one repository hosted in one place and another in another place for the current code\nto work -- for this we'd need to store the url per repository).", 
             "title": "Creating pull reviews"
         }, 
         {
             "location": "/open_url/#to-use", 
-            "text": "mu open-url main-pattern --dest=dest_branch  The main-pattern may use the following keywords:    repo : the repository name    source : the source branch    dest : the repository destination name    So, given the following situations, it may be used to create pull requests by using:  Github pattern:  https://github.com/user/project/compare/old_development...master  mu open-url https://github.com/user/{repo}/compare/{source}...{dest} --dest=master  Bitbucket pattern:  https://bitbucket.org/user/project/branch/source_branch?dest=master  mu open-url https://bitbucket.org/user/{repo}/branch/{source}?dest={dest} --dest=master  Stash pattern:  https://custom.domain.com/stash/projects/container/repos/repo_name/compare/commits?sourceBranch=sourceBranch targetBranch=master  mu open-url \"https://custom.domain.com/stash/projects/container/repos/{repo}/compare/commits?sourceBranch={source} targetBranch={dest}\" --dest=master  Note that currently the base url/pattern must be the same for all the repos (it's not possible\nto have one repository hosted in one place and another in another place for the current code\nto work -- for this we'd need to store the url per repository).", 
+            "text": "mu open-url main-pattern --dest=dest_branch  The main-pattern may use the following keywords:    repo : the repository name    source : the source branch    dest : the repository destination name    So, given the following situations, it may be used to create pull requests by using:", 
             "title": "To use:"
+        }, 
+        {
+            "location": "/open_url/#github", 
+            "text": "", 
+            "title": "Github"
+        }, 
+        {
+            "location": "/open_url/#pattern-httpsgithubcomuserprojectcompareold_developmentmaster", 
+            "text": "Example to create pull request from current branch to the master branch:   mu open-url \"https://github.com/user/{repo}/compare/{source}...{dest}\" --dest=master", 
+            "title": "Pattern: https://github.com/user/project/compare/old_development...master"
+        }, 
+        {
+            "location": "/open_url/#bitbucket", 
+            "text": "", 
+            "title": "Bitbucket"
+        }, 
+        {
+            "location": "/open_url/#pattern-httpsbitbucketorguserprojectbranchsource_branchdestmaster", 
+            "text": "Example to create pull request from current branch to the master branch:   mu open-url \"https://bitbucket.org/user/{repo}/branch/{source}?dest={dest}\" --dest=master", 
+            "title": "Pattern: https://bitbucket.org/user/project/branch/source_branch?dest=master"
+        }, 
+        {
+            "location": "/open_url/#gitlab", 
+            "text": "", 
+            "title": "GitLab"
+        }, 
+        {
+            "location": "/open_url/#pattern-httpsgitlabcomuserrepomerge_requestsnewmerge_requestsource_branchmy-feature-branchmerge_requesttarget_branchmaster", 
+            "text": "Example to create pull request from current branch to the master branch:   mu open-url \"https://gitlab.com/user/{repo}/merge_requests/new?merge_request[source_branch]={source} merge_request[target_branch]={dest}\" --dest=master", 
+            "title": "Pattern: https://gitlab.com/user/repo/merge_requests/new?merge_request[source_branch]=my-feature-branch&amp;merge_request[target_branch]=master"
+        }, 
+        {
+            "location": "/open_url/#stash", 
+            "text": "Example to create pull request from current branch to the master branch:", 
+            "title": "Stash"
+        }, 
+        {
+            "location": "/open_url/#pattern-httpscustomdomaincomstashprojectscontainerreposrepo_namecomparecommitssourcebranchsourcebranchtargetbranchmaster", 
+            "text": "mu open-url \"https://custom.domain.com/stash/projects/container/repos/{repo}/compare/commits?sourceBranch={source} targetBranch={dest}\" --dest=master   Note that currently the base url/pattern must be the same for all the repos (it's not possible\nto have one repository hosted in one place and another in another place for the current code\nto work -- for this we'd need to store the url per repository).", 
+            "title": "Pattern: https://custom.domain.com/stash/projects/container/repos/repo_name/compare/commits?sourceBranch=sourceBranch&amp;targetBranch=master"
         }, 
         {
             "location": "/tips_and_tricks/", 

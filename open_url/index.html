@@ -183,6 +183,14 @@
     
         <li class="main active"><a href="#to-use">To use:</a></li>
         
+            <li><a href="#github">Github</a></li>
+        
+            <li><a href="#bitbucket">Bitbucket</a></li>
+        
+            <li><a href="#gitlab">GitLab</a></li>
+        
+            <li><a href="#stash">Stash</a></li>
+        
     
     </ul>
 </div></div>
@@ -217,15 +225,30 @@
 </li>
 </ul>
 <p>So, given the following situations, it may be used to create pull requests by using:</p>
-<p>Github pattern: <code>https://github.com/user/project/compare/old_development...master</code></p>
-<pre><code>mu open-url https://github.com/user/{repo}/compare/{source}...{dest} --dest=master
-</code></pre>
-<p>Bitbucket pattern: <code>https://bitbucket.org/user/project/branch/source_branch?dest=master</code></p>
-<pre><code>mu open-url https://bitbucket.org/user/{repo}/branch/{source}?dest={dest} --dest=master
-</code></pre>
-<p>Stash pattern: <code>https://custom.domain.com/stash/projects/container/repos/repo_name/compare/commits?sourceBranch=sourceBranch&amp;targetBranch=master</code></p>
-<pre><code>mu open-url "https://custom.domain.com/stash/projects/container/repos/{repo}/compare/commits?sourceBranch={source}&amp;targetBranch={dest}" --dest=master
-</code></pre>
+<h3 id="github">Github</h3>
+<h5 id="pattern-httpsgithubcomuserprojectcompareold_developmentmaster">Pattern: <code>https://github.com/user/project/compare/old_development...master</code></h5>
+<p>Example to create pull request from current branch to the master branch:</p>
+<ul>
+<li><code>mu open-url "https://github.com/user/{repo}/compare/{source}...{dest}" --dest=master</code></li>
+</ul>
+<h3 id="bitbucket">Bitbucket</h3>
+<h5 id="pattern-httpsbitbucketorguserprojectbranchsource_branchdestmaster">Pattern: <code>https://bitbucket.org/user/project/branch/source_branch?dest=master</code></h5>
+<p>Example to create pull request from current branch to the master branch:</p>
+<ul>
+<li><code>mu open-url "https://bitbucket.org/user/{repo}/branch/{source}?dest={dest}" --dest=master</code></li>
+</ul>
+<h3 id="gitlab">GitLab</h3>
+<h5 id="pattern-httpsgitlabcomuserrepomerge_requestsnewmerge_requestsource_branchmy-feature-branchmerge_requesttarget_branchmaster">Pattern: <code>https://gitlab.com/user/repo/merge_requests/new?merge_request[source_branch]=my-feature-branch&amp;merge_request[target_branch]=master</code></h5>
+<p>Example to create pull request from current branch to the master branch:</p>
+<ul>
+<li><code>mu open-url "https://gitlab.com/user/{repo}/merge_requests/new?merge_request[source_branch]={source}&amp;merge_request[target_branch]={dest}" --dest=master</code></li>
+</ul>
+<h3 id="stash">Stash</h3>
+<p>Example to create pull request from current branch to the master branch:</p>
+<h5 id="pattern-httpscustomdomaincomstashprojectscontainerreposrepo_namecomparecommitssourcebranchsourcebranchtargetbranchmaster">Pattern: <code>https://custom.domain.com/stash/projects/container/repos/repo_name/compare/commits?sourceBranch=sourceBranch&amp;targetBranch=master</code></h5>
+<ul>
+<li><code>mu open-url "https://custom.domain.com/stash/projects/container/repos/{repo}/compare/commits?sourceBranch={source}&amp;targetBranch={dest}" --dest=master</code></li>
+</ul>
 <p>Note that currently the base url/pattern must be the same for all the repos (it's not possible
 to have one repository hosted in one place and another in another place for the current code
 to work -- for this we'd need to store the url per repository).</p>
