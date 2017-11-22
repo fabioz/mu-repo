@@ -24,7 +24,7 @@ def Run(params):
 
     if len(branch_to_repos) == 1:
         # The default one does not match but we have a single match, let's use it!
-        branch, _repo = iteritems(branch_to_repos).next()
+        branch, _repo = next(iteritems(branch_to_repos))
         params.args[1] = branch
         from .action_default import Run  # @Reimport
         return Run(params)
