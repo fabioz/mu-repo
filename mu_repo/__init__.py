@@ -334,7 +334,8 @@ def main(config_file=None, args=None, config=None):
         if len(config.repos) == 1:
             config.serial = True
 
-    config.repos = [path for path in config.repos if os.path.exists(path)]
+    if arg0 != 'register':
+        config.repos = [path for path in config.repos if os.path.exists(path)]
     return Run(Params(config, args, config_file))
 
 
