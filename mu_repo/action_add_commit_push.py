@@ -34,7 +34,17 @@ def Run(params, add, commit, push):
                 f.write(b'# Please enter the commit message for your changes. Lines starting\n')
                 f.write(b'# with "#" will be ignored, and an empty message aborts the commit.\n')
             import sys
-            args = editors[0].decode(sys.getfilesystemencoding()) + ' ' + f.name
+            args = editors[0].decode(sys.getfilesystemencoding())
+            
+            # Handle having something as: git config core.editor "'C:\Program File\Notepad++\notepad++.exe' -multiInst -notabbar -nosession -noPlugin"
+            # where we have to replace ' for " so that the command can be properly recognized by the shell.
+            if sys.platform == 'win32':
+                args = args.replace(u'\'', u'"')
+            args += u' '
+            filename = f.name
+            if isinstance(filename, bytes):
+                filename = filename.decode(sys.getfilesystemencoding())
+            args += filename
             if hasattr(subprocess, 'run'):
                 subprocess.run(args)
             else:
