@@ -11,6 +11,13 @@ def Run(params, add, commit, push):
     from .print_ import Print, CreateJoinedReposMsg
 
     args = params.args[1:]
+    if push:
+        force_push=False
+        for force_flag in ('--force', '-f'):
+            if force_flag in args:
+                args.remove(force_flag)
+                force_push = True
+                
     if commit and not args:
         git = params.config.git
         from mu_repo.execute_command import ExecuteCommand
@@ -90,8 +97,13 @@ def Run(params, add, commit, push):
     if push:
         from .get_repos_and_curr_branch import GetReposAndCurrBranch
         repos_and_curr_branch = GetReposAndCurrBranch(params)
+        
+        if force_push:
+            force_args = ['--force']
+        else:
+            force_args = []
 
-        commands = [ParallelCmd(repo, [params.config.git, 'push', 'origin', branch])
+        commands = [ParallelCmd(repo, [params.config.git, 'push', 'origin', branch] + force_args)
             for (repo, branch) in repos_and_curr_branch]
 
         ExecuteInParallelStackingMessages(
