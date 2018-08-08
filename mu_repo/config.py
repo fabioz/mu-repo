@@ -3,6 +3,7 @@ Created on 17/05/2012
 
 @author: Fabio Zadrozny
 '''
+import os
 import sys
 
 from mu_repo.backwards import iteritems
@@ -155,6 +156,11 @@ class Config(object):
                         group_name = values[0]
                         repos = values[1:]
                         config.groups[group_name] = repos
+
+        # MU_REPO_SERIAL env var overrides any value in the file.
+        serial_flag = os.getenv('MU_REPO_SERIAL', None)
+        if serial_flag is not None:
+            config.serial = IsTrue(serial_flag)
 
         return config
 
