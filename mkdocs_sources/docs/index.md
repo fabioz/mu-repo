@@ -44,6 +44,17 @@ Using ``mu``, you register the repositories you want only once and then issue co
 * [Open Url](open_url.md) for opening the browser to create pull requests over multiple repositories.
 * Run **arbitrary commands** on registered repositories (through `mu sh <command to execute>`).
 
+### New on 1.8.0
+
+It's possible to specify a `MU_REPO_SERIAL=True|False` environment variable to force mu repo to
+run serially or in parallel (overriding the contents of the `.mu_repo` file).
+
+`mu p -f` may be used to force pushing all repos to remote.
+
+Fix checking out by partial branch name on Python 3.
+
+Fix: when a group is loaded, passing `repo:<repo_name>` in the command line only affects the passed repo.  
+
 ### New on 1.6.0
 
 Created `mu sh` action to execute non git commands (i.e.: `mu sh make` or `mu sh python setup.py install` or `mu mvn install`).

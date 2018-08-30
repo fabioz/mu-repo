@@ -236,6 +236,12 @@ mu fetch &amp;&amp; mu checkout -b my-feature origin/master
 <li><a href="open_url/">Open Url</a> for opening the browser to create pull requests over multiple repositories.</li>
 <li>Run <strong>arbitrary commands</strong> on registered repositories (through <code>mu sh &lt;command to execute&gt;</code>).</li>
 </ul>
+<h3 id="new-on-180">New on 1.8.0</h3>
+<p>It's possible to specify a <code>MU_REPO_SERIAL=True|False</code> environment variable to force mu repo to
+run serially or in parallel (overriding the contents of the <code>.mu_repo</code> file).</p>
+<p><code>mu p -f</code> may be used to force pushing all repos to remote.</p>
+<p>Fix checking out by partial branch name on Python 3.</p>
+<p>Fix: when a group is loaded, passing <code>repo:&lt;repo_name&gt;</code> in the command line only affects the passed repo.  </p>
 <h3 id="new-on-160">New on 1.6.0</h3>
 <p>Created <code>mu sh</code> action to execute non git commands (i.e.: <code>mu sh make</code> or <code>mu sh python setup.py install</code> or <code>mu mvn install</code>).</p>
 <p>Fixed issue in <code>mu open-url</code> action when dealing with relative repositories. See <a href="open_url/">Open Url</a>.</p>
@@ -324,5 +330,5 @@ directory containing a .mu_repo file or a .git directory).</p>
 
 <!--
 MkDocs version : 0.16.3
-Build Date UTC : 2017-06-21 14:07:09
+Build Date UTC : 2018-08-30 12:49:16
 -->
