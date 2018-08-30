@@ -140,10 +140,13 @@ def main(config_file=None, args=None, config=None):
     if config is None:
         config = CreateConfig(config_file)
 
+    update_repos_from_groups = True
+
     for arg in args:
         if arg.startswith('repo:'):
             args.remove(arg)
             config.repos = arg[len('repo:'):].replace(';', ',').split(',')
+            update_repos_from_groups = False
             if not args:
                 Print('"repo" specified, but no additional args given.')
                 return
@@ -172,7 +175,6 @@ def main(config_file=None, args=None, config=None):
 
     arg0 = args[0]
     change_to_serial_if_possible = True
-    update_repos_from_groups = True
 
     Run = None
 
