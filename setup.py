@@ -19,32 +19,7 @@ setup(
     },
 )
 
-# Note: nice reference: https://jamie.curle.io/blog/my-first-experience-adding-package-pypi/
-# New version: change version and then:
+
+# For releasing, change version, create tag and push (deploy should be automatic).
 # git tag -a mu_repo_1_8_0
 # git push --tags
-# python setup.py sdist
-# python setup.py sdist upload
-
-#
-# Note: Upload may fail if ~/.pypirc is not present with username (see: https://github.com/pypa/setuptools/issues/941)
-# Contents of ~/.pypirc:
-#
-# [distutils]
-# index-servers =
-#     pypi
-#
-# [pypi]
-# repository: https://upload.pypi.org/legacy/
-# username: <username>
-
-
-
-# Note on newer pip version, the contents must be:
-#
-# [distutils]
-# index-servers =
-#     pypi
-#
-# [pypi]
-# username: fabioz
