@@ -1,9 +1,15 @@
 language: python
-python:
-  - 3.4
-
+python: 3.6
 install:
-  - pip install tox --use-wheel
-
+- pip install tox --use-wheel
 script:
-  - tox
+- tox
+deploy:
+  provider: pypi
+  distributions: sdist bdist_wheel
+  user: fabioz
+  on:
+    tags: true
+    repo: fabioz/mu-repo
+  password:
+    secure: QH9CJIf+E0oiNOJ13M6pPJt3u0DS9KNKDTWFdw6IN6IgWjiZgPwhJk0nkj+25u3okc1/TrNjBHVYoAJoFC+NmX+bX64ThN8en4ZIpW1OLpE8yqZc59xl2nVH6Wy1rc0GCmpn8JcsWdjVAPZYIsk+Uqexj/5RSfQxp3EfctyonHQ=

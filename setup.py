@@ -5,7 +5,7 @@ except ImportError:
 
 setup(
     name='mu_repo',
-    version='1.7.0',  # Note: update here and in mu_repo.__init__
+    version='1.8.0',  # Note: update here and in mu_repo.__init__
     description = 'Tool to work with multiple git repositories',
     author='Fabio Zadrozny',
     url='http://fabioz.github.io/mu-repo',
@@ -21,7 +21,7 @@ setup(
 
 # Note: nice reference: https://jamie.curle.io/blog/my-first-experience-adding-package-pypi/
 # New version: change version and then:
-# git tag -a mu_repo_1_7_0
+# git tag -a mu_repo_1_8_0
 # git push --tags
 # python setup.py sdist
 # python setup.py sdist upload
