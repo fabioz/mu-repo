@@ -1,67 +1,43 @@
-from mu_repo.print_ import PushIgnorePrint, PopIgnorePrint
-from mu_repo.rmtree import RmTree
-import mu_repo
-import os.path
 import subprocess
-import unittest
+
+import mu_repo
 
 
-#===================================================================================================
-# Test
-#===================================================================================================
-class Test(unittest.TestCase):
+def set_up(workdir):
+    subprocess.call('git init {}/lib'.format(workdir).split(), cwd='.')
+    subprocess.call('git init {}/app'.format(workdir).split(), cwd='.')
+    open('{}/lib/dummy'.format(workdir), 'w').close()
+    open('{}/app/dummy'.format(workdir), 'w').close()
+    with open('{}/.mu_repo'.format(workdir), 'w') as config_file:
+        config_file.write('repo=lib\nrepo=app\n')
 
-    def setUp(self):
-        PushIgnorePrint()
-        self.clear()
-        self.workspace = 'test_temp_dir'
-        subprocess.call('git init {}/lib'.format(self.workspace).split(), cwd='.')
-        subprocess.call('git init {}/app'.format(self.workspace).split(), cwd='.')
-        open('{}/lib/dummy'.format(self.workspace), 'w').close()
-        open('{}/app/dummy'.format(self.workspace), 'w').close()
-        with open('{}/.mu_repo'.format(self.workspace), 'w') as config_file:
-            config_file.write('repo=lib\nrepo=app\n')
-        self._last_dir = os.getcwd()
-        os.chdir(self.workspace)
-        # Do an initial commit to create master branch
-        mu_repo.main(config_file='.mu_repo', args=['add', '.'])
-        mu_repo.main(config_file='.mu_repo', args=['config', '--local', 'user.email', 'you@example'])
-        mu_repo.main(config_file='.mu_repo', args=['commit', '-am', '"init"'])
+    # Do an initial commit to create master branch
+    mu_repo.main(config_file='.mu_repo', args=['add', '.'])
+    mu_repo.main(config_file='.mu_repo', args=['config', '--local', 'user.email', 'you@example'])
+    mu_repo.main(config_file='.mu_repo', args=['commit', '-am', '"init"'])
 
 
-    def tearDown(self):
-        PopIgnorePrint()
-        os.chdir(self._last_dir)
-        self.clear()
+def test_stat_server(workdir):
+    set_up(workdir)
+    mu_repo.main(config_file='.mu_repo', args=['branch', 'fb-rock'])
+    mu_repo.main(config_file='.mu_repo', args=['branch', 'fb-paper'])
+    mu_repo.main(config_file='.mu_repo', args=['branch', 'rb-scissors'])
 
-    def clear(self):
-        if os.path.exists('test_temp_dir'):
-            RmTree('test_temp_dir')
+    # Checkout fb-rock on both projects
+    mu_repo.main(config_file='.mu_repo', args=['checkout', 'fb-rock'])
+    assert 'fb-rock' == get_current_branch('app')
+    assert 'fb-rock' == get_current_branch('lib')
 
-    def test_stat_server(self):
-        mu_repo.main(config_file='.mu_repo', args=['branch', 'fb-rock'])
-        mu_repo.main(config_file='.mu_repo', args=['branch', 'fb-paper'])
-        mu_repo.main(config_file='.mu_repo', args=['branch', 'rb-scissors'])
+    # Only one possible mathc, switch to rb-scissors
+    mu_repo.main(config_file='.mu_repo', args=['checkout', 'rb-'])
+    assert 'rb-scissors' == get_current_branch('app')
+    assert 'rb-scissors' == get_current_branch('lib')
 
-        # Checkout fb-rock on both projects
-        mu_repo.main(config_file='.mu_repo', args=['checkout', 'fb-rock'])
-        self.assertEqual('fb-rock', self.get_current_branch('app'))
-        self.assertEqual('fb-rock', self.get_current_branch('lib'))
+    # Couldn't guess branch name, do not checkout
+    mu_repo.main(config_file='.mu_repo', args=['checkout', 'fb-'])
+    assert 'rb-scissors' == get_current_branch('lib')
 
-        # Only one possible mathc, switch to rb-scissors
-        mu_repo.main(config_file='.mu_repo', args=['checkout', 'rb-'])
-        self.assertEqual('rb-scissors', self.get_current_branch('app'))
-        self.assertEqual('rb-scissors', self.get_current_branch('lib'))
 
-        # Couldn't guess branch name, do not checkout
-        mu_repo.main(config_file='.mu_repo', args=['checkout', 'fb-'])
-        self.assertEqual('rb-scissors', self.get_current_branch('lib'))
+def get_current_branch(project):
+    return subprocess.check_output("git rev-parse --abbrev-ref HEAD".split(), cwd=project).strip().decode()
 
-    def get_current_branch(self, project):
-        return subprocess.check_output("git rev-parse --abbrev-ref HEAD".split(), cwd=project).strip().decode()
-
-#===================================================================================================
-# main
-#===================================================================================================
-if __name__ == "__main__":
-    unittest.main()

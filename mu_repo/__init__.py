@@ -142,20 +142,28 @@ def main(config_file=None, args=None, config=None):
 
     update_repos_from_groups = True
 
+    prefixes = ('repo:', 'repos:', '@', '#')
     for arg in args:
-        if arg.startswith('repo:'):
+        if arg.startswith(prefixes):
+            for prefix in prefixes:
+                if arg.startswith(prefix):
+                    # Leave current prefix in namespace
+                    break
+                
             args.remove(arg)
-            config.repos = arg[len('repo:'):].replace(';', ',').split(',')
+            passed_repos = []
+            # Check if one of those is a group (if it is, use it instead).
+            for repo in arg[len(prefix):].replace(';', ',').split(','):
+                group_repos = config.groups.get(repo, None)
+                if group_repos is not None:
+                    passed_repos.extend(group_repos)
+                else:
+                    passed_repos.append(repo)
+            
+            config.repos = passed_repos
             update_repos_from_groups = False
             if not args:
-                Print('"repo" specified, but no additional args given.')
-                return
-
-        elif arg.startswith('repos:'):
-            args.remove(arg)
-            config.repos = arg[len('repos:'):].replace(';', ',').split(',')
-            if not args:
-                Print('"repos" specified, but no additional args given.')
+                Print('"%s" specified, but no additional args given.' % (prefix,))
                 return
 
         elif arg == '--help':
