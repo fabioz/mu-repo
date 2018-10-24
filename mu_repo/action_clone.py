@@ -63,7 +63,7 @@ def Run(params):
         repos = params.config.repos
     else:
         for arg in args:
-            if not arg.startswith('-') and not '@' in arg and not ':' in arg and not '/' in arg:
+            if not arg.startswith('-') and not '@' in arg and not ':' in arg:
                 repos.append(arg)
             else:
                 other_cmd_line_args.append(arg)
