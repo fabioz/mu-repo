@@ -17,7 +17,7 @@ def set_up(workdir):
     mu_repo.main(config_file='.mu_repo', args=['commit', '-am', '"init"'])
 
 
-def test_stat_server(workdir):
+def test_checkout_partial_names(workdir):
     set_up(workdir)
     mu_repo.main(config_file='.mu_repo', args=['branch', 'fb-rock'])
     mu_repo.main(config_file='.mu_repo', args=['branch', 'fb-paper'])
