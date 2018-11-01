@@ -30,12 +30,23 @@ def Run(params):
             args = [repo for repo in os.listdir('.') if isdir(join(repo, '.git'))]
         elif '--recursive' in args:
             args = []
+            search_paths = [os.path.realpath('.')]
             for root, directories, filenames in os.walk('.'):
                 if '.git' in directories:
                     directories.remove('.git')
-                for directory in directories:
-                    if isdir(os.path.join(root, directory, '.git')):
-                        args.append(os.path.relpath(os.path.join(root, directory)))
+                for idx, directory in enumerate(directories):
+                    # Follow symlinks, which lie outside the already considered search path
+                    if os.path.islink(join(root, directory)):
+                        directory = os.path.realpath(join(root, directory))
+                        if any(
+                                (directory + '/').startswith(search_path + '/')
+                                for search_path in search_paths
+                                ):
+                            continue
+                        directories[idx] = directory
+                        search_paths.append(os.path.realpath(join(root, directory)))
+                    if isdir(join(root, directory, '.git')):
+                        args.append(os.path.relpath(join(root, directory)))
 
     new_args = []
     for arg in args:

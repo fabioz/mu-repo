@@ -1,30 +1,18 @@
 from __future__ import with_statement
 
-from contextlib import contextmanager
 from os import makedirs
 import os.path
 import subprocess
 
 import mu_repo
 
-from .utils import configure_git_user
+from .utils import configure_git_user, push_dir
+_push_dir = push_dir
 
 
 def read(file2):
     with open(file2, 'r') as f:
         return f.read()
-
-
-@contextmanager
-def _push_dir(directory):
-    old = os.path.realpath(os.path.abspath(os.getcwd()))
-    new_dir = os.path.realpath(os.path.abspath(directory))
-    assert os.path.exists(new_dir)
-    os.chdir(new_dir)
-    try:
-        yield
-    finally:
-        os.chdir(old)
 
 
 def test_clone_with_deps():
