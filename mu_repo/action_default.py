@@ -27,6 +27,11 @@ def Run(params, on_output=None):
             if len(args) == 1:
                 args.insert(1, '-s')
 
+        elif arg0 == 'bst':
+            args[0] = 'for-each-ref'
+            args.insert(1,'--format="%(refname:short) %(upstream:track)"')
+            args.insert(2, 'refs/heads')
+
         elif arg0 == 'co':
             args[0] = 'checkout'
 
