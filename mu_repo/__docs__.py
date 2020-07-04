@@ -14,7 +14,7 @@
     Finds all branches matching a given pattern (or simply mu fb).
 * ${START_COLOR}mu git-init-config:${RESET_COLOR} Initial git configuration (username, log, etc.)
 * ${START_COLOR}mu --version:${RESET_COLOR} Prints its version
-* ${START_COLOR}mu worktreeadd {path} branch : ${RESET_COLOR}= git worktree {path} branch
+* ${START_COLOR}mu worktreeadd {path} branch : ${RESET_COLOR}= git worktree add {path} branch
     {path} is optional and defaults to a subfolder based on the branch name starting with _wt/ in the current directory.
     For example if branch 'release' was given, the path would be ./_wt/release
     The .murepo file is copied to the destination folder so that mu repo commands will work in the new worktree.
@@ -69,6 +69,7 @@ ${START_COLOR}mu ac msg     ${RESET_COLOR}= git add -A & git commit -m (the mess
 ${START_COLOR}mu acp msg    ${RESET_COLOR}= same as 'mu ac' + git push origin current branch.
 ${START_COLOR}mu p          ${RESET_COLOR}= git push origin current branch.
 ${START_COLOR}mu rb         ${RESET_COLOR}= git rebase origin/current branch.
+${START_COLOR}mu wtadd      ${RESET_COLOR}= see mu worktreeadd
 ${START_COLOR}mu shell      ${RESET_COLOR}= On msysgit, call sh --login -i (linux-like env)
 ${START_COLOR}mu fb [-r] pat${RESET_COLOR}= Shortcut for find-branch
 
