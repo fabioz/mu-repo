@@ -265,6 +265,8 @@ def main(config_file=None, args=None, config=None):
 
     elif arg0 == 'rb':  # Rebase current_branch origin/current_branch
         from .action_rebase import Run  # @Reimport
+    elif arg0 in ('worktreeadd', 'wtadd'):  #  Add a new worktree
+        from .action_worktreeadd import Run  # @Reimport
 
 
     # assorted -------------------------------------------------------------------------------------

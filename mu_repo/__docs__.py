@@ -14,6 +14,11 @@
     Finds all branches matching a given pattern (or simply mu fb).
 * ${START_COLOR}mu git-init-config:${RESET_COLOR} Initial git configuration (username, log, etc.)
 * ${START_COLOR}mu --version:${RESET_COLOR} Prints its version
+* ${START_COLOR}mu worktreeadd {path} branch : ${RESET_COLOR}= git worktree {path} branch
+    {path} is optional and defaults to a subfolder based on the branch name starting with _wt/ in the current directory.
+    For example if branch 'release' was given, the path would be ./_wt/release
+    The .murepo file is copied to the destination folder so that mu repo commands will work in the new worktree.
+
 * ${START_COLOR}mu auto-update:${RESET_COLOR} Automatically updates mu-repo
   (using git -- if it was installed from the repo as in the instructions).
 
