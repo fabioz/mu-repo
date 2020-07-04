@@ -30,14 +30,14 @@ def _WorktreeAdd(repos_and_branch, params):
     repos = []
     for repo, _branch in repos_and_branch:
         repos.append(repo)
-
+    
+    # sorting to improve odds with nested repos
+    # though if .murepo has things like ../../ in them it will throw things off
+    # TBD: might make sense to do abspath here in a sort lambda to be sure
     repos.sort(key = len)
-
-    Print(repos)
 
     for repo in repos:
         #Simple: Do git worktree add <base path> <branch> for all repos
-        Print([params.config.git, 'worktree', 'add', os.path.join(base_path,repo) , branch])
         commands.append(ParallelCmd(
             repo, [params.config.git, 'worktree', 'add', os.path.join(base_path,repo) , branch]))
 
