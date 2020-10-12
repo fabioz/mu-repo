@@ -211,7 +211,7 @@ def ExecuteThreadsHandlingOutputQueue(threads, output_queue, on_output=None):
             progress_on_timeout = 5.0
             while True:
                 t.join(timeout=progress_on_timeout)
-                if t.isAlive():
+                if t.is_alive():
                     total_timeout += progress_on_timeout
                     partial_output = t.GetPartialStderrOutput()
                     if partial_output:
