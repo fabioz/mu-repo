@@ -1,5 +1,5 @@
 from mu_repo.print_ import Print
-
+import git
     
 
 #===================================================================================================
@@ -84,6 +84,7 @@ def Run(params):
                 repo = os.path.basename(os.path.realpath('.'))
             else:
                 repo = repo.replace('.', '').replace('/', '').replace('\\', '')
+            keywords['r_name'] = list(git.Repo(repo,search_parent_directories=True).remotes[0].urls)[0].split('/')[-1].split('.')[0]
             keywords['repo'] = repo
             url = pattern.format(**keywords)
             webbrowser.open_new_tab(url)
