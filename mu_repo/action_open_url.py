@@ -1,7 +1,5 @@
 from mu_repo.print_ import Print
 
-    
-
 #===================================================================================================
 # Run
 #===================================================================================================
@@ -73,17 +71,36 @@ def Run(params):
 
     repos_with_changes = set(ComputeReposWithChangesFromCurrentBranchToOrigin(
         repos_and_curr_branch, params, target_branch=dest))
-
-
+    # todo: identify the remote for the current branch
+    # get from the confif the remote.{REMOTE}.url
+    # parse it. XXX 
     import webbrowser
-    for repo, branch in repos_and_curr_branch:
+    #print(repos_and_curr_branch)
+    for repo, branch in repos_and_curr_branch:        
         keywords['source'] = branch
+        print(repo)
         if repo in repos_with_changes:
             import os.path
             if repo == '.':
                 repo = os.path.basename(os.path.realpath('.'))
             else:
                 repo = repo.replace('.', '').replace('/', '').replace('\\', '')
+            if '{r_name}' in pattern:
+                from mu_repo.execute_command import ExecuteCommand
+                output = ExecuteCommand(
+                    ['git'] + 'rev-parse --symbolic-full-name --abbrev-ref @{u}'.split(),
+                    repo,
+                    return_stdout=True)
+                remote = output.decode('latin1').split('/')[0]
+                output = ExecuteCommand(
+                    ['git'] + 'config --get-regexp ^remote\.{}\.url$'.format(remote).split(),
+                    repo,
+                    return_stdout=True)
+
+                keywords['r_name'] = (
+                    output.decode('latin1').split(' ')[1]
+                    .split('/')[-1].split('.')[0] )
             keywords['repo'] = repo
             url = pattern.format(**keywords)
             webbrowser.open_new_tab(url)
+
