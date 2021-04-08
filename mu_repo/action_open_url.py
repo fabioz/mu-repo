@@ -78,7 +78,7 @@ def Run(params):
     #print(repos_and_curr_branch)
     for repo, branch in repos_and_curr_branch:        
         keywords['source'] = branch
-        print(repo)
+        
         if repo in repos_with_changes:
             import os.path
             if repo == '.':
