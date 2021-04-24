@@ -42,6 +42,8 @@
 
   * ${START_COLOR}mu group add <name> [--empty]:${RESET_COLOR}
       Creates new group with current repositories, unless --empty is given
+  * ${START_COLOR}mu group add <name> --copy=<from>:${RESET_COLOR}
+      Creates new group with repositories copied from another group.
   * ${START_COLOR}mu group rm <name>:${RESET_COLOR} Removes a group
   * ${START_COLOR}mu group switch <name>:${RESET_COLOR} Switches to an existing group
   * ${START_COLOR}mu group reset:${RESET_COLOR} Stops using the current group (uses all repos again).
