@@ -20,7 +20,7 @@ def Run(params):
     
     clean_new_group = '--clean' in args or '--empty' in args
     copy_from = None
-    copy_arg =  next((x for x in args if x.startswith("--copy")), None)
+    copy_arg =  next((x for x in args if x.startswith("--copy=")), None)
     if copy_arg:
         copy_from = copy_arg.split("=")[1]
 
@@ -60,7 +60,7 @@ def Run(params):
             if copy_from in config.groups:
                 config.groups[group_name] = config.groups[copy_from]
             else:
-                msg = 'Group to copy ${START_COLOR}%s{RESET_COLOR} does not exist' % copy_from
+                msg = 'Group to copy ${START_COLOR}%s${RESET_COLOR} does not exist' % copy_from
                 Print(msg)
                 return Status(msg, False)
         else:
