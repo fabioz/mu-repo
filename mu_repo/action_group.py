@@ -17,6 +17,7 @@ def Run(params):
     msgs = []
     command = args[1] if len(args) > 1 else None
     group_name = args[2] if len(args) > 2 else None
+    clone_from = args[3] if len(args) > 3 else None
 
     clean_new_group = '--clean' in args or '--empty' in args
 
@@ -39,7 +40,7 @@ def Run(params):
                 Print(msg)
                 msgs.append(msg)
 
-    elif command == 'add':
+    elif command in ('add', 'clone'):
         if group_name is None:
             msg = 'Group name not given.'
             Print(msg)
@@ -52,11 +53,18 @@ def Run(params):
 
         if clean_new_group:
             config.groups[group_name] = []
+        elif clone_from:
+            if clone_from in config.groups:
+                config.groups[group_name] = config.groups[clone_from]
+            else:
+                msg = 'Group to clone ${START_COLOR}%s{RESET_COLOR} does not exist' % clone_from
+                Print(msg)
+                return Status(msg, False)
         else:
             config.groups[group_name] = config.repos
 
         config.current_group = group_name
-
+    
     elif command in ('rm', 'del', 'switch', 'sw'):
         if group_name is None:
 

@@ -127,6 +127,13 @@ def test_groups():
     assert status.config.current_group == 'group2'
     assert status.config.groups == {'group1' : ['pydev'], 'group2' : ['studio3']}
 
+    #clone group from pydev
+    status = mu_repo.main(config_file='.bar_file', args=['group','clone', 'pydev_bugfix', 'group1'])
+    assert status.config.repos == ['pydev', 'studio3']
+    assert status.config.current_group == 'pydev_bugfix'
+    assert status.config.groups == {'group1' : ['pydev'], 'group2' : ['studio3'], 'pydev_bugfix': ['pydev']}
+
+
     status = mu_repo.main(config_file='.bar_file', args=['list', '@group1'])
     assert status.config.repos == ['pydev']
 
@@ -141,7 +148,7 @@ def test_groups():
     status = mu_repo.main(config_file='.bar_file', args=['group', 'del', 'group1'])
     assert status.config.repos == ['pydev', 'studio3']
     assert status.config.current_group == None
-    assert status.config.groups == {'group2' : ['studio3']}
+    assert status.config.groups == {'group2' : ['studio3'], 'pydev_bugfix': ['pydev']}
 
     # make sure state is to the rest of the application in other commands
 
@@ -160,7 +167,6 @@ def test_groups():
     status = mu_repo.main(config_file='.bar_file', args=['list'])
     assert status.config.repos == ['pydev', 'studio3']
     assert status.config.current_group == None
-
 
 def test_search_config_file_normal_case(workdir):
     """Test config search search works for the usual case up where the file is at the root of the repository."""
