@@ -128,7 +128,7 @@ def test_groups():
     assert status.config.groups == {'group1' : ['pydev'], 'group2' : ['studio3']}
 
     #copy group from pydev
-    status = mu_repo.main(config_file='.bar_file', args=['group','copy', 'pydev_bugfix', 'group1'])
+    status = mu_repo.main(config_file='.bar_file', args=['group','add', 'pydev_bugfix', '--copy=group1'])
     assert status.config.repos == ['pydev', 'studio3']
     assert status.config.current_group == 'pydev_bugfix'
     assert status.config.groups == {'group1' : ['pydev'], 'group2' : ['studio3'], 'pydev_bugfix': ['pydev']}

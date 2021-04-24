@@ -17,9 +17,12 @@ def Run(params):
     msgs = []
     command = args[1] if len(args) > 1 else None
     group_name = args[2] if len(args) > 2 else None
-    copy_from = args[3] if len(args) > 3 else None
-
+    
     clean_new_group = '--clean' in args or '--empty' in args
+    copy_from = None
+    copy_arg =  next((x for x in args if x.startswith("--copy")), None)
+    if copy_arg:
+        copy_from = copy_arg.split("=")[1]
 
     if command != 'add' and clean_new_group:
         msg = '--clean and --empty only for "add" command'
@@ -40,7 +43,7 @@ def Run(params):
                 Print(msg)
                 msgs.append(msg)
 
-    elif command in ('add', 'copy'):
+    elif command == 'add':
         if group_name is None:
             msg = 'Group name not given.'
             Print(msg)
