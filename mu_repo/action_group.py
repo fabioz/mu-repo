@@ -17,8 +17,12 @@ def Run(params):
     msgs = []
     command = args[1] if len(args) > 1 else None
     group_name = args[2] if len(args) > 2 else None
-
+    
     clean_new_group = '--clean' in args or '--empty' in args
+    copy_from = None
+    copy_arg =  next((x for x in args if x.startswith("--copy=")), None)
+    if copy_arg:
+        copy_from = copy_arg.split("=")[1]
 
     if command != 'add' and clean_new_group:
         msg = '--clean and --empty only for "add" command'
@@ -52,11 +56,18 @@ def Run(params):
 
         if clean_new_group:
             config.groups[group_name] = []
+        elif copy_from:
+            if copy_from in config.groups:
+                config.groups[group_name] = config.groups[copy_from]
+            else:
+                msg = 'Group to copy ${START_COLOR}%s${RESET_COLOR} does not exist' % copy_from
+                Print(msg)
+                return Status(msg, False)
         else:
             config.groups[group_name] = config.repos
 
         config.current_group = group_name
-
+    
     elif command in ('rm', 'del', 'switch', 'sw'):
         if group_name is None:
 
