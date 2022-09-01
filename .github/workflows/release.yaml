@@ -1,0 +1,28 @@
+on:
+  push:
+    tags:
+      - "mu_repo_*"
+name: Deploy
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: true
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+    - name: Install deps
+      run: pip install --upgrade pip twine wheel setuptools
+    - name: Build wheel
+      run: python setup.py sdist bdist_wheel --universal
+    - name: Upload to PyPI
+      run: twine upload dist/*
+      env:
+        TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}

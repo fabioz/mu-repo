@@ -10,3 +10,4 @@ __pycache__
 *.egg-info/
 test_temp_dir/
 /dist/
+/.pytest_cache/

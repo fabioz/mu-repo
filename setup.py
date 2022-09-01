@@ -5,7 +5,7 @@ except ImportError:
 
 setup(
     name='mu_repo',
-    version='1.8.1',  # Note: update here and in mu_repo.__init__
+    version='1.8.2',  # Note: update here and in mu_repo.__init__
     description = 'Tool to work with multiple git repositories',
     long_description = '''mu-repo enables dealing with multiple git and provides features such as:
 
@@ -43,5 +43,5 @@ See: http://fabioz.github.io/mu-repo for more information.
 
 
 # For releasing, change version, create tag and push (deploy should be automatic).
-# git tag -a mu_repo_1_8_1
+# git tag mu_repo_1_8_2
 # git push --tags

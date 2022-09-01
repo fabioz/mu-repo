@@ -2,6 +2,10 @@ import os
 
 import mu_repo
 from .utils import push_dir
+import sys
+import pytest
+
+pytestmark = pytest.mark.skipif(sys.platform == 'win32', reason='Symlink not always available.')
 
 def set_up(workdir):
     join = os.path.join
@@ -31,7 +35,7 @@ def test_direct_symlink(workdir):
         status = mu_repo.main(config_file='.bar_file', args=['register', '--recursive'])
 
     assert status.succeeded
-    assert status.config.repos == ['sectionX/repo1']
+    _compare_repos(status.config.repos, ['sectionX/repo1'])
 
 def test_indirect_symlink(workdir):
     """Linking to an ancestor of a repository"""
@@ -42,7 +46,7 @@ def test_indirect_symlink(workdir):
         status = mu_repo.main(config_file='.bar_file', args=['register', '--recursive'])
 
     assert status.succeeded
-    assert status.config.repos == ['sectionX/repo1']
+    _compare_repos(status.config.repos, ['sectionX/repo1'])
 
 def test_search_path_expansion(workdir):
     """Linking to a repository outside of initial search path"""
@@ -53,7 +57,7 @@ def test_search_path_expansion(workdir):
         status = mu_repo.main(config_file='.bar_file', args=['register', '--recursive'])
 
     assert status.succeeded
-    assert set(status.config.repos) == set(['sectionX/repo1', '../projectB/sectionY/repo2'])
+    _compare_repos(status.config.repos, ['sectionX/repo1', '../projectB/sectionY/repo2'])
 
 def test_infinite_cycle(workdir):
     """Linking to own ancestor directory"""
@@ -64,7 +68,7 @@ def test_infinite_cycle(workdir):
         status = mu_repo.main(config_file='.bar_file', args=['register', '--recursive'])
 
     assert status.succeeded
-    assert status.config.repos == ['sectionX/repo1']
+    _compare_repos(status.config.repos, ['sectionX/repo1'])
 
 def test_infinite_cycle_ouside(workdir):
     """Linking to own ancestor directory in expanded search path"""
@@ -76,4 +80,7 @@ def test_infinite_cycle_ouside(workdir):
         status = mu_repo.main(config_file='.bar_file', args=['register', '--recursive'])
 
     assert status.succeeded
-    assert set(status.config.repos) == set(['sectionX/repo1', '../projectB/sectionY/repo2'])
+    _compare_repos(status.config.repos, ['sectionX/repo1', '../projectB/sectionY/repo2'])
+
+def _compare_repos(found, expected):
+    assert set(found) == set(x.replace('/', os.sep) for x in expected)

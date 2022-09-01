@@ -1,0 +1,38 @@
+name: Tests
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        name: [
+          "windows-py37",
+          "ubuntu-py38",
+        ]
+        
+        include:
+          - name: "windows-py37"
+            python: "3.7"
+            os: windows-latest
+          - name: "ubuntu-py38"
+            python: "3.8"
+            os: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python }}
+    - name: Install pytest
+      run: python -W ignore -m pip install pytest
+    - name: Test
+      run: python -m pytest -vv mu_repo/tests
+

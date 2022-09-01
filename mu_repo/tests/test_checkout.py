@@ -1,20 +1,32 @@
 import subprocess
 
 import mu_repo
+import sys
 
 
 def set_up(workdir):
+    sys.stderr.write('Init 1\n')
     subprocess.call('git init {}/lib'.format(workdir).split(), cwd='.')
+    subprocess.call('git config init.defaultBranch master'.split(), cwd='./lib')
+    
+    sys.stderr.write('Init 2\n')
     subprocess.call('git init {}/app'.format(workdir).split(), cwd='.')
+    subprocess.call('git config init.defaultBranch master'.split(), cwd='./app')
+    
+    sys.stderr.write('Write files\n')
     open('{}/lib/dummy'.format(workdir), 'w').close()
     open('{}/app/dummy'.format(workdir), 'w').close()
+    
+    sys.stderr.write('Create .mu_repo for both repositories\n')
     with open('{}/.mu_repo'.format(workdir), 'w') as config_file:
         config_file.write('repo=lib\nrepo=app\n')
 
     # Do an initial commit to create master branch
-    mu_repo.main(config_file='.mu_repo', args=['add', '.'])
+    sys.stderr.write('Make initial commit.\n')
+    mu_repo.main(config_file='.mu_repo', args=['a'])
     mu_repo.main(config_file='.mu_repo', args=['config', '--local', 'user.email', 'you@example'])
-    mu_repo.main(config_file='.mu_repo', args=['commit', '-am', '"init"'])
+    mu_repo.main(config_file='.mu_repo', args=['config', '--local', 'user.name', 'testing'])
+    mu_repo.main(config_file='.mu_repo', args=['commit', '--allow-empty', '-n', '-m', 'init'])
 
 
 def test_checkout_partial_names(workdir):
