@@ -7,13 +7,13 @@ import os
 #===================================================================================================
 def Run(params):
     '''
-    Usage: 
+    Usage:
       Cloning one or multiple registered repositories
       $mu clone repo-name [repo-name] ...
-      
+
       Cloning all registered repositories
       $mu clone --all
-    
+
     mu-repo can deal with cloning a repository and other referenced repositories recursively.
 
     To work this way, users are expected to commit the .mu_repo files they rely on and set
@@ -49,15 +49,15 @@ def Run(params):
     args = params.args
     assert args[0] == 'clone'
     args = args[1:]
-    
+
     repos = []
     other_cmd_line_args = []
-    
+
     if len(args) == 1 and args[0] == '--help':
         import webbrowser
         webbrowser.open("http://fabioz.github.io/mu-repo/cloning/")
         Print('Opening http://fabioz.github.io/mu-repo/cloning/ for help on cloning...')
-        return        
+        return
     elif len(args) == 1 and args[0] == '--all':
         Print("Cloning all registered repos...")
         repos = params.config.repos
@@ -121,12 +121,7 @@ def Run(params):
                                 # Ok, seems like something valid for us to clone in the current dir
                                 # (along what we just cloned)
 
-                                # Create a copy and reorder so that the current one appears first.
-                                check_at = remote_hosts[:]
-                                check_at.remove(remote)
-                                check_at = [remote] + check_at
-
-                                for remote in check_at:
+                                for remote in remote_hosts:
                                     if _Clone(remote, new_repo_name, params, other_cmd_line_args):
                                         # Ok, worked for this repo
                                         break
