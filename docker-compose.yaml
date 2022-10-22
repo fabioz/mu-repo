@@ -1,0 +1,8 @@
+services:
+  test:
+    build:
+      context: .
+    volumes:
+      - .:/workarea
+    working_dir: /workarea
+    command: python3.7 -m pytest -vvv mu_repo/tests
