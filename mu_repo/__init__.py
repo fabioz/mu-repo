@@ -9,7 +9,7 @@ from . import backwards
 from .print_ import Print
 
 # Note: update here and in setup
-__version__ = '1.8.2'
+__version__ = '1.9.0'
 
 # Just making sure we're in the PYTHONPATH!
 sys.path.append(os.path.dirname(__file__))

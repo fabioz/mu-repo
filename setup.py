@@ -5,7 +5,7 @@ except ImportError:
 
 setup(
     name='mu_repo',
-    version='1.8.2',  # Note: update here and in mu_repo.__init__
+    version='1.9.0',  # Note: update here and in mu_repo.__init__
     description = 'Tool to work with multiple git repositories',
     long_description = '''mu-repo enables dealing with multiple git and provides features such as:
 
