@@ -330,12 +330,20 @@ def Run(params):
             except:
                 Print('Error calling: %s' % (' '.join(cmd),))
         else:
-            # Winmerge is not available on Linux, so, let's use another option (meld)
-            cmd = ['meld', temp_working, temp_repo]
+            write_left = ['-leftreadonly'] #Cannot write on left
+            if not branch:
+                write_left = [] #Can write on left when not working with branch (i.e.: working dir).
+                
+            cmd = ['bcomp', temp_working, temp_repo, '-expandall'] + write_left
             try:
                 subprocess.call(cmd)
             except:
-                Print('Error calling: %s' % (' '.join(cmd),))
+                # Try beyond compare, if it didn't work try meld.
+                cmd = ['meld', temp_working, temp_repo]
+                try:
+                    subprocess.call(cmd)
+                except:
+                    Print('Error calling: %s' % (' '.join(cmd),))
 
     finally:
         #If we've gone to the synching mode, make sure we had a last synchronization before
