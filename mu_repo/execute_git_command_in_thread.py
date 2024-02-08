@@ -42,6 +42,7 @@ class ExecuteGitCommandThread(threading.Thread):
         self.repo = repo
         self.cmd = cmd
         self.output_queue = output_queue
+        self.returncode = None
 
 
     class ReaderThread(threading.Thread):
@@ -97,6 +98,7 @@ class ExecuteGitCommandThread(threading.Thread):
                 PrintError('Error executing: ' + ' '.join(cmd) + ' on: ' + repo)
             if p is not None:
                 p.wait()
+            self.returncode = p.returncode
 
         else:
             try:
@@ -123,6 +125,7 @@ class ExecuteGitCommandThread(threading.Thread):
             stderr = AsStr(self.stderr_thread.GetFullOutput())
 
             self._HandleOutput(msg, stdout, stderr)
+            self.returncode = p.returncode
 
     def GetPartialStderrOutput(self):
         stderr_thread = getattr(self, 'stderr_thread', None)

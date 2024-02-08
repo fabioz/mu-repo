@@ -2,6 +2,7 @@ from mu_repo.action_find_branch import ConvertRepoToBranchesToBranchToRepos, Pri
 from mu_repo.backwards import iteritems
 from mu_repo.get_repos_and_local_branches import GetReposAndLocalBranches
 from mu_repo.print_ import Print
+from mu_repo import Status
 
 #===================================================================================================
 # Run
@@ -33,4 +34,5 @@ def Run(params):
     Print('Found more than one branch that matches ${START_COLOR}%s${RESET_COLOR}:\n' % params.args[1])
     PrintBranchToRepos(branch_to_repos, params)
     Print('\n${START_COLOR}ERROR${RESET_COLOR}: unable to decide branch to work on.', __color__='RED')
+    return Status("ERROR", succeeded=False)
 

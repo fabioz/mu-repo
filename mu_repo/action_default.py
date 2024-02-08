@@ -49,7 +49,12 @@ def Run(params, on_output=None):
         else:
             commands.append(ParallelCmd(repo, [config.git] + args))
 
-    ExecuteInParallel(commands, on_output, serial=config.serial)
-
-    return Status('Finished', True)
+    cmd_return_codes = ExecuteInParallel(commands, on_output, serial=config.serial)
+    failed_cmds = [cmd for (cmd, returncode) in cmd_return_codes if returncode != 0]
+    if failed_cmds:
+        message = "Failed:\n" + "\n".join(f'  {x.repo}' for x in failed_cmds)
+        Print('\n${START_COLOR}' + message + '${RESET_COLOR}', __color__="RED")
+        return Status(message, False)
+    else:
+        return Status('Finished', True)
 

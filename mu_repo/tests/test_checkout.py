@@ -36,17 +36,21 @@ def test_checkout_partial_names(workdir):
     mu_repo.main(config_file='.mu_repo', args=['branch', 'rb-scissors'])
 
     # Checkout fb-rock on both projects
-    mu_repo.main(config_file='.mu_repo', args=['checkout', 'fb-rock'])
+    status = mu_repo.main(config_file='.mu_repo', args=['checkout', 'fb-rock'])
+    assert status == mu_repo.Status("Finished", True)
     assert 'fb-rock' == get_current_branch('app')
     assert 'fb-rock' == get_current_branch('lib')
 
     # Only one possible mathc, switch to rb-scissors
-    mu_repo.main(config_file='.mu_repo', args=['checkout', 'rb-'])
+    status = mu_repo.main(config_file='.mu_repo', args=['checkout', 'rb-'])
+    assert status == mu_repo.Status("Finished", True)
     assert 'rb-scissors' == get_current_branch('app')
     assert 'rb-scissors' == get_current_branch('lib')
 
     # Couldn't guess branch name, do not checkout
-    mu_repo.main(config_file='.mu_repo', args=['checkout', 'fb-'])
+    status = mu_repo.main(config_file='.mu_repo', args=['checkout', 'fb-'])
+    assert status == mu_repo.Status("ERROR", False)
+    assert 'rb-scissors' == get_current_branch('app')
     assert 'rb-scissors' == get_current_branch('lib')
 
 
