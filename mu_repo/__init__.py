@@ -26,6 +26,16 @@ class Status(object):
         self.succeeded = succeeded
         self.config = config
 
+    def __repr__(self):
+        return f"Status(status_message={self.status_message!r}, succeeded={self.succeeded!r})"
+
+    def __eq__(self, other):
+        return (
+            self.status_message == other.status_message
+            and self.succeeded == other.succeeded
+            and self.config == other.config
+        )
+
 #===================================================================================================
 # Params
 #===================================================================================================

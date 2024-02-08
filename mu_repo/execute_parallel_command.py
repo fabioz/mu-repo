@@ -82,6 +82,7 @@ def ExecuteInParallel(commands, on_output=None, serial=False):
     else:
         from mu_repo.execute_git_command_in_thread import ExecuteThreadsHandlingOutputQueue
         ExecuteThreadsHandlingOutputQueue(threads, output_queue, on_output=on_output)
+    return [(commands[i], t.returncode) for i, t in enumerate(threads)]
 
 
 
