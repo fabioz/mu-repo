@@ -69,7 +69,7 @@ def test_action_diff():
     if sys.platform.startswith('win'):
         merge_command = 'winmergeu.exe'
     else:
-        merge_command = 'meld'
+        merge_command = 'bcomp'
     assert [merge_command] == called
 
     # Test diffing with previous version of HEAD without changes
