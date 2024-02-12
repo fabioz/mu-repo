@@ -14,6 +14,7 @@ __version__ = '1.9.0'
 # Just making sure we're in the PYTHONPATH!
 sys.path.append(os.path.dirname(__file__))
 
+
 #===================================================================================================
 # Status
 #===================================================================================================
@@ -35,6 +36,7 @@ class Status(object):
             and self.succeeded == other.succeeded
             and self.config == other.config
         )
+
 
 #===================================================================================================
 # Params
@@ -58,13 +60,16 @@ class Params(object):
 #===================================================================================================
 def PrintTime(func):
     import time
+
     def Exec(*args, **kwargs):
         curr_time = time.time()
         ret = func(*args, **kwargs)
         diff = time.time() - curr_time
         Print('Total time: %.2fs' % (diff,))
         return ret
+
     return Exec
+
 
 #===================================================================================================
 # CreateConfig
@@ -190,7 +195,6 @@ def main(config_file=None, args=None, config=None):
                 # Allow it to be used on single git repos too.
                 config.repos.append('.')
 
-
     arg0 = args[0]
     change_to_serial_if_possible = True
 
@@ -233,32 +237,34 @@ def main(config_file=None, args=None, config=None):
 
     # acp variants ---------------------------------------------------------------------------------
     if arg0 == 'acp':  # Add, commit, push
+
         def Run(params):
             from .action_add_commit_push import Run  # @Reimport
             Run(params, add=True, commit=True, push=True)
 
     elif arg0 == 'ac':  # Add, commit
+
         def Run(params):
             from .action_add_commit_push import Run  # @Reimport
             Run(params, add=True, commit=True, push=False)
 
     elif arg0 == 'a':  # Add
+
         def Run(params):
             from .action_add_commit_push import Run  # @Reimport
             Run(params, add=True, commit=False, push=False)
 
     elif arg0 == 'c':  # Commit
+
         def Run(params):
             from .action_add_commit_push import Run  # @Reimport
             Run(params, add=False, commit=True, push=False)
 
     elif arg0 == 'p':  # Push
+
         def Run(params):
             from .action_add_commit_push import Run  # @Reimport
             Run(params, add=False, commit=False, push=True)
-
-
-
 
     # related to git actions -----------------------------------------------------------------------
     elif arg0 == 'dd':
@@ -275,7 +281,6 @@ def main(config_file=None, args=None, config=None):
 
     elif arg0 == 'rb':  # Rebase current_branch origin/current_branch
         from .action_rebase import Run  # @Reimport
-
 
     # assorted -------------------------------------------------------------------------------------
     elif arg0 == 'clone':
@@ -298,7 +303,6 @@ def main(config_file=None, args=None, config=None):
 
     elif arg0 in ('open-url'):
         from .action_open_url import Run  # @Reimport
-
 
     elif arg0 == 'shell':
         import subprocess
@@ -340,7 +344,6 @@ def main(config_file=None, args=None, config=None):
         args = args[1:]
         from .action_default import Run  # @Reimport
 
-
     # default action -------------------------------------------------------------------------------
     if Run is None:
         if arg0 == 'stash' and len(args) == 1:
@@ -354,7 +357,13 @@ def main(config_file=None, args=None, config=None):
         if len(config.repos) == 1:
             config.serial = True
 
-    return Run(Params(config, args, config_file))
+    ret = Run(Params(config, args, config_file))
+    if not isinstance(ret, Status):
+        # If an action doesn't return a status, just return None
+        # (otherwise the entry point may fail). 
+        return None
+    
+    return ret 
 
 
 if '--timeit' in sys.argv:
