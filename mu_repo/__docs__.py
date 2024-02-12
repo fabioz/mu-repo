@@ -55,6 +55,7 @@
 Shortcuts:
 
 ${START_COLOR}mu st         ${RESET_COLOR}= Nice status message for all repos (always in parallel)
+${START_COLOR}mu bst        ${RESET_COLOR}= Compact branch status message for all repos
 ${START_COLOR}mu co branch  ${RESET_COLOR}= git checkout branch
 ${START_COLOR}mu mu-branch  ${RESET_COLOR}= git rev-parse --abbrev-ref HEAD (print current branch)
 ${START_COLOR}mu up         ${RESET_COLOR}= git fetch origin curr_branch:refs/remotes/origin/curr_branch
